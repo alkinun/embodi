@@ -1,0 +1,13 @@
+{
+  "experiment": "013-execution-horizon-screen",
+  "evaluation_seed": 13000,
+  "episodes": 10,
+  "cube_x_range": [0.24, 0.28],
+  "cube_y_range": [-0.025, 0.025],
+  "deterministic_ik": true,
+  "successes": {
+    "nominal": {"1": 0, "4": 0, "8": 2, "16": 4, "32": 2},
+    "wide": {"1": 0, "4": 0, "8": 1, "16": 2, "32": 0}
+  },
+  "selected_horizon": 16
+}

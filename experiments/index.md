@@ -19,6 +19,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [010](010-position-shift-robustness.md) | does success survive x shifts? | expand robot and decoder coverage. |
 | [011](011-robot-position-coverage.md) | do wider demonstrations fix x shifts? | no. coverage alone causes forgetting. |
 | [012](012-checkpoint-selection.md) | did an earlier checkpoint work better? | no. no robust control peak appeared. |
+| [013](013-execution-horizon-screen.md) | can inference horizon recover near shifts? | horizon 16 wins the small screen. |
 
 ## current decision
 
