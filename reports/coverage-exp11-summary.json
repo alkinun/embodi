@@ -1,5 +1,5 @@
 {
-  "experiment": "011-robot-position-coverage",
+  "experiment": "011-cube-position-coverage",
   "data_seed": 11000,
   "training_seed": 3991,
   "evaluation_seed": 11500,

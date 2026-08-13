@@ -2,7 +2,7 @@
 
 ## question
 
-can a different inference horizon recover near-shift control?
+can a different execution horizon recover near-shift control?
 
 ## setup
 
@@ -41,7 +41,7 @@ final estimate.
 
 - keep horizon 16 as a candidate, not a new default.
 - confirm horizons 8 and 16 on 50 held-out scenes.
-- keep the same cores and deterministic-ik control.
+- keep the same cores and deterministic ik control.
 - reject horizon 1 for this benchmark because it is slow and ineffective.
 
 raw results:

@@ -12,14 +12,14 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [003](003-control-decoder.md) | why did low loss fail in control? | fix limits and train on policy states. |
 | [004](004-deterministic-regression.md) | does regression improve control? | use regression for this benchmark. |
 | [005](005-expert-only-transfer.md) | which component transfers? | transfer only the action expert. |
-| [006](006-action-expert-scaling.md) | which expert size works best? | keep the 53m expert. |
+| [006](006-action-expert-scaling.md) | which expert size works best? | keep the 53M expert. |
 | [007](007-decoder-robustness.md) | why was decoder training unstable? | reuse one broad teacher cache. |
 | [008](008-xperience-data-scaling.md) | does more human data help transfer? | 1,000 clips win at the fixed budget. |
 | [009](009-nested-human-data-scaling.md) | does matched-exposure scaling help? | more unique data helps. |
 | [010](010-position-shift-robustness.md) | does success survive x shifts? | expand robot and decoder coverage. |
-| [011](011-robot-position-coverage.md) | do wider demonstrations fix x shifts? | no. coverage alone causes forgetting. |
+| [011](011-cube-position-coverage.md) | do wider cube positions fix x shifts? | no. coverage alone causes forgetting. |
 | [012](012-checkpoint-selection.md) | did an earlier checkpoint work better? | no. no robust control peak appeared. |
-| [013](013-execution-horizon-screen.md) | can inference horizon recover near shifts? | horizon 16 wins the small screen. |
+| [013](013-execution-horizon-screen.md) | can execution horizon recover near shifts? | horizon 16 wins the small screen. |
 | [014](014-execution-horizon-confirmation.md) | does horizon 16 beat horizon 8 on new scenes? | use horizon 16, but improve the policy. |
 
 ## current decision

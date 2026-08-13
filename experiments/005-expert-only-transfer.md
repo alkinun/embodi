@@ -8,22 +8,23 @@ is useful xperience transfer in the vlm adapters or the action expert?
 
 - baseline: fresh robot adapters and expert.
 - full transfer: xperience adapters and expert.
-- backbone only: xperience adapters and a fresh expert.
+- adapter only: xperience adapters and a fresh expert.
 - expert only: fresh robot adapters and the xperience expert.
 
 ## result
 
-seed 3991 used 50 paired scenes.
+training seed 3991 used 50 paired scenes with evaluation seed 52000.
 
 | initialization | success |
 | --- | ---: |
 | baseline | 56% |
 | full transfer | 22% |
-| backbone only | 40% |
+| adapter only | 40% |
 | expert only | 88% |
 
-seed 3992 reached 60% expert-only, 42% baseline, and 28% full transfer.
-aggregate expert-only deterministic-ik success was 74%.
+training seed 3992 reached 60% expert-only, 42% baseline, and 28% full transfer
+with evaluation seed 53000. aggregate expert-only deterministic ik success was
+74%.
 
 the best learned expert-only controller reached 83/100. its baseline reached
 56/100. expert transfer won 33 scenes uniquely. baseline won 6.

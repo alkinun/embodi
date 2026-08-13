@@ -11,10 +11,10 @@ compare native control, deterministic ik, and learned decoders.
 ## result
 
 - native controller: 20/20 success.
-- exact canonical commands through deterministic ik: 20/20.
+- canonical commands through deterministic ik: 20/20.
 - original learned decoder: 0/20.
 - residual decoder on 100 demonstrations: 15/20.
-- stale `2 degree` chunk limits reduced the ik teacher to 0/20.
+- stale 2-degree action limits reduced the ik teacher to 0/20.
 
 policy-state decoder training raised baseline control to 62% and 56%.
 
@@ -24,6 +24,6 @@ the decoder and stale action limits caused the control failure.
 
 ## decision
 
-- disable stale chunk limits.
+- disable stale action limits.
 - train decoders on policy states.
 - select decoders with closed-loop success, not mse.

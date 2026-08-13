@@ -6,7 +6,7 @@ does nominal success survive a shift in the cube x position?
 
 ## setup
 
-- fixed 53m expert-only so-101 core from seed 3991.
+- fixed 53M expert-only so-101 core from training seed 3991.
 - fixed decoders from seeds 1, 2, and 3.
 - 50 paired scenes per range, seed 65000.
 - nominal x: `[0.28, 0.32]` m.
@@ -31,15 +31,16 @@ learned-decoder success:
 decoder 1 had 27 nominal-only and 2 near-only wins (`p=1.62e-6`). it had 39
 nominal-only and 0 far-only wins (`p=3.64e-12`). tests used exact mcnemar.
 
-deterministic-ik control:
+deterministic ik control:
 
-| cube range | success | lift |
+| cube range | success | lifts |
 | --- | ---: | ---: |
 | nominal | 41/50 | 41/50 |
 | near | 12/50 | 12/50 |
 | far | 19/50 | 28/50 |
 
-near failure remains with exact ik. far ik improves decoder 1 from 12% to 38%.
+near failure remains with deterministic ik. far ik improves decoder 1 from 12%
+to 38%.
 the canonical policy still stays below its 82% nominal result. most failures
 happen before lift.
 

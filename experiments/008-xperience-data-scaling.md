@@ -8,17 +8,18 @@ does more xperience data improve human loss and so-101 transfer?
 
 - eight episodes from eight sessions at revision
   `ce943cf271a758b60240084892d05cf6dc12dd90`.
-- 18,574 valid anchors. one episode had invalid labels.
+- 18,574 valid anchors. one episode had no valid anchors because its synchronized
+  labels were non-finite, so it was excluded.
 - fixed whole-episode split.
 - motion-balanced budgets of 100, 1,000, and 10,000 clips.
-- frozen vlm and fixed 53.12m expert.
+- frozen vlm and fixed 53.12M expert.
 - 1,000 human-pretraining updates for every data budget.
 - expert-only transfer with 1,500 so-101 updates on 100 demonstrations.
 - 30 paired scenes, seed 63000, deterministic ik, horizon 8.
 
 ## result
 
-| human clips | human validation loss | robot validation loss | lift | success |
+| human clips | human validation loss | robot validation loss | lifts | success |
 | ---: | ---: | ---: | ---: | ---: |
 | 100 | `0.4380` | `0.000502` | 14/30 (47%) | 11/30 (37%) |
 | 1,000 | `0.2217` | `0.000375` | 18/30 (60%) | 15/30 (50%) |
@@ -40,4 +41,5 @@ use 1,000 clips at the fixed 1,000-update budget. rerun 10,000 clips with a
 longer matched-exposure schedule.
 
 control results are in
-`reports/so101-xperience-multi8-data-scaling-rescale-h8-30.json`.
+`reports/so101-xperience-multi8-data-scaling-rescale-h8-30.json`. despite the
+ambiguous filename, this report contains the valid corrected-preprocessing run.

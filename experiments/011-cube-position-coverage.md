@@ -1,8 +1,9 @@
-# 011: robot position coverage
+# 011: cube-position coverage
 
 ## question
 
-do wider robot demonstrations fix the x-shift failure from experiment 010?
+do demonstrations with wider cube positions fix the x-shift failure from
+experiment 010?
 
 ## setup
 
@@ -14,7 +15,7 @@ do wider robot demonstrations fix the x-shift failure from experiment 010?
 - 24,405 nominal frames and 24,172 wide frames.
 - the same 1,000-clip human expert checkpoint.
 - core seed 3991, 2,500 updates, and effective batch size 32.
-- fixed config, split rule, schedule, and deterministic-ik evaluation.
+- fixed config, split rule, schedule, and deterministic ik evaluation.
 - 50 paired scenes per near, nominal, and far range. evaluation seed 11500.
 
 the oracle accepted 105 nominal episodes in 108 attempts. it accepted 105 wide

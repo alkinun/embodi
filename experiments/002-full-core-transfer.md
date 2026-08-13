@@ -13,7 +13,7 @@ does transferring xperience vlm adapters and the action expert help so-101?
 ## result
 
 full transfer reduced offline loss. it did not improve task success across three
-2,500-step deterministic-ik runs.
+2,500-step deterministic ik runs.
 
 | model | success |
 | --- | ---: |

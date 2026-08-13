@@ -9,7 +9,7 @@ can xperience hand motion use the same canonical space as so-101?
 - 100 balanced clips from one xperience episode.
 - `primary_effector / pose_scalar`, 10 channels.
 - initial-root coordinates, relative rotation6d, and normalized hand opening.
-- 32 steps at 30 hz.
+- 32 steps at 30 Hz.
 
 ## result
 

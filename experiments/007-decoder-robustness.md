@@ -6,9 +6,9 @@ did decoder variance come from optimization or rollout collection?
 
 ## setup
 
-- fixed 53m expert-only so-101 core.
-- one cached deterministic-ik teacher dataset.
-- 40 rollout episodes, 35 train and 5 held out.
+- fixed 53M expert-only so-101 core.
+- one cached deterministic ik teacher dataset.
+- 40 rollout episodes, 35 train and 5 held-out.
 - 1,294 policy-conditioned canonical/native chunks.
 - teacher success: 35/40. all held-out episodes succeeded.
 - fixed initialization, tensors, split, architecture, and 2,500 updates.

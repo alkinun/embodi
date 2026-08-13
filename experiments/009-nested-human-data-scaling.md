@@ -7,7 +7,7 @@ does more unique human data help when exposure stays fixed?
 ## setup
 
 - human-only experiment.
-- frozen vlm and fixed 53.12m expert.
+- frozen vlm and fixed 53.12M expert.
 - nested budgets: `100 subset 1,000 subset 10,000`.
 - five training episodes and two validation episodes.
 - one fixed 1,000-clip validation set.

@@ -44,7 +44,7 @@ checkpoints that differ by one or two successes.
 - do not recover experiment 011 with checkpoint selection.
 - keep closed-loop screening during training.
 - stop runs early only after a larger paired control screen confirms a peak.
-- test inference horizon next because it needs no retraining.
+- test execution horizon next because it needs no retraining.
 
 raw results:
 

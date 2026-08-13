@@ -48,7 +48,7 @@ images + instruction + canonical state
         native robot commands
 ```
 
-the selected expert has 53.12m parameters. it uses `width=512`, `layers=12`,
+the selected expert has 53.12M parameters. it uses `width=512`, `layers=12`,
 and `heads=8`.
 
 each controllable part uses one 10-channel token:
