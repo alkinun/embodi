@@ -1,30 +1,31 @@
-# 002: Full-Core Transfer
+# 002: full-core transfer
 
-## Question
+## question
 
-Does transferring both Xperience-trained VLM adapters and the action expert
-improve SO-101 learning?
+does transferring xperience vlm adapters and the action expert help so-101?
 
-## Comparison
+## setup
 
-- Baseline: foundational VLM with fresh adapters and fresh action expert.
-- Full generalist: Xperience-trained VLM adapters and action expert.
-- Same robot data, decoder initialization, schedules, and seeds.
+- baseline: fresh adapters and a fresh action expert.
+- full transfer: xperience adapters and action expert.
+- robot data, decoder initialization, schedules, and seeds stayed fixed.
 
-## Result
+## result
 
-Full transfer reduced offline canonical loss but did not robustly improve task
-success. Across three 2,500-step deterministic-IK runs:
+full transfer reduced offline loss. it did not improve task success across three
+2,500-step deterministic-ik runs.
 
-| Model | Success |
+| model | success |
 | --- | ---: |
-| Baseline | 57/150 (38.0%) |
-| Full generalist | 50/150 (33.3%) |
+| baseline | 57/150 (38.0%) |
+| full transfer | 50/150 (33.3%) |
 
-Later matched component tests were worse: full generalist reached 22% and 28%
-where the corresponding baselines reached 56% and 42%.
+later tests found 22% and 28% for full transfer. baselines reached 56% and 42%.
 
-## Decision
+## finding
 
-Do not transfer the complete human-adapted core into the robot domain. Offline
-canonical loss is not a sufficient model-selection metric.
+human vlm adapters hurt robot transfer. offline loss does not predict control.
+
+## decision
+
+do not transfer the full human core. use closed-loop success for selection.

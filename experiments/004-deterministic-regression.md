@@ -1,23 +1,29 @@
-# 004: Deterministic Regression
+# 004: deterministic regression
 
-## Question
+## question
 
-Was flow integration hiding useful transfer behind sampling error?
+was flow integration hiding transfer behind sampling error?
 
-## Result
+## setup
 
-Sampling diagnostics showed vector-field error dominated numerical integration
-error. Replacing flow inference with deterministic trajectory regression
-produced nontrivial control, but the full-generalist advantage was seed-sensitive:
+compare flow inference with deterministic trajectory regression.
 
-| Training steps | Baseline | Full generalist |
+## result
+
+vector-field error dominated integration error. regression produced useful
+control. the first transfer gain did not replicate.
+
+| training steps | baseline | full transfer |
 | ---: | ---: | ---: |
 | 2,500, first run | 10% | 46% |
 | 5,000 | 36% | 34% |
 
-Two additional 2,500-step seeds reversed the initial result.
+two more 2,500-step seeds reversed the first result.
 
-## Decision
+## finding
 
-Use deterministic regression for controlled SO-101 transfer studies. Evaluate
-multiple training seeds and paired simulator scenes.
+regression removes avoidable sampling noise. one seed is not enough.
+
+## decision
+
+use regression for so-101 studies. use multiple seeds and paired scenes.

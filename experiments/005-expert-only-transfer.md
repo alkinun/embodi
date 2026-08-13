@@ -1,44 +1,41 @@
-# 005: Expert-Only Transfer
+# 005: expert-only transfer
 
-## Question
+## question
 
-Is useful Xperience transfer stored in the VLM adapters, the action expert, or
-both?
+is useful xperience transfer in the vlm adapters or the action expert?
 
-## Comparison
+## setup
 
-- Baseline: fresh robot-domain adapters and fresh action expert.
-- Full generalist: Xperience adapters and Xperience action expert.
-- Backbone only: Xperience adapters and fresh action expert.
-- Expert only: fresh robot-domain adapters and Xperience action expert.
+- baseline: fresh robot adapters and expert.
+- full transfer: xperience adapters and expert.
+- backbone only: xperience adapters and a fresh expert.
+- expert only: fresh robot adapters and the xperience expert.
 
-## Result
+## result
 
-Seed 3991, 50 paired scenes:
+seed 3991 used 50 paired scenes.
 
-| Initialization | Success |
+| initialization | success |
 | --- | ---: |
-| Baseline | 56% |
-| Full generalist | 22% |
-| Backbone only | 40% |
-| Expert only | 88% |
+| baseline | 56% |
+| full transfer | 22% |
+| backbone only | 40% |
+| expert only | 88% |
 
-Expert-only transfer replicated on seed 3992 at 60%, versus 42% baseline and
-28% full generalist. Aggregate expert-only deterministic-IK success was 74%.
+seed 3992 reached 60% expert-only, 42% baseline, and 28% full transfer.
+aggregate expert-only deterministic-ik success was 74%.
 
-After policy-manifold decoder training, the best expert-only learned controller
-reached 83/100 success versus its matched baseline at 56/100. Expert transfer
-won 33 paired scenes uniquely; baseline won 6 uniquely. Decoder training itself
-remains seed-sensitive.
+the best learned expert-only controller reached 83/100. its baseline reached
+56/100. expert transfer won 33 scenes uniquely. baseline won 6.
 
-## Finding
+## finding
 
-The reusable knowledge is in the approximately 53M-parameter action expert.
-Human-domain VLM adapters cause negative visual-domain transfer.
+the action expert stores the reusable knowledge. human vlm adapters hurt robot
+vision transfer.
 
-## Decision
+## decision
 
-- Freeze the complete VLM during egocentric pretraining.
-- Pretrain and transfer the action expert only.
-- Initialize robot-domain VLM adapters/state path fresh.
-- Train a small decoder per robot.
+- freeze the vlm during human pretraining.
+- transfer only the action expert.
+- start robot adapters and state paths fresh.
+- train one small decoder for each robot.

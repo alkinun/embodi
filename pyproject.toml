@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "embodi"
 version = "0.1.0"
 description = "simulation-first vision-language-action policy for so-100 and so-101"
-readme = "README.md"
+readme = "readme.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "huggingface-hub>=1.0",

@@ -1,24 +1,27 @@
-# 001: Xperience Pipeline
+# 001: xperience pipeline
 
-## Question
+## question
 
-Can Xperience egocentric hand motion be converted into the same canonical action
-space used by SO-101?
+can xperience hand motion use the same canonical space as so-101?
 
-## Setup
+## setup
 
-- 100 balanced clips from one Xperience episode.
+- 100 balanced clips from one xperience episode.
 - `primary_effector / pose_scalar`, 10 channels.
-- Initial-root coordinates, relative rotation6d, normalized hand opening.
-- 32 steps at 30 Hz.
+- initial-root coordinates, relative rotation6d, and normalized hand opening.
+- 32 steps at 30 hz.
 
-## Result
+## result
 
 - 2,932 valid anchors passed synchronization and geometry checks.
-- Training loss: `1.0529 -> 0.1053` over 2,000 steps.
-- Held-out loss: `1.0686 -> 0.1642`.
+- training loss: `1.0529 -> 0.1053` over 2,000 steps.
+- held-out loss: `1.0686 -> 0.1642`.
 
-## Decision
+## finding
 
-The data and canonical conversion pipeline are usable. This is a 100-clip
-pipeline experiment, not evidence about large-scale Xperience pretraining.
+the conversion pipeline works.
+
+## decision
+
+use the pipeline for larger studies. do not treat this 100-clip run as scaling
+evidence.
