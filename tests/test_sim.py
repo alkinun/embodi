@@ -3,6 +3,7 @@ import os
 os.environ.setdefault("MUJOCO_GL", "egl")
 
 import numpy as np
+import pytest
 
 from embodi.sim.environment import HOME_STATE, SO101PickPlaceEnv
 
@@ -52,3 +53,8 @@ def test_environment_uses_configured_cube_range() -> None:
         np.testing.assert_allclose(cube_position[:2], [0.25, 0.05], atol=1e-6)
     finally:
         env.close()
+
+
+def test_environment_rejects_invalid_cube_range() -> None:
+    with pytest.raises(ValueError, match="cube ranges"):
+        SO101PickPlaceEnv(cube_x_range=(0.32, 0.28))

@@ -1,0 +1,23 @@
+{
+  "experiment": "011-robot-position-coverage",
+  "data_seed": 11000,
+  "training_seed": 3991,
+  "evaluation_seed": 11500,
+  "episodes_per_dataset": 105,
+  "training_steps": 2500,
+  "effective_batch_size": 32,
+  "validation_regression_loss": {
+    "nominal": 0.000616,
+    "wide": 0.000946
+  },
+  "deterministic_ik_successes": {
+    "near": {"nominal": 2, "wide": 6, "episodes": 50},
+    "nominal": {"nominal": 10, "wide": 1, "episodes": 50},
+    "far": {"nominal": 3, "wide": 1, "episodes": 50}
+  },
+  "dataset": {
+    "nominal": {"frames": 24405, "attempts": 108, "cube_x_range": [0.28, 0.32]},
+    "wide": {"frames": 24172, "attempts": 113, "cube_x_range": [0.24, 0.36]},
+    "cube_y_range": [-0.025, 0.025]
+  }
+}

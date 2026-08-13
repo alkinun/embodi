@@ -12,8 +12,19 @@ from .environment import JOINT_NAMES, SO101PickPlaceEnv, TASK
 from .expert import Phase, PrivilegedPickPlaceExpert, run_expert_episode
 
 
-def evaluate_oracle(episodes: int, seed: int) -> float:
-    env = SO101PickPlaceEnv(width=64, height=48, seed=seed)
+def evaluate_oracle(
+    episodes: int,
+    seed: int,
+    cube_x_range: tuple[float, float] = (0.28, 0.32),
+    cube_y_range: tuple[float, float] = (-0.025, 0.025),
+) -> float:
+    env = SO101PickPlaceEnv(
+        width=64,
+        height=48,
+        seed=seed,
+        cube_x_range=cube_x_range,
+        cube_y_range=cube_y_range,
+    )
     successes = 0
     try:
         progress = tqdm(range(episodes), desc="oracle evaluation", unit="episode")
@@ -34,6 +45,8 @@ def generate_dataset(
     seed: int,
     max_attempts: int,
     camera_names: tuple[str, ...],
+    cube_x_range: tuple[float, float] = (0.28, 0.32),
+    cube_y_range: tuple[float, float] = (-0.025, 0.025),
 ) -> None:
     from lerobot.datasets.lerobot_dataset import LeRobotDataset
 
@@ -98,14 +111,20 @@ def generate_dataset(
         )
         + "\n"
     )
-    env = SO101PickPlaceEnv(seed=seed)
+    env = SO101PickPlaceEnv(
+        seed=seed,
+        cube_x_range=cube_x_range,
+        cube_y_range=cube_y_range,
+    )
     successes = 0
     attempts = 0
+    accepted_initial_cube_xy = []
     progress = tqdm(total=episodes, desc="synthetic demonstrations", unit="episode")
     try:
         while successes < episodes and attempts < max_attempts:
             attempts += 1
             env.reset()
+            initial_cube_xy = env.data.xpos[env.cube_body_id, :2].tolist()
             expert = PrivilegedPickPlaceExpert(env)
             for _ in range(750):
                 state = env.state()
@@ -139,6 +158,7 @@ def generate_dataset(
                     break
             if expert.phase == Phase.DONE:
                 dataset.save_episode(parallel_encoding=False)
+                accepted_initial_cube_xy.append(initial_cube_xy)
                 successes += 1
                 progress.update()
             else:
@@ -150,6 +170,22 @@ def generate_dataset(
         progress.close()
         env.close()
         dataset.finalize()
+    generation_path = root / "meta" / "generation.json"
+    generation_path.write_text(
+        json.dumps(
+            {
+                "seed": seed,
+                "episodes": episodes,
+                "attempts": attempts,
+                "camera_names": list(camera_names),
+                "cube_x_range": list(cube_x_range),
+                "cube_y_range": list(cube_y_range),
+                "accepted_initial_cube_xy": accepted_initial_cube_xy,
+            },
+            indent=2,
+        )
+        + "\n"
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -160,6 +196,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-attempts", type=int)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--cameras", nargs="+", choices=("top", "wrist"), default=["top"])
+    parser.add_argument("--cube-x-range", type=float, nargs=2, default=(0.28, 0.32))
+    parser.add_argument("--cube-y-range", type=float, nargs=2, default=(-0.025, 0.025))
     parser.add_argument("--evaluate-only", action="store_true")
     return parser.parse_args()
 
@@ -169,15 +207,26 @@ def main() -> None:
     os.environ.setdefault("MUJOCO_GL", "egl")
     if args.episodes <= 0:
         raise ValueError("--episodes must be positive")
+    cube_x_range = tuple(args.cube_x_range)
+    cube_y_range = tuple(args.cube_y_range)
     if args.evaluate_only:
-        rate = evaluate_oracle(args.episodes, args.seed)
+        rate = evaluate_oracle(args.episodes, args.seed, cube_x_range, cube_y_range)
         print(f"oracle_success_rate={rate:.1%} episodes={args.episodes}")
         return
     max_attempts = args.max_attempts or max(args.episodes * 2, args.episodes + 10)
     camera_names = tuple(args.cameras)
     if len(set(camera_names)) != len(camera_names):
         raise ValueError("--cameras must contain unique camera names")
-    generate_dataset(args.root, args.repo_id, args.episodes, args.seed, max_attempts, camera_names)
+    generate_dataset(
+        args.root,
+        args.repo_id,
+        args.episodes,
+        args.seed,
+        max_attempts,
+        camera_names,
+        cube_x_range,
+        cube_y_range,
+    )
     print(f"dataset_root={args.root} repo_id={args.repo_id} episodes={args.episodes}")
 
 

@@ -17,6 +17,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [008](008-xperience-data-scaling.md) | does more human data help transfer? | 1,000 clips win at the fixed budget. |
 | [009](009-nested-human-data-scaling.md) | does matched-exposure scaling help? | more unique data helps. |
 | [010](010-position-shift-robustness.md) | does success survive x shifts? | expand robot and decoder coverage. |
+| [011](011-robot-position-coverage.md) | do wider demonstrations fix x shifts? | no. coverage alone causes forgetting. |
 
 ## current decision
 
