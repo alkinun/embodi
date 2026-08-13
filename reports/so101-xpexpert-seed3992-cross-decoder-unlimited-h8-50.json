@@ -1,0 +1,376 @@
+{
+  "frequency_hz": 30,
+  "max_steps": 500,
+  "execution_horizon": 8,
+  "deterministic_decoder": false,
+  "clip_deterministic_actions": false,
+  "disable_action_limits": true,
+  "embodiment_from": "outputs/so101-exp0-xpexpert-regression-2p5k-seed3991-ik-distill/final",
+  "noise_mode": "random",
+  "noise_refresh": "chunk",
+  "results": [
+    {
+      "checkpoint": "outputs/so101-exp0-xpexpert-regression-100demo-2p5k-seed3992/final",
+      "episodes": 50,
+      "seed": 55000,
+      "successes": 30,
+      "success_rate": 0.6,
+      "lifts": 31,
+      "lift_rate": 0.62,
+      "mean_steps": 312.02,
+      "elapsed_seconds": 66.25063253380358,
+      "outcomes": [
+        {
+          "episode": 0,
+          "success": true,
+          "lifted": true,
+          "steps": 175,
+          "chunks": 22
+        },
+        {
+          "episode": 1,
+          "success": true,
+          "lifted": true,
+          "steps": 172,
+          "chunks": 22
+        },
+        {
+          "episode": 2,
+          "success": true,
+          "lifted": true,
+          "steps": 201,
+          "chunks": 26
+        },
+        {
+          "episode": 3,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 4,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 5,
+          "success": true,
+          "lifted": true,
+          "steps": 330,
+          "chunks": 42
+        },
+        {
+          "episode": 6,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 7,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 8,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 9,
+          "success": true,
+          "lifted": true,
+          "steps": 178,
+          "chunks": 23
+        },
+        {
+          "episode": 10,
+          "success": true,
+          "lifted": true,
+          "steps": 170,
+          "chunks": 22
+        },
+        {
+          "episode": 11,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 12,
+          "success": true,
+          "lifted": true,
+          "steps": 193,
+          "chunks": 25
+        },
+        {
+          "episode": 13,
+          "success": true,
+          "lifted": true,
+          "steps": 171,
+          "chunks": 22
+        },
+        {
+          "episode": 14,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 15,
+          "success": true,
+          "lifted": true,
+          "steps": 172,
+          "chunks": 22
+        },
+        {
+          "episode": 16,
+          "success": true,
+          "lifted": true,
+          "steps": 228,
+          "chunks": 29
+        },
+        {
+          "episode": 17,
+          "success": true,
+          "lifted": true,
+          "steps": 185,
+          "chunks": 24
+        },
+        {
+          "episode": 18,
+          "success": true,
+          "lifted": true,
+          "steps": 178,
+          "chunks": 23
+        },
+        {
+          "episode": 19,
+          "success": true,
+          "lifted": true,
+          "steps": 196,
+          "chunks": 25
+        },
+        {
+          "episode": 20,
+          "success": true,
+          "lifted": true,
+          "steps": 172,
+          "chunks": 22
+        },
+        {
+          "episode": 21,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 22,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 23,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 24,
+          "success": true,
+          "lifted": true,
+          "steps": 177,
+          "chunks": 23
+        },
+        {
+          "episode": 25,
+          "success": true,
+          "lifted": true,
+          "steps": 170,
+          "chunks": 22
+        },
+        {
+          "episode": 26,
+          "success": true,
+          "lifted": true,
+          "steps": 212,
+          "chunks": 27
+        },
+        {
+          "episode": 27,
+          "success": true,
+          "lifted": true,
+          "steps": 171,
+          "chunks": 22
+        },
+        {
+          "episode": 28,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 29,
+          "success": true,
+          "lifted": true,
+          "steps": 187,
+          "chunks": 24
+        },
+        {
+          "episode": 30,
+          "success": true,
+          "lifted": true,
+          "steps": 175,
+          "chunks": 22
+        },
+        {
+          "episode": 31,
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 32,
+          "success": true,
+          "lifted": true,
+          "steps": 178,
+          "chunks": 23
+        },
+        {
+          "episode": 33,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 34,
+          "success": true,
+          "lifted": true,
+          "steps": 224,
+          "chunks": 28
+        },
+        {
+          "episode": 35,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 36,
+          "success": true,
+          "lifted": true,
+          "steps": 168,
+          "chunks": 21
+        },
+        {
+          "episode": 37,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 38,
+          "success": true,
+          "lifted": true,
+          "steps": 185,
+          "chunks": 24
+        },
+        {
+          "episode": 39,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 40,
+          "success": true,
+          "lifted": true,
+          "steps": 156,
+          "chunks": 20
+        },
+        {
+          "episode": 41,
+          "success": true,
+          "lifted": true,
+          "steps": 178,
+          "chunks": 23
+        },
+        {
+          "episode": 42,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 43,
+          "success": true,
+          "lifted": true,
+          "steps": 175,
+          "chunks": 22
+        },
+        {
+          "episode": 44,
+          "success": true,
+          "lifted": true,
+          "steps": 162,
+          "chunks": 21
+        },
+        {
+          "episode": 45,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 46,
+          "success": true,
+          "lifted": true,
+          "steps": 178,
+          "chunks": 23
+        },
+        {
+          "episode": 47,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 48,
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 63
+        },
+        {
+          "episode": 49,
+          "success": true,
+          "lifted": true,
+          "steps": 184,
+          "chunks": 23
+        }
+      ]
+    }
+  ]
+}

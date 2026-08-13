@@ -1,0 +1,547 @@
+{
+  "seed": 15000,
+  "results": [
+    {
+      "name": "native_oracle",
+      "episodes": 20,
+      "successes": 20,
+      "success_rate": 1.0,
+      "lifts": 20,
+      "lift_rate": 1.0,
+      "mean_native_rmse": 0.0,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 245,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 242,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 232,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 226,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 246,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 238,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        }
+      ]
+    },
+    {
+      "name": "deterministic_canonical_decoder",
+      "episodes": 20,
+      "successes": 20,
+      "success_rate": 1.0,
+      "lifts": 20,
+      "lift_rate": 1.0,
+      "mean_native_rmse": 0.0009824882328004067,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 245,
+          "native_rmse": 0.0011312622612996218,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024024321005329157,
+            "descend": 0.003260518328170292,
+            "close": 0.0017343300884628359,
+            "lift": 0.0008762045717479563,
+            "transit": 0.00032669512863699976,
+            "release": 5.291981700186928e-05,
+            "retreat": 3.7181071093073115e-05,
+            "done": 0.0024348353035748005
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 242,
+          "native_rmse": 0.0010212525659902148,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024112514268960117,
+            "descend": 0.0030736332264496014,
+            "close": 0.0009935496430747055,
+            "lift": 0.0007989639561856166,
+            "transit": 0.0003266079408852172,
+            "release": 5.621755359849582e-05,
+            "retreat": 3.595407179091126e-05,
+            "done": 0.002384442137554288
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0009307711592747277,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024123582169522707,
+            "descend": 0.002669864920608234,
+            "close": 0.0007896262019736847,
+            "lift": 0.0006054715593468005,
+            "transit": 0.0003299996831451497,
+            "release": 0.00012762440577110585,
+            "retreat": 3.2999520044540986e-05,
+            "done": 0.00223747082054615
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.000999416707743833,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.002381998374403338,
+            "descend": 0.002835440434864722,
+            "close": 0.0010461655644273076,
+            "lift": 0.0007174581486550677,
+            "transit": 0.0003289802822379257,
+            "release": 0.00011242547467797219,
+            "retreat": 3.426156035857275e-05,
+            "done": 0.0022719812113791704
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0009299362082626592,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0026206803225932163,
+            "descend": 0.0022816191238234753,
+            "close": 0.0017824280536539543,
+            "lift": 0.0003302721694732706,
+            "transit": 0.00031971901966866014,
+            "release": 5.8094392564574567e-05,
+            "retreat": 3.164896406815387e-05,
+            "done": 0.0020691172685474157
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0009881532648300514,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024087316875920804,
+            "descend": 0.0028444777836273537,
+            "close": 0.0009450428357619481,
+            "lift": 0.0006199288440661298,
+            "transit": 0.00033055956308276224,
+            "release": 4.959643132072718e-05,
+            "retreat": 3.2999520044540986e-05,
+            "done": 0.002245599403977394
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 232,
+          "native_rmse": 0.0010019239271959754,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0023814609624726777,
+            "descend": 0.00289405330986483,
+            "close": 0.0009815403415511053,
+            "lift": 0.0007110462643645911,
+            "transit": 0.0003305382028596381,
+            "release": 6.0411845818938063e-05,
+            "retreat": 3.401289723115042e-05,
+            "done": 0.0022835549898445606
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0009236390070164653,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0025934040856073434,
+            "descend": 0.0022961162714636883,
+            "close": 0.0017216448541148566,
+            "lift": 0.00032851037164953977,
+            "transit": 0.0003185139808740559,
+            "release": 6.141381769945535e-05,
+            "retreat": 3.210546128684655e-05,
+            "done": 0.0021174680441617966
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 228,
+          "native_rmse": 0.0009029145898389246,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.002424969012664453,
+            "descend": 0.00262268946680706,
+            "close": 0.0006875468552607344,
+            "lift": 0.0005140064604347572,
+            "transit": 0.000330331517601168,
+            "release": 4.760013446987917e-05,
+            "retreat": 3.214320895494893e-05,
+            "done": 0.0021583253983408213
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0009909782932169564,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024050416730980423,
+            "descend": 0.0029347043397137894,
+            "close": 0.0009262625111053543,
+            "lift": 0.0007180780117374121,
+            "transit": 0.00032955188414364656,
+            "release": 5.672434563166462e-05,
+            "retreat": 3.6189394450047985e-05,
+            "done": 0.0023165279999375343
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0008826916440425218,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.002523752730078687,
+            "descend": 0.0024257705450375995,
+            "close": 0.0008597177478198622,
+            "lift": 0.00030703126241052005,
+            "transit": 0.00033635773745897623,
+            "release": 0.00012436102606443454,
+            "retreat": 3.248097709729336e-05,
+            "done": 0.0021126719657331705
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0010159890176002035,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.00237641319464191,
+            "descend": 0.0030255022306496706,
+            "close": 0.0010872897801164072,
+            "lift": 0.0007138074353052718,
+            "transit": 0.0003286808718084579,
+            "release": 5.0476178876124324e-05,
+            "retreat": 3.5818902688333765e-05,
+            "done": 0.0023356375750154257
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 226,
+          "native_rmse": 0.0009133839395621122,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0025298487088387927,
+            "descend": 0.002369839683524333,
+            "close": 0.0014336305745625093,
+            "lift": 0.00032033437807848185,
+            "transit": 0.0003154077590136838,
+            "release": 6.501790024534178e-05,
+            "retreat": 3.18399652314838e-05,
+            "done": 0.0021016050595790148
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0010950292607500409,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0023765276617505942,
+            "descend": 0.0032459084714691225,
+            "close": 0.0012667078905603073,
+            "lift": 0.0008909222524380311,
+            "transit": 0.00032838626066222787,
+            "release": 0.00011987955161506155,
+            "retreat": 3.7181071093073115e-05,
+            "done": 0.002402140758931637
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 246,
+          "native_rmse": 0.0011360717536572226,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024114124796893598,
+            "descend": 0.0032295495751895943,
+            "close": 0.0017221275144644703,
+            "lift": 0.0009571817201121073,
+            "transit": 0.00032441132627556926,
+            "release": 0.00011879245430463925,
+            "retreat": 3.705038034240715e-05,
+            "done": 0.002438528696075082
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.001004008853129395,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.002413308975064865,
+            "descend": 0.002837535548989275,
+            "close": 0.001097934410305849,
+            "lift": 0.0006245148364946039,
+            "transit": 0.0003298019550533758,
+            "release": 0.00012169284952202967,
+            "retreat": 3.461369124124758e-05,
+            "done": 0.002266587922349572
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0009350448820717979,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024549372780711563,
+            "descend": 0.0027924698959218295,
+            "close": 0.000678737784861975,
+            "lift": 0.0006103693982974315,
+            "transit": 0.0003300698713986961,
+            "release": 6.014913548521387e-05,
+            "retreat": 3.605511301429942e-05,
+            "done": 0.00230752513743937
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.000915122507180676,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.002442019041394049,
+            "descend": 0.002698400850931648,
+            "close": 0.0007359620643304273,
+            "lift": 0.0005027620839731147,
+            "transit": 0.0003297409051810973,
+            "release": 5.534330909237421e-05,
+            "retreat": 3.168725379509851e-05,
+            "done": 0.0021995410788804293
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0009021217536736698,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0024696753698663088,
+            "descend": 0.0026522360130911693,
+            "close": 0.0007572054355478031,
+            "lift": 0.0005004249437155926,
+            "transit": 0.00032806100820640234,
+            "release": 6.46776010398753e-05,
+            "retreat": 3.2999520044540986e-05,
+            "done": 0.0021990116219967604
+          }
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 236,
+          "native_rmse": 0.0010300530596710634,
+          "phase_native_rmse": {
+            "open": 4.183125533469618e-06,
+            "pregrasp": 0.0023748782268739888,
+            "descend": 0.003117396839512273,
+            "close": 0.0010476543454084701,
+            "lift": 0.0007079493823564715,
+            "transit": 0.00032968644921651044,
+            "release": 5.21690560465989e-05,
+            "retreat": 3.595407179091126e-05,
+            "done": 0.0023396338801831007
+          }
+        }
+      ]
+    }
+  ]
+}

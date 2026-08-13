@@ -1,0 +1,427 @@
+{
+  "seed": 15000,
+  "results": [
+    {
+      "name": "native_oracle",
+      "episodes": 20,
+      "successes": 20,
+      "success_rate": 1.0,
+      "lifts": 20,
+      "lift_rate": 1.0,
+      "mean_native_rmse": 0.0,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 245,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 242,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 232,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 226,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 246,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 238,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        }
+      ]
+    },
+    {
+      "name": "outputs/so101-exp0-residual-decoder/final",
+      "episodes": 20,
+      "successes": 0,
+      "success_rate": 0.0,
+      "lifts": 0,
+      "lift_rate": 0.0,
+      "mean_native_rmse": 8.122935335537685,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 7.168980052202408,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 8.15010180995484,
+            "failed": 13.339376449584961
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 7.191386269232524,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 8.176026705375387,
+            "failed": 13.339334487915039
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.638216311577708,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.850052463121651,
+            "failed": 13.338423728942871
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.875960955436208,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.125129982459644,
+            "failed": 13.33829402923584
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 7.920557971924011,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.019694505151639,
+            "failed": 13.339569091796875
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 9.04535855394123,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.321127290568075,
+            "failed": 13.33828353881836
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.977277645881154,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.24235665404107,
+            "failed": 13.338203430175781
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 5.756270425221217,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 6.515833866005101,
+            "failed": 13.306449890136719
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 9.011095065290906,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.28148196108085,
+            "failed": 13.338479995727539
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.344074526841618,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.509720587533367,
+            "failed": 13.338730812072754
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.900709907058626,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.153761208057404,
+            "failed": 13.33876895904541
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.551877544168383,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.750154547947497,
+            "failed": 13.338644027709961
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.78319417577503,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.01779108796238,
+            "failed": 13.338951110839844
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.66116593436205,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.876606557487456,
+            "failed": 13.338325500488281
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 6.992721424344927,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 7.946165072523858,
+            "failed": 13.339513778686523
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.81529167931793,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 10.05493359772627,
+            "failed": 13.338357925415039
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 6.066533558270229,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 6.874889783130205,
+            "failed": 13.29752254486084
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.712560088280588,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.936069669802327,
+            "failed": 13.338470458984375
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 7.377446086478552,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 8.391294259177752,
+            "failed": 13.34033489227295
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.668028535148395,
+          "phase_native_rmse": {
+            "open": 0.230861769678692,
+            "pregrasp": 9.884546354782483,
+            "failed": 13.338374137878418
+          }
+        }
+      ]
+    }
+  ]
+}

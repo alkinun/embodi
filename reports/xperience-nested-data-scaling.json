@@ -1,0 +1,50 @@
+{
+  "experiment": "nested-human-data-scaling",
+  "seed": 80000,
+  "model": {
+    "expert_parameters": 53120000,
+    "expert_width": 512,
+    "expert_layers": 12,
+    "expert_heads": 8,
+    "freeze_backbone": true
+  },
+  "data": {
+    "nested": true,
+    "validation_clips": 1000,
+    "train_episode_indices": [0, 1, 4, 5, 7],
+    "validation_episode_indices": [3, 6],
+    "presentations_per_clip": 32
+  },
+  "optimization": {
+    "batch_size": 1,
+    "accumulation_steps": 32,
+    "learning_rate": 0.0001,
+    "warmup_fraction": 0.1,
+    "schedule": "cosine"
+  },
+  "results": [
+    {
+      "clips": 100,
+      "steps": 100,
+      "checkpoint": "outputs/xperience-nested-scaling-100clip-100step/final",
+      "training_loss": 0.721702,
+      "validation_loss": 0.871528
+    },
+    {
+      "clips": 1000,
+      "steps": 1000,
+      "checkpoint": "outputs/xperience-nested-scaling-1000clip-1000step/final",
+      "training_loss": 0.098318,
+      "validation_loss": 0.282061
+    },
+    {
+      "clips": 10000,
+      "steps": 10000,
+      "checkpoint": "outputs/xperience-nested-scaling-10000clip-10000step/final",
+      "training_loss": 0.043555,
+      "validation_loss": 0.263720,
+      "best_measured_step": 7500,
+      "best_measured_validation_loss": 0.261124
+    }
+  ]
+}

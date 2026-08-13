@@ -1,0 +1,929 @@
+{
+  "seed": 15000,
+  "results": [
+    {
+      "name": "native_oracle",
+      "episodes": 20,
+      "successes": 20,
+      "success_rate": 1.0,
+      "lifts": 20,
+      "lift_rate": 1.0,
+      "mean_native_rmse": 0.0,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 245,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 242,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 232,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 227,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 237,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 226,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 246,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 234,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 239,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 231,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 235,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "terminal_phase": "done",
+          "steps": 238,
+          "native_rmse": 0.0,
+          "phase_native_rmse": {}
+        }
+      ]
+    },
+    {
+      "name": "outputs/so101-exp0-shared-decoder/final",
+      "episodes": 20,
+      "successes": 0,
+      "success_rate": 0.0,
+      "lifts": 0,
+      "lift_rate": 0.0,
+      "mean_native_rmse": 10.384292351475784,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.393722380484853,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.618433946420339,
+            "failed": 13.819369316101074
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.419171469126429,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.647536803868192,
+            "failed": 13.860795974731445
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.433518627285958,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.663966500069485,
+            "failed": 13.881404876708984
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.383824639235224,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.606989872357078,
+            "failed": 13.818418502807617
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.33294600205762,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.547810649083665,
+            "failed": 13.856095314025879
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.400005013176374,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.625549708516145,
+            "failed": 13.837930679321289
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.401129155073846,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.626873264628008,
+            "failed": 13.835160255432129
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.249749723076821,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.452070275614084,
+            "failed": 13.793201446533203
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.3733258413417,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.594895743141489,
+            "failed": 13.811976432800293
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.394147880162512,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.618894599685984,
+            "failed": 13.823200225830078
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.368714954597609,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.589646616257912,
+            "failed": 13.801596641540527
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.352990610684667,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.571641940715885,
+            "failed": 13.778754234313965
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.42605686570917,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.655172161819522,
+            "failed": 13.900873184204102
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.344408693909646,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.561847871985318,
+            "failed": 13.762368202209473
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.379292359096663,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.601706850627236,
+            "failed": 13.823144912719727
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.371131727950914,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.592454153644152,
+            "failed": 13.800232887268066
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.408923144425664,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.63564506345544,
+            "failed": 13.864931106567383
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.412886295574053,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.640353141737378,
+            "failed": 13.85009479522705
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.425251135230065,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.654209126125682,
+            "failed": 13.904598236083984
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.414650511315891,
+          "phase_native_rmse": {
+            "open": 1.9706253574954138,
+            "pregrasp": 11.64222298968922,
+            "failed": 13.870833396911621
+          }
+        }
+      ]
+    },
+    {
+      "name": "outputs/so101-exp0-baseline-refine-seed777/final",
+      "episodes": 20,
+      "successes": 0,
+      "success_rate": 0.0,
+      "lifts": 0,
+      "lift_rate": 0.0,
+      "mean_native_rmse": 8.295473902480945,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.372332126327924,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.271449863418075,
+            "failed": 12.395637512207031
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.341275150009563,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.23555066959917,
+            "failed": 12.391463279724121
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.354601803421975,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.25110519424943,
+            "failed": 12.375097274780273
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.489399702634131,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.406872571007279,
+            "failed": 12.398950576782227
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 7.627430958833013,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 8.410018890357215,
+            "failed": 12.342621803283691
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.542511485729898,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.467869239405166,
+            "failed": 12.45400333404541
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.473660354529109,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.389004242321677,
+            "failed": 12.35750961303711
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 7.668043743286814,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 8.456992881357177,
+            "failed": 12.344558715820312
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.40625493143286,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.310742289566797,
+            "failed": 12.390446662902832
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.365554537517683,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.263658349179039,
+            "failed": 12.389548301696777
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.247077699644224,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.126570159738714,
+            "failed": 12.390461921691895
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.460540798306464,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.373402128534869,
+            "failed": 12.4086275100708
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.126948804089002,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 8.987856356565617,
+            "failed": 12.356786727905273
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.487280774542263,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.404299407951102,
+            "failed": 12.413653373718262
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.377780764017785,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.277789854806317,
+            "failed": 12.391307830810547
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.457086631655693,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.369560965821762,
+            "failed": 12.389824867248535
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.177446089897837,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.046179711326095,
+            "failed": 12.369280815124512
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.33629473064627,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.229857030978872,
+            "failed": 12.383134841918945
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.135970007947513,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 8.998016790910201,
+            "failed": 12.390342712402344
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 8.461986955148832,
+          "phase_native_rmse": {
+            "open": 2.104745927784178,
+            "pregrasp": 9.37534431189545,
+            "failed": 12.37608528137207
+          }
+        }
+      ]
+    },
+    {
+      "name": "outputs/so101-exp0-generalist-refine-seed777/final",
+      "episodes": 20,
+      "successes": 0,
+      "success_rate": 0.0,
+      "lifts": 0,
+      "lift_rate": 0.0,
+      "mean_native_rmse": 10.60994094782642,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.69037595817021,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.952192734095675,
+            "failed": 13.551040649414062
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.61930522109781,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.870769134730347,
+            "failed": 13.45339298248291
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.579968246391841,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.825498655807873,
+            "failed": 13.423944473266602
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.60548213337149,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.854871997655916,
+            "failed": 13.4417142868042
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.613174125977926,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.863441482063168,
+            "failed": 13.481685638427734
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.579460560423987,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.82491716176025,
+            "failed": 13.423229217529297
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.581986596328871,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.827815848441164,
+            "failed": 13.426133155822754
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.59621548312051,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.844255717332699,
+            "failed": 13.428953170776367
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.571433066044534,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.81563998894258,
+            "failed": 13.421917915344238
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.624613027061734,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.876787452658347,
+            "failed": 13.468269348144531
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.57165680527687,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.81579330243355,
+            "failed": 13.434690475463867
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.63611948447568,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.889941067242425,
+            "failed": 13.48758602142334
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.554784368617193,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.796478745365931,
+            "failed": 13.409610748291016
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.615042827384812,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.865774473375525,
+            "failed": 13.46101188659668
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.722977593966894,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.989541575928365,
+            "failed": 13.596059799194336
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.584825109158244,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.831168080656981,
+            "failed": 13.4179048538208
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.629778856890542,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.882790234463274,
+            "failed": 13.46514892578125
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.625182997754642,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.87727559253204,
+            "failed": 13.48900032043457
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.590798005887441,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.838041692725882,
+            "failed": 13.422403335571289
+          }
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "terminal_phase": "failed",
+          "steps": 140,
+          "native_rmse": 10.60563848912716,
+          "phase_native_rmse": {
+            "open": 2.049237370491028,
+            "pregrasp": 11.855065854620342,
+            "failed": 13.440147399902344
+          }
+        }
+      ]
+    }
+  ]
+}

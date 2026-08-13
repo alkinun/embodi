@@ -1,0 +1,50 @@
+{
+  "episode": "datasets/xperience-10m/003dcaf0-edba-4787-ada0-187d2748f684/ep1",
+  "source_frames": 5858,
+  "source_fps": 20.000033200055114,
+  "target_fps": 30,
+  "horizon_steps": 32,
+  "horizon_seconds": 1.0666666666666667,
+  "caption_segments": 18,
+  "valid_anchors": 2932,
+  "valid_motion_bins": {
+    "small": 911,
+    "meaningful": 1934,
+    "stationary": 87
+  },
+  "selected_train_motion_bins": {
+    "meaningful": 50,
+    "small": 25,
+    "stationary": 25
+  },
+  "selected_validation_motion_bins": {
+    "meaningful": 16,
+    "small": 4
+  },
+  "selected_validation_segments": [
+    1
+  ],
+  "rejection_counts": {
+    "non-finite synchronized labels": 2514,
+    "caption_horizon": 396,
+    "hand/body wrist disagreement exceeds 10 cm": 16
+  },
+  "finite_opening_frames": 3464,
+  "opening_percentiles": {
+    "0": 0.0,
+    "5": 0.0,
+    "50": 0.19041267037391663,
+    "95": 0.9878148436546326,
+    "100": 1.0
+  },
+  "wrist_consistency_m": {
+    "accepted_median": 0.003632313571870327,
+    "accepted_p95": 0.00886127632111311,
+    "accepted_max": 0.02810884453356266,
+    "all_finite_median": 0.005910363048315048,
+    "all_finite_p95": 0.7309543490409851,
+    "all_finite_max": 0.7701401710510254
+  },
+  "selected_values_finite": true,
+  "max_rotation_orthogonality_error": 3.5762786865234375e-07
+}

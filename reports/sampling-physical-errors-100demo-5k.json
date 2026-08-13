@@ -1,0 +1,137 @@
+{
+  "seed": 4444,
+  "results": [
+    {
+      "checkpoint": "outputs/so101-exp0-baseline-100demo-5k-seed990/final",
+      "batches": 10,
+      "integrations": {
+        "euler_10": {
+          "translation_cm_mean": 3.412476587295532,
+          "translation_cm_first": 3.574497228860855,
+          "translation_cm_endpoint": 5.316304302215576,
+          "rotation_deg_mean": 5.661545658111573,
+          "rotation_deg_first": 4.817676848173141,
+          "rotation_deg_endpoint": 7.997644758224487,
+          "scalar_mae_mean": 0.04681816715747118,
+          "scalar_mae_first": 0.04350595474243164,
+          "scalar_mae_endpoint": 0.04675982892513275,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "euler_20": {
+          "translation_cm_mean": 3.5763904333114622,
+          "translation_cm_first": 3.6029587030410766,
+          "translation_cm_endpoint": 5.516061925888062,
+          "rotation_deg_mean": 5.924919700622558,
+          "rotation_deg_first": 5.210793006420135,
+          "rotation_deg_endpoint": 8.24666678905487,
+          "scalar_mae_mean": 0.04602954993024468,
+          "scalar_mae_first": 0.04255819320678711,
+          "scalar_mae_endpoint": 0.04382115602493286,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "euler_50": {
+          "translation_cm_mean": 3.7247408866882323,
+          "translation_cm_first": 3.6592358231544493,
+          "translation_cm_endpoint": 5.5920415163040165,
+          "rotation_deg_mean": 6.112991666793823,
+          "rotation_deg_first": 5.670598292350769,
+          "rotation_deg_endpoint": 8.306545066833497,
+          "scalar_mae_mean": 0.04592355126515031,
+          "scalar_mae_first": 0.047121071815490724,
+          "scalar_mae_endpoint": 0.04524418413639068,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "heun_10": {
+          "translation_cm_mean": 4.495876741409302,
+          "translation_cm_first": 3.860535967350006,
+          "translation_cm_endpoint": 5.986135458946228,
+          "rotation_deg_mean": 8.486825847625733,
+          "rotation_deg_first": 8.620989346504212,
+          "rotation_deg_endpoint": 10.096523427963257,
+          "scalar_mae_mean": 0.056533473916351794,
+          "scalar_mae_first": 0.07031921148300171,
+          "scalar_mae_endpoint": 0.058298665285110476,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "heun_20": {
+          "translation_cm_mean": 3.9608593463897703,
+          "translation_cm_first": 3.73627564907074,
+          "translation_cm_endpoint": 5.649633407592773,
+          "rotation_deg_mean": 6.734591341018676,
+          "rotation_deg_first": 6.696633923053741,
+          "rotation_deg_endpoint": 8.548856639862061,
+          "scalar_mae_mean": 0.04786416757851839,
+          "scalar_mae_first": 0.05598412156105041,
+          "scalar_mae_endpoint": 0.05151374936103821,
+          "scalar_out_of_range_fraction": 0.0
+        }
+      }
+    },
+    {
+      "checkpoint": "outputs/so101-exp0-generalist-100demo-5k-seed990/final",
+      "batches": 10,
+      "integrations": {
+        "euler_10": {
+          "translation_cm_mean": 3.4887218713760375,
+          "translation_cm_first": 4.075904750823975,
+          "translation_cm_endpoint": 5.010956263542175,
+          "rotation_deg_mean": 5.442334485054016,
+          "rotation_deg_first": 6.053107023239136,
+          "rotation_deg_endpoint": 7.15143313407898,
+          "scalar_mae_mean": 0.0376457585953176,
+          "scalar_mae_first": 0.04118703305721283,
+          "scalar_mae_endpoint": 0.039675310254096985,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "euler_20": {
+          "translation_cm_mean": 3.699095845222473,
+          "translation_cm_first": 4.136052846908569,
+          "translation_cm_endpoint": 5.117560935020447,
+          "rotation_deg_mean": 5.8014054775238035,
+          "rotation_deg_first": 6.606839895248413,
+          "rotation_deg_endpoint": 7.411469340324402,
+          "scalar_mae_mean": 0.03786389976739883,
+          "scalar_mae_first": 0.04087969958782196,
+          "scalar_mae_endpoint": 0.03879086375236511,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "euler_50": {
+          "translation_cm_mean": 3.840850520133972,
+          "translation_cm_first": 4.143089282512665,
+          "translation_cm_endpoint": 5.153710961341858,
+          "rotation_deg_mean": 5.9727214813232425,
+          "rotation_deg_first": 7.0411217451095585,
+          "rotation_deg_endpoint": 7.322374927997589,
+          "scalar_mae_mean": 0.03819978293031454,
+          "scalar_mae_first": 0.04288992583751679,
+          "scalar_mae_endpoint": 0.04030460417270661,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "heun_10": {
+          "translation_cm_mean": 4.572999763488769,
+          "translation_cm_first": 4.60426117181778,
+          "translation_cm_endpoint": 5.426447248458862,
+          "rotation_deg_mean": 8.382190179824828,
+          "rotation_deg_first": 10.03842134475708,
+          "rotation_deg_endpoint": 9.041502737998963,
+          "scalar_mae_mean": 0.045024869963526726,
+          "scalar_mae_first": 0.045631510019302365,
+          "scalar_mae_endpoint": 0.045997637510299685,
+          "scalar_out_of_range_fraction": 0.0
+        },
+        "heun_20": {
+          "translation_cm_mean": 4.04188039302826,
+          "translation_cm_first": 4.23168693780899,
+          "translation_cm_endpoint": 5.2286665678024296,
+          "rotation_deg_mean": 6.584285831451416,
+          "rotation_deg_first": 7.905254769325256,
+          "rotation_deg_endpoint": 7.824044966697693,
+          "scalar_mae_mean": 0.03863136079162359,
+          "scalar_mae_first": 0.04109087288379669,
+          "scalar_mae_endpoint": 0.04136211276054382,
+          "scalar_out_of_range_fraction": 0.0
+        }
+      }
+    }
+  ]
+}

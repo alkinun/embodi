@@ -1,0 +1,49 @@
+{
+  "experiment": "010-position-shift-robustness",
+  "core_training_seed": 3991,
+  "evaluation_seed": 65000,
+  "episodes": 50,
+  "max_steps": 500,
+  "execution_horizon": 8,
+  "cube_y_range": [-0.025, 0.025],
+  "learned_decoder": {
+    "nominal": {
+      "cube_x_range": [0.28, 0.32],
+      "successes": [45, 44, 43],
+      "lifts": [47, 45, 44],
+      "mean_success_rate": 0.88,
+      "population_sd": 0.016329931618554536
+    },
+    "near": {
+      "cube_x_range": [0.24, 0.28],
+      "successes": [20, 13, 6],
+      "lifts": [20, 13, 7],
+      "mean_success_rate": 0.26,
+      "population_sd": 0.11430952132988166
+    },
+    "far": {
+      "cube_x_range": [0.32, 0.36],
+      "successes": [6, 5, 13],
+      "lifts": [8, 10, 14],
+      "mean_success_rate": 0.16,
+      "population_sd": 0.07118052168020875
+    }
+  },
+  "deterministic_ik": {
+    "nominal": {"successes": 41, "lifts": 41},
+    "near": {"successes": 12, "lifts": 12},
+    "far": {"successes": 19, "lifts": 28}
+  },
+  "paired_decoder_seed1": {
+    "nominal_vs_near": {
+      "nominal_only_successes": 27,
+      "shift_only_successes": 2,
+      "exact_mcnemar_two_sided_p": 1.6242265701293945e-6
+    },
+    "nominal_vs_far": {
+      "nominal_only_successes": 39,
+      "shift_only_successes": 0,
+      "exact_mcnemar_two_sided_p": 3.637978807091713e-12
+    }
+  }
+}

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "embodi"
+version = "0.1.0"
+description = "simulation-first vision-language-action policy for so-100 and so-101"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "huggingface-hub>=1.0",
+  "torch>=2.4",
+  "transformers>=5.1,<5.2",
+  "peft>=0.14",
+]
+
+[project.optional-dependencies]
+train = [
+  "h5py>=3.12",
+  "lerobot[dataset]>=0.6.1,<0.7",
+  "matplotlib>=3.10",
+  "accelerate>=1.2",
+  "tqdm>=4.67",
+  "wandb>=0.19",
+]
+test = ["pytest>=8"]
+sim = [
+  "fastapi>=0.116",
+  "mujoco>=3.3,<4",
+  "pillow>=11",
+  "uvicorn>=0.35",
+]
+
+[project.scripts]
+embodi-train = "embodi.train:main"
+embodi-sim = "embodi.sim.cli:main"
+embodi-generate = "embodi.sim.data:main"
+embodi-preview = "embodi.preview:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/embodi"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

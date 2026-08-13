@@ -1,0 +1,28 @@
+{
+  "format_version": 3,
+  "model_name": "embodi03-so101-exp0-top",
+  "camera_names": [
+    "top"
+  ],
+  "image_do_rescale": false,
+  "parts": [
+    {
+      "name": "primary_effector",
+      "kind": "pose_scalar"
+    }
+  ],
+  "action_group_part_names": [
+    "primary_effector"
+  ],
+  "chunk_size": 32,
+  "n_action_steps": 32,
+  "decoder_hidden_width": 256,
+  "decoder_layers": 3,
+  "decoder_input_noise_std": 0.0,
+  "decoder_residual": true,
+  "decoder_first_step_weight": 10.0,
+  "flow_first_step_weight": 10.0,
+  "core_objective": "regression",
+  "native_action_delta_limits": [],
+  "freeze_vision_encoder": true
+}

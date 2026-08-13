@@ -1,0 +1,75 @@
+{
+  "frequency_hz": 30,
+  "max_steps": 450,
+  "execution_horizon": 32,
+  "results": [
+    {
+      "checkpoint": "outputs/so101-exp0-baseline-seed777/final",
+      "episodes": 3,
+      "seed": 9000,
+      "successes": 0,
+      "success_rate": 0.0,
+      "lifts": 0,
+      "lift_rate": 0.0,
+      "mean_steps": 450.0,
+      "elapsed_seconds": 3.869315800955519,
+      "outcomes": [
+        {
+          "episode": 0,
+          "success": false,
+          "lifted": false,
+          "steps": 450,
+          "chunks": 15
+        },
+        {
+          "episode": 1,
+          "success": false,
+          "lifted": false,
+          "steps": 450,
+          "chunks": 15
+        },
+        {
+          "episode": 2,
+          "success": false,
+          "lifted": false,
+          "steps": 450,
+          "chunks": 15
+        }
+      ]
+    },
+    {
+      "checkpoint": "outputs/so101-exp0-generalist-seed777/final",
+      "episodes": 3,
+      "seed": 9000,
+      "successes": 0,
+      "success_rate": 0.0,
+      "lifts": 0,
+      "lift_rate": 0.0,
+      "mean_steps": 450.0,
+      "elapsed_seconds": 3.6001352560706437,
+      "outcomes": [
+        {
+          "episode": 0,
+          "success": false,
+          "lifted": false,
+          "steps": 450,
+          "chunks": 15
+        },
+        {
+          "episode": 1,
+          "success": false,
+          "lifted": false,
+          "steps": 450,
+          "chunks": 15
+        },
+        {
+          "episode": 2,
+          "success": false,
+          "lifted": false,
+          "steps": 450,
+          "chunks": 15
+        }
+      ]
+    }
+  ]
+}

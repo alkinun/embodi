@@ -1,0 +1,15 @@
+{
+  "format_version": 3,
+  "model_name": "embodi03-xperience-scale-medium",
+  "camera_names": ["stereo_left"],
+  "image_do_rescale": true,
+  "parts": [{"name": "primary_effector", "kind": "pose_scalar"}],
+  "action_group_part_names": ["primary_effector"],
+  "chunk_size": 32,
+  "n_action_steps": 32,
+  "expert_width": 512,
+  "expert_layers": 12,
+  "expert_heads": 8,
+  "freeze_vision_encoder": true,
+  "freeze_backbone": true
+}

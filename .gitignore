@@ -1,0 +1,51 @@
+# Python environments and caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Training data, checkpoints, and generated runs
+datasets/
+outputs/
+wandb/
+checkpoints/
+artifacts/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.parquet
+
+# Dataset-derived previews may contain controlled-access imagery
+reports/**/sample-*.png
+
+# Generated media and logs
+*.mp4
+*.avi
+*.mov
+*.log
+
+# Editor and operating-system files
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store

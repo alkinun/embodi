@@ -1,0 +1,960 @@
+{
+  "seed": 49000,
+  "execution_horizon": 8,
+  "results": [
+    {
+      "name": "generalist",
+      "episodes": 30,
+      "successes": 5,
+      "lifts": 6,
+      "mean_steps": 452.53333333333336,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 210
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 190
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 270
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 219
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 187
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        }
+      ]
+    },
+    {
+      "name": "baseline",
+      "episodes": 30,
+      "successes": 20,
+      "lifts": 21,
+      "mean_steps": 297.8666666666667,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 211
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 201
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 184
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 215
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 206
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 211
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 204
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 185
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 218
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 169
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 216
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 204
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 160
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 206
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 191
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 184
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 210
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 184
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 185
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 192
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        }
+      ]
+    },
+    {
+      "name": "baseline_translation",
+      "episodes": 30,
+      "successes": 10,
+      "lifts": 22,
+      "mean_steps": 402.73333333333335,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 200
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 257
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 190
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 216
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 174
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 208
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 216
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 187
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 204
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 230
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        }
+      ]
+    },
+    {
+      "name": "baseline_rotation",
+      "episodes": 30,
+      "successes": 10,
+      "lifts": 10,
+      "mean_steps": 419.8333333333333,
+      "outcomes": [
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 257
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 214
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 294
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 252
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 243
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 492
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 301
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 177
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 187
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 178
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        }
+      ]
+    },
+    {
+      "name": "baseline_opening",
+      "episodes": 30,
+      "successes": 7,
+      "lifts": 8,
+      "mean_steps": 425.56666666666666,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 169
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 172
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 191
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 188
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 179
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 189
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 179
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        }
+      ]
+    },
+    {
+      "name": "baseline_pose",
+      "episodes": 30,
+      "successes": 16,
+      "lifts": 18,
+      "mean_steps": 344.06666666666666,
+      "outcomes": [
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 216
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 185
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 241
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 186
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 183
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 209
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 222
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 198
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 236
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 224
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 192
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 209
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 221
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 202
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": false,
+          "lifted": false,
+          "steps": 500
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 206
+        },
+        {
+          "success": true,
+          "lifted": true,
+          "steps": 192
+        },
+        {
+          "success": false,
+          "lifted": true,
+          "steps": 500
+        }
+      ]
+    }
+  ]
+}
