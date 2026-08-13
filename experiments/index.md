@@ -18,6 +18,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [009](009-nested-human-data-scaling.md) | does matched-exposure scaling help? | more unique data helps. |
 | [010](010-position-shift-robustness.md) | does success survive x shifts? | expand robot and decoder coverage. |
 | [011](011-robot-position-coverage.md) | do wider demonstrations fix x shifts? | no. coverage alone causes forgetting. |
+| [012](012-checkpoint-selection.md) | did an earlier checkpoint work better? | no. no robust control peak appeared. |
 
 ## current decision
 

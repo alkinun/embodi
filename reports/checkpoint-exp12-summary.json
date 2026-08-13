@@ -1,0 +1,16 @@
+{
+  "experiment": "012-checkpoint-selection",
+  "evaluation_seed": 12000,
+  "episodes_per_range": 10,
+  "ranges": ["near", "nominal", "far"],
+  "execution_horizon": 8,
+  "deterministic_ik": true,
+  "successes_across_30_scenes": {
+    "nominal": {"500": 0, "1000": 0, "1500": 0, "2000": 2, "2500": 1},
+    "wide": {"500": 0, "1000": 0, "1500": 0, "2000": 0, "2500": 1}
+  },
+  "best_region_counts": {
+    "nominal_step_2000": {"near": 1, "nominal": 1, "far": 0},
+    "wide_step_2500": {"near": 1, "nominal": 0, "far": 0}
+  }
+}
