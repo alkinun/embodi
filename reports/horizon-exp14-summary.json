@@ -1,0 +1,21 @@
+{
+  "experiment": "014-execution-horizon-confirmation",
+  "evaluation_seed": 14000,
+  "episodes": 50,
+  "cube_x_range": [0.24, 0.28],
+  "cube_y_range": [-0.025, 0.025],
+  "deterministic_ik": true,
+  "successes": {
+    "nominal": {"8": 5, "16": 10},
+    "wide": {"8": 5, "16": 9}
+  },
+  "paired_successes": {
+    "nominal": {"both": 3, "8_only": 2, "16_only": 7, "neither": 38},
+    "wide": {"both": 3, "8_only": 2, "16_only": 6, "neither": 39}
+  },
+  "elapsed_seconds": {
+    "nominal": {"8": 190.7295591630973, "16": 92.07191385095939},
+    "wide": {"8": 205.20236029708758, "16": 99.11082596238703}
+  },
+  "selected_horizon": 16
+}
