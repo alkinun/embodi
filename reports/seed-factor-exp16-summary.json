@@ -1,0 +1,73 @@
+{
+  "experiment": "016-training-seed-factorization",
+  "evaluation_seed": 15500,
+  "episodes_per_range": 50,
+  "execution_horizon": 16,
+  "deterministic_ik": true,
+  "outcomes": {
+    "m3991_l3991": {
+      "successes": {"near": 0, "nominal": 1, "far": 4, "total": 5},
+      "lifts": {"near": 0, "nominal": 1, "far": 4, "total": 5},
+      "validation_regression_loss": 0.000911,
+      "mean_offline_translation_error_cm": 0.553447
+    },
+    "m3991_l3992": {
+      "successes": {"near": 0, "nominal": 0, "far": 4, "total": 4},
+      "lifts": {"near": 0, "nominal": 0, "far": 4, "total": 4},
+      "validation_regression_loss": 0.000788,
+      "mean_offline_translation_error_cm": 0.484926
+    },
+    "m3992_l3991": {
+      "successes": {"near": 7, "nominal": 4, "far": 3, "total": 14},
+      "lifts": {"near": 7, "nominal": 5, "far": 8, "total": 20},
+      "validation_regression_loss": 0.000991,
+      "mean_offline_translation_error_cm": 0.542088
+    },
+    "m3992_l3992": {
+      "successes": {"near": 28, "nominal": 26, "far": 37, "total": 91},
+      "lifts": {"near": 28, "nominal": 35, "far": 39, "total": 102},
+      "validation_regression_loss": 0.000897,
+      "mean_offline_translation_error_cm": 0.571753
+    }
+  },
+  "aggregate_success_contrasts_percentage_points": {
+    "model_seed": 32.0,
+    "loader_seed": 25.333333333333332,
+    "interaction": 52.0
+  },
+  "preregistered_criteria": {
+    "model_3992_beats_3991_under_both_loaders": true,
+    "loader_3992_beats_3991_under_both_models": false
+  },
+  "paired_successes": {
+    "model_seed_with_loader_3991": {
+      "both": 0,
+      "m3991_only": 5,
+      "m3992_only": 14,
+      "neither": 131,
+      "exact_mcnemar_p": 0.063568115234375
+    },
+    "model_seed_with_loader_3992": {
+      "both": 2,
+      "m3991_only": 2,
+      "m3992_only": 89,
+      "neither": 57,
+      "exact_mcnemar_p": 3.3822260230598437e-24
+    },
+    "loader_seed_with_model_3991": {
+      "both": 0,
+      "l3991_only": 5,
+      "l3992_only": 4,
+      "neither": 141,
+      "exact_mcnemar_p": 1.0
+    },
+    "loader_seed_with_model_3992": {
+      "both": 10,
+      "l3991_only": 4,
+      "l3992_only": 81,
+      "neither": 55,
+      "exact_mcnemar_p": 1.0997419584023695e-19
+    }
+  },
+  "conclusion": "model_initialization_dominates_with_large_loader_interaction"
+}

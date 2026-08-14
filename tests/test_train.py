@@ -3,6 +3,7 @@ import torch
 from embodi import EmbodiConfig, EmbodiPolicy
 from embodi.train import (
     _SmokeBackbone,
+    configure_deterministic_training,
     gradient_norm,
     prepare_model_batch,
     resolve_training_seeds,
@@ -32,6 +33,12 @@ def test_training_seed_overrides_are_independent() -> None:
     assert resolve_training_seeds(7, 11, None) == (11, 7)
     assert resolve_training_seeds(7, None, 13) == (7, 13)
     assert resolve_training_seeds(7, 11, 13) == (11, 13)
+
+
+def test_deterministic_training_disabled_preserves_global_setting() -> None:
+    previous = torch.are_deterministic_algorithms_enabled()
+    configure_deterministic_training(False)
+    assert torch.are_deterministic_algorithms_enabled() is previous
 
 
 def test_gradient_norm_uses_only_available_gradients() -> None:

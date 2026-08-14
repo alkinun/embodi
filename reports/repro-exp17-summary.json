@@ -1,0 +1,37 @@
+{
+  "experiment": "017-same-seed-reproduction",
+  "model_seed": 3992,
+  "loader_seed": 3992,
+  "evaluation_seed": 15500,
+  "episodes_per_range": 50,
+  "semantic_hashes": {
+    "original_core": "0e1a7c90256a4bcae5ada30884a6ef25682c15efe74920292ec3ce04322aa509",
+    "reproduction_core": "1cbde9a89a6dcce02bd89298f7240ccca89bec0f51da4cc86273bbdc0ce3cddf",
+    "core_identical": false,
+    "original_state_adapter": "fc2730ad99f4de138a21b075e372473dc00487c7a2d53ef9aed72661a1920355",
+    "reproduction_state_adapter": "fc2730ad99f4de138a21b075e372473dc00487c7a2d53ef9aed72661a1920355",
+    "state_adapter_identical": true
+  },
+  "validation_regression_loss": {"original": 0.000897, "reproduction": 0.000877},
+  "successes": {
+    "original": {"near": 28, "nominal": 26, "far": 37, "total": 91},
+    "reproduction": {"near": 28, "nominal": 17, "far": 29, "total": 74}
+  },
+  "lifts": {
+    "original": {"near": 28, "nominal": 35, "far": 39, "total": 102},
+    "reproduction": {"near": 29, "nominal": 24, "far": 42, "total": 95}
+  },
+  "paired_successes": {
+    "near": {"both": 16, "original_only": 12, "reproduction_only": 12, "neither": 10, "exact_mcnemar_p": 1.0},
+    "nominal": {"both": 9, "original_only": 17, "reproduction_only": 8, "neither": 16, "exact_mcnemar_p": 0.10775214433670044},
+    "far": {"both": 25, "original_only": 12, "reproduction_only": 4, "neither": 9, "exact_mcnemar_p": 0.076812744140625},
+    "all": {"both": 50, "original_only": 41, "reproduction_only": 24, "neither": 35, "exact_mcnemar_p": 0.04635347433291122}
+  },
+  "strict_determinism_smoke_test": {
+    "steps": 1,
+    "independent_runs": 2,
+    "core_hashes_identical": true,
+    "validation_metrics_identical": true
+  },
+  "conclusion": "behaviorally_replicated_but_not_bitwise_reproducible"
+}

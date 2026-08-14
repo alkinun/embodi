@@ -4,6 +4,7 @@ import argparse
 from dataclasses import asdict, replace
 import json
 import math
+import os
 from pathlib import Path
 import random
 
@@ -70,6 +71,15 @@ def resolve_training_seeds(
         seed if model_seed is None else model_seed,
         seed if loader_seed is None else loader_seed,
     )
+
+
+def configure_deterministic_training(enabled: bool) -> None:
+    if not enabled:
+        return
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    torch.use_deterministic_algorithms(True)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
 
 
 def prepare_model_batch(
@@ -209,10 +219,14 @@ def train(args: argparse.Namespace) -> None:
     )
     if args.resume and any((args.init_from, args.init_core, args.init_embodiment)):
         raise ValueError("--resume cannot be combined with initialization checkpoints")
+    configure_deterministic_training(args.deterministic)
     model_seed, loader_seed = resolve_training_seeds(
         args.seed, args.model_seed, args.loader_seed
     )
-    print(f"training seeds: data={args.seed} model={model_seed} loader={loader_seed}")
+    print(
+        f"training seeds: data={args.seed} model={model_seed} loader={loader_seed} "
+        f"deterministic={args.deterministic}"
+    )
     random.seed(model_seed)
     torch.manual_seed(model_seed)
     if torch.cuda.is_available():
@@ -616,6 +630,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=0, help="default seed and data-selection seed")
     parser.add_argument("--model-seed", type=int, help="override model initialization seed")
     parser.add_argument("--loader-seed", type=int, help="override training DataLoader seed")
+    parser.add_argument("--deterministic", action="store_true", help="require deterministic PyTorch algorithms")
     parser.add_argument("--xperience-episode-path")
     parser.add_argument("--xperience-train-episode-path", action="append", default=[])
     parser.add_argument("--xperience-validation-episode-path", action="append", default=[])

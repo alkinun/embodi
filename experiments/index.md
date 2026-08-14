@@ -22,8 +22,8 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [013](013-execution-horizon-screen.md) | can execution horizon recover near shifts? | horizon 16 wins the small screen. |
 | [014](014-execution-horizon-confirmation.md) | does horizon 16 beat horizon 8 on new scenes? | use horizon 16, but improve the policy. |
 | [015](015-center-weighted-cube-coverage.md) | can center weighting add coverage without forgetting? | inconclusive. the effect reverses across core seeds. |
-| [016](016-training-seed-factorization.md) | does initialization or data order drive seed instability? | experiment in progress. |
-| [017](017-same-seed-reproduction.md) | is the exceptional center cell reproducible with the same seeds? | experiment in progress. |
+| [016](016-training-seed-factorization.md) | does initialization or data order drive seed instability? | initialization dominates, with a large loader interaction. |
+| [017](017-same-seed-reproduction.md) | is the exceptional center cell reproducible with the same seeds? | behavior broadly replicates, but training is not bitwise reproducible. |
 
 ## current decision
 
@@ -37,6 +37,6 @@ fresh robot adapters and state path
 one decoder for each robot
 ```
 
-for robot coverage, isolate core-training instability before changing the data
-distribution again. for human pretraining, add more sessions and tasks rather
-than more windows from the same five episodes.
+for robot coverage, use deterministic training and separate model and loader
+seeds before changing the data distribution again. for human pretraining, add
+more sessions and tasks rather than more windows from the same five episodes.
