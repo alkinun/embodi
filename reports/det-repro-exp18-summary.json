@@ -1,0 +1,35 @@
+{
+  "experiment": "018-full-deterministic-reproduction",
+  "model_seed": 3992,
+  "loader_seed": 3992,
+  "validation_seed": 0,
+  "training_steps": 2500,
+  "deterministic_training": true,
+  "semantic_hashes": {
+    "core": "6a6b16bc1a1bb633aad7ee60c95e1595d0f311a3740ec73e36d33614b1c8c0e6",
+    "embodiment": "6e13ae412909b32bdbb1212df1d1f87910fe7d60a2b47bb164af8647dec36f18",
+    "trainer": "689c53efbbe78a663ada3012038f9c9618ec0adb06498060fa7a7365246e92c7",
+    "runs_identical": true
+  },
+  "final_validation": {
+    "regression_loss": 0.000950,
+    "state_adapter_loss": 0.325868,
+    "trajectories_identical": true
+  },
+  "evaluation": {
+    "seed": 15500,
+    "execution_horizon": 16,
+    "max_steps": 500,
+    "deterministic_ik": true,
+    "successes": {"near": 0, "nominal": 9, "far": 10, "total": 19},
+    "lifts": {"near": 1, "nominal": 12, "far": 17, "total": 30},
+    "episodes_per_range": 50
+  },
+  "comparison_successes": {
+    "nondeterministic_original": 91,
+    "nondeterministic_reproduction": 74,
+    "deterministic": 19,
+    "episodes": 150
+  },
+  "conclusion": "full_training_is_exactly_reproducible_but_control_is_weak"
+}
