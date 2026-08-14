@@ -5,6 +5,7 @@ from dataclasses import asdict, replace
 import json
 import math
 import os
+import platform
 from pathlib import Path
 import random
 
@@ -227,6 +228,28 @@ def train(args: argparse.Namespace) -> None:
         f"training seeds: data={args.seed} model={model_seed} loader={loader_seed} "
         f"deterministic={args.deterministic}"
     )
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    run_manifest = {
+        "format_version": 1,
+        "arguments": vars(args),
+        "resolved_seeds": {
+            "data": args.seed,
+            "model": model_seed,
+            "loader": loader_seed,
+            "validation": args.validation_seed,
+        },
+        "model_config": asdict(config),
+        "runtime": {
+            "python": platform.python_version(),
+            "torch": torch.__version__,
+            "cuda": torch.version.cuda,
+            "cudnn": torch.backends.cudnn.version(),
+        },
+    }
+    (output_dir / "run_manifest.json").write_text(
+        json.dumps(run_manifest, indent=2, default=str) + "\n"
+    )
     random.seed(model_seed)
     torch.manual_seed(model_seed)
     if torch.cuda.is_available():
@@ -354,8 +377,6 @@ def train(args: argparse.Namespace) -> None:
             "train": train_records,
             "validation": validation_records,
         }
-        output_dir = Path(args.output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
         (output_dir / "data_manifest.json").write_text(json.dumps(data_report, indent=2) + "\n")
         train_units = len(split.train)
         validation_units = len(split.validation)
