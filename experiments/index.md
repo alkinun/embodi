@@ -23,6 +23,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [014](014-execution-horizon-confirmation.md) | does horizon 16 beat horizon 8 on new scenes? | use horizon 16, but improve the policy. |
 | [015](015-center-weighted-cube-coverage.md) | can center weighting add coverage without forgetting? | inconclusive. the effect reverses across core seeds. |
 | [016](016-training-seed-factorization.md) | does initialization or data order drive seed instability? | experiment in progress. |
+| [017](017-same-seed-reproduction.md) | is the exceptional center cell reproducible with the same seeds? | experiment in progress. |
 
 ## current decision
 
