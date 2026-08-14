@@ -25,6 +25,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [016](016-training-seed-factorization.md) | does initialization or data order drive seed instability? | initialization dominates, with a large loader interaction. |
 | [017](017-same-seed-reproduction.md) | is the exceptional center cell reproducible with the same seeds? | behavior broadly replicates, but training is not bitwise reproducible. |
 | [018](018-full-deterministic-reproduction.md) | does strict determinism reproduce a full training run? | yes, exactly, but the deterministic policy is weak. |
+| [019](019-deterministic-model-seed-screen.md) | can deterministic initialization recover strong control? | experiment in progress. |
 
 ## current decision
 
