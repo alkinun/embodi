@@ -1,0 +1,85 @@
+{
+  "experiment": "015-center-weighted-cube-coverage",
+  "evaluation_seed": 15500,
+  "training_seeds": [3991, 3992],
+  "episodes_per_range": 50,
+  "max_steps": 500,
+  "execution_horizon": 16,
+  "deterministic_ik": true,
+  "cube_x_ranges": {
+    "near": [0.24, 0.28],
+    "nominal": [0.28, 0.32],
+    "far": [0.32, 0.36]
+  },
+  "cube_y_range": [-0.025, 0.025],
+  "successes": {
+    "3991": {
+      "nominal": {"near": 11, "nominal": 2, "far": 0},
+      "wide": {"near": 6, "nominal": 8, "far": 4},
+      "center": {"near": 0, "nominal": 1, "far": 4}
+    },
+    "3992": {
+      "nominal": {"near": 3, "nominal": 9, "far": 0},
+      "wide": {"near": 18, "nominal": 6, "far": 7},
+      "center": {"near": 28, "nominal": 26, "far": 37}
+    }
+  },
+  "lifts": {
+    "3991": {
+      "nominal": {"near": 11, "nominal": 2, "far": 0},
+      "wide": {"near": 7, "nominal": 14, "far": 8},
+      "center": {"near": 0, "nominal": 1, "far": 4}
+    },
+    "3992": {
+      "nominal": {"near": 4, "nominal": 11, "far": 2},
+      "wide": {"near": 23, "nominal": 8, "far": 14},
+      "center": {"near": 28, "nominal": 35, "far": 39}
+    }
+  },
+  "primary_comparisons": {
+    "center_vs_nominal_combined_edges": {
+      "3991": {
+        "center_successes": 4,
+        "nominal_successes": 11,
+        "episodes": 100,
+        "paired": {"both": 0, "center_only": 4, "nominal_only": 11, "neither": 85},
+        "exact_mcnemar_p": 0.11846923828125,
+        "direction": "center_lower"
+      },
+      "3992": {
+        "center_successes": 65,
+        "nominal_successes": 3,
+        "episodes": 100,
+        "paired": {"both": 0, "center_only": 65, "nominal_only": 3, "neither": 32},
+        "exact_mcnemar_p": 3.5550311609441887e-16,
+        "direction": "center_higher"
+      },
+      "direction_replicated": false
+    },
+    "center_vs_wide_nominal": {
+      "3991": {
+        "center_successes": 1,
+        "wide_successes": 8,
+        "episodes": 50,
+        "paired": {"both": 1, "center_only": 0, "wide_only": 7, "neither": 42},
+        "exact_mcnemar_p": 0.015625,
+        "direction": "center_lower"
+      },
+      "3992": {
+        "center_successes": 26,
+        "wide_successes": 6,
+        "episodes": 50,
+        "paired": {"both": 4, "center_only": 22, "wide_only": 2, "neither": 22},
+        "exact_mcnemar_p": 3.5881996154785156e-05,
+        "direction": "center_higher"
+      },
+      "direction_replicated": false
+    }
+  },
+  "raw_reports": {
+    "near": "reports/coverage-exp15-near-ik-h16-6model-50.json",
+    "nominal": "reports/coverage-exp15-nominal-ik-h16-6model-50.json",
+    "far": "reports/coverage-exp15-far-ik-h16-6model-50.json"
+  },
+  "conclusion": "inconclusive_due_to_opposite_training_seed_directions"
+}

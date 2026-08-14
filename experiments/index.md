@@ -21,7 +21,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [012](012-checkpoint-selection.md) | did an earlier checkpoint work better? | no. no robust control peak appeared. |
 | [013](013-execution-horizon-screen.md) | can execution horizon recover near shifts? | horizon 16 wins the small screen. |
 | [014](014-execution-horizon-confirmation.md) | does horizon 16 beat horizon 8 on new scenes? | use horizon 16, but improve the policy. |
-| [015](015-center-weighted-cube-coverage.md) | can center weighting add coverage without forgetting? | experiment in progress. |
+| [015](015-center-weighted-cube-coverage.md) | can center weighting add coverage without forgetting? | inconclusive. the effect reverses across core seeds. |
 
 ## current decision
 
@@ -35,5 +35,6 @@ fresh robot adapters and state path
 one decoder for each robot
 ```
 
-next, add more sessions and tasks. do not repeat more windows from the same five
-episodes.
+for robot coverage, isolate core-training instability before changing the data
+distribution again. for human pretraining, add more sessions and tasks rather
+than more windows from the same five episodes.
