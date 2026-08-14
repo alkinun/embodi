@@ -63,6 +63,15 @@ def split_episode_indices(total_episodes: int, validation_episodes: int) -> tupl
     return list(range(boundary)), list(range(boundary, total_episodes))
 
 
+def resolve_training_seeds(
+    seed: int, model_seed: int | None, loader_seed: int | None
+) -> tuple[int, int]:
+    return (
+        seed if model_seed is None else model_seed,
+        seed if loader_seed is None else loader_seed,
+    )
+
+
 def prepare_model_batch(
     raw_batch: dict,
     processor: EmbodiProcessor,
@@ -200,10 +209,14 @@ def train(args: argparse.Namespace) -> None:
     )
     if args.resume and any((args.init_from, args.init_core, args.init_embodiment)):
         raise ValueError("--resume cannot be combined with initialization checkpoints")
-    random.seed(args.seed)
-    torch.manual_seed(args.seed)
+    model_seed, loader_seed = resolve_training_seeds(
+        args.seed, args.model_seed, args.loader_seed
+    )
+    print(f"training seeds: data={args.seed} model={model_seed} loader={loader_seed}")
+    random.seed(model_seed)
+    torch.manual_seed(model_seed)
     if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(args.seed)
+        torch.cuda.manual_seed_all(model_seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     policy = EmbodiPolicy(config).to(device)
     policy.configure_stage(args.stage)
@@ -379,7 +392,7 @@ def train(args: argparse.Namespace) -> None:
         policy.set_normalization_stats(metadata.stats)
         train_units = len(train_episodes)
         validation_units = len(validation_episodes)
-    loader_generator = torch.Generator().manual_seed(args.seed)
+    loader_generator = torch.Generator().manual_seed(loader_seed)
     loader = DataLoader(
         train_dataset,
         batch_size=args.batch_size,
@@ -600,7 +613,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--validation-episodes", type=int, default=5)
     parser.add_argument("--validation-batches", type=int, default=10)
     parser.add_argument("--validation-seed", type=int, default=0)
-    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--seed", type=int, default=0, help="default seed and data-selection seed")
+    parser.add_argument("--model-seed", type=int, help="override model initialization seed")
+    parser.add_argument("--loader-seed", type=int, help="override training DataLoader seed")
     parser.add_argument("--xperience-episode-path")
     parser.add_argument("--xperience-train-episode-path", action="append", default=[])
     parser.add_argument("--xperience-validation-episode-path", action="append", default=[])

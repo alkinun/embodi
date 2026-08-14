@@ -1,7 +1,13 @@
 import torch
 
 from embodi import EmbodiConfig, EmbodiPolicy
-from embodi.train import _SmokeBackbone, gradient_norm, prepare_model_batch, split_episode_indices
+from embodi.train import (
+    _SmokeBackbone,
+    gradient_norm,
+    prepare_model_batch,
+    resolve_training_seeds,
+    split_episode_indices,
+)
 
 
 def test_episode_split_holds_out_last_episodes() -> None:
@@ -19,6 +25,13 @@ def test_episode_split_rejects_empty_partition() -> None:
             pass
         else:
             raise AssertionError("invalid validation split was accepted")
+
+
+def test_training_seed_overrides_are_independent() -> None:
+    assert resolve_training_seeds(7, None, None) == (7, 7)
+    assert resolve_training_seeds(7, 11, None) == (11, 7)
+    assert resolve_training_seeds(7, None, 13) == (7, 13)
+    assert resolve_training_seeds(7, 11, 13) == (11, 13)
 
 
 def test_gradient_norm_uses_only_available_gradients() -> None:
