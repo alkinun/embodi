@@ -4,12 +4,60 @@ import argparse
 import json
 import os
 from pathlib import Path
+import random
 
 import numpy as np
 from tqdm.auto import tqdm
 
 from .environment import JOINT_NAMES, SO101PickPlaceEnv, TASK
 from .expert import Phase, PrivilegedPickPlaceExpert, run_expert_episode
+
+
+CubeXBin = tuple[float, float, int]
+
+
+def build_cube_x_schedule(
+    episodes: int,
+    cube_x_range: tuple[float, float],
+    cube_x_bins: tuple[CubeXBin, ...] | None,
+    stratified_tail_episodes: int,
+    seed: int,
+) -> tuple[tuple[float, float], ...]:
+    if not cube_x_bins:
+        if stratified_tail_episodes:
+            raise ValueError("a stratified tail requires --cube-x-bin")
+        return (tuple(cube_x_range),) * episodes
+    if stratified_tail_episodes < 0 or stratified_tail_episodes >= episodes:
+        raise ValueError("stratified tail episodes must be between 0 and episodes - 1")
+    if any(
+        count <= 0 or not np.isfinite((lower, upper)).all() or lower > upper
+        for lower, upper, count in cube_x_bins
+    ):
+        raise ValueError("cube x bins require finite ascending ranges and positive counts")
+    if sum(count for _lower, _upper, count in cube_x_bins) != episodes:
+        raise ValueError("cube x bin counts must sum to episodes")
+
+    exact_tail_counts = [count * stratified_tail_episodes / episodes for *_range, count in cube_x_bins]
+    tail_counts = [int(value) for value in exact_tail_counts]
+    remaining = stratified_tail_episodes - sum(tail_counts)
+    remainder_order = sorted(
+        range(len(cube_x_bins)),
+        key=lambda index: (exact_tail_counts[index] - tail_counts[index], -index),
+        reverse=True,
+    )
+    for index in remainder_order[:remaining]:
+        tail_counts[index] += 1
+
+    training_schedule = []
+    tail_schedule = []
+    for (lower, upper, count), tail_count in zip(cube_x_bins, tail_counts, strict=True):
+        cube_range = (lower, upper)
+        training_schedule.extend([cube_range] * (count - tail_count))
+        tail_schedule.extend([cube_range] * tail_count)
+    schedule_random = random.Random(seed)
+    schedule_random.shuffle(training_schedule)
+    schedule_random.shuffle(tail_schedule)
+    return tuple(training_schedule + tail_schedule)
 
 
 def evaluate_oracle(
@@ -47,7 +95,16 @@ def generate_dataset(
     camera_names: tuple[str, ...],
     cube_x_range: tuple[float, float] = (0.28, 0.32),
     cube_y_range: tuple[float, float] = (-0.025, 0.025),
+    cube_x_bins: tuple[CubeXBin, ...] | None = None,
+    stratified_tail_episodes: int = 0,
 ) -> None:
+    cube_x_schedule = build_cube_x_schedule(
+        episodes,
+        cube_x_range,
+        cube_x_bins,
+        stratified_tail_episodes,
+        seed,
+    )
     from lerobot.datasets.lerobot_dataset import LeRobotDataset
 
     camera_features = {
@@ -113,7 +170,7 @@ def generate_dataset(
     )
     env = SO101PickPlaceEnv(
         seed=seed,
-        cube_x_range=cube_x_range,
+        cube_x_range=cube_x_schedule[0],
         cube_y_range=cube_y_range,
     )
     successes = 0
@@ -123,6 +180,7 @@ def generate_dataset(
     try:
         while successes < episodes and attempts < max_attempts:
             attempts += 1
+            env.cube_x_range = cube_x_schedule[successes]
             env.reset()
             initial_cube_xy = env.data.xpos[env.cube_body_id, :2].tolist()
             expert = PrivilegedPickPlaceExpert(env)
@@ -170,22 +228,26 @@ def generate_dataset(
         progress.close()
         env.close()
         dataset.finalize()
+    generation_report = {
+        "seed": seed,
+        "episodes": episodes,
+        "attempts": attempts,
+        "camera_names": list(camera_names),
+        "cube_x_range": [
+            min(cube_range[0] for cube_range in cube_x_schedule),
+            max(cube_range[1] for cube_range in cube_x_schedule),
+        ],
+        "cube_y_range": list(cube_y_range),
+        "accepted_initial_cube_xy": accepted_initial_cube_xy,
+    }
+    if cube_x_bins:
+        generation_report["cube_x_bins"] = [
+            {"range": [lower, upper], "episodes": count}
+            for lower, upper, count in cube_x_bins
+        ]
+        generation_report["stratified_tail_episodes"] = stratified_tail_episodes
     generation_path = root / "meta" / "generation.json"
-    generation_path.write_text(
-        json.dumps(
-            {
-                "seed": seed,
-                "episodes": episodes,
-                "attempts": attempts,
-                "camera_names": list(camera_names),
-                "cube_x_range": list(cube_x_range),
-                "cube_y_range": list(cube_y_range),
-                "accepted_initial_cube_xy": accepted_initial_cube_xy,
-            },
-            indent=2,
-        )
-        + "\n"
-    )
+    generation_path.write_text(json.dumps(generation_report, indent=2) + "\n")
 
 
 def parse_args() -> argparse.Namespace:
@@ -197,6 +259,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--cameras", nargs="+", choices=("top", "wrist"), default=["top"])
     parser.add_argument("--cube-x-range", type=float, nargs=2, default=(0.28, 0.32))
+    parser.add_argument(
+        "--cube-x-bin",
+        type=float,
+        nargs=3,
+        action="append",
+        metavar=("MIN", "MAX", "EPISODES"),
+        help="repeat for an exact stratified cube-x distribution",
+    )
+    parser.add_argument("--stratified-tail-episodes", type=int, default=0)
     parser.add_argument("--cube-y-range", type=float, nargs=2, default=(-0.025, 0.025))
     parser.add_argument("--evaluate-only", action="store_true")
     return parser.parse_args()
@@ -217,6 +288,13 @@ def main() -> None:
     camera_names = tuple(args.cameras)
     if len(set(camera_names)) != len(camera_names):
         raise ValueError("--cameras must contain unique camera names")
+    cube_x_bins = None
+    if args.cube_x_bin:
+        if any(not count.is_integer() for _lower, _upper, count in args.cube_x_bin):
+            raise ValueError("cube x bin episode counts must be integers")
+        cube_x_bins = tuple(
+            (lower, upper, int(count)) for lower, upper, count in args.cube_x_bin
+        )
     generate_dataset(
         args.root,
         args.repo_id,
@@ -226,6 +304,8 @@ def main() -> None:
         camera_names,
         cube_x_range,
         cube_y_range,
+        cube_x_bins,
+        args.stratified_tail_episodes,
     )
     print(f"dataset_root={args.root} repo_id={args.repo_id} episodes={args.episodes}")
 

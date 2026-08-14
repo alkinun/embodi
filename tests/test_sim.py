@@ -5,6 +5,7 @@ os.environ.setdefault("MUJOCO_GL", "egl")
 import numpy as np
 import pytest
 
+from embodi.sim.data import build_cube_x_schedule
 from embodi.sim.environment import HOME_STATE, SO101PickPlaceEnv
 
 
@@ -58,3 +59,21 @@ def test_environment_uses_configured_cube_range() -> None:
 def test_environment_rejects_invalid_cube_range() -> None:
     with pytest.raises(ValueError, match="cube ranges"):
         SO101PickPlaceEnv(cube_x_range=(0.32, 0.28))
+
+
+def test_cube_x_schedule_stratifies_training_and_validation() -> None:
+    bins = ((0.28, 0.32, 53), (0.24, 0.28, 26), (0.32, 0.36, 26))
+    schedule = build_cube_x_schedule(105, (0.24, 0.36), bins, 5, seed=15000)
+
+    assert schedule[:100].count((0.28, 0.32)) == 50
+    assert schedule[:100].count((0.24, 0.28)) == 25
+    assert schedule[:100].count((0.32, 0.36)) == 25
+    assert schedule[100:].count((0.28, 0.32)) == 3
+    assert schedule[100:].count((0.24, 0.28)) == 1
+    assert schedule[100:].count((0.32, 0.36)) == 1
+    assert schedule == build_cube_x_schedule(105, (0.24, 0.36), bins, 5, seed=15000)
+
+
+def test_cube_x_schedule_rejects_mismatched_counts() -> None:
+    with pytest.raises(ValueError, match="counts must sum"):
+        build_cube_x_schedule(10, (0.24, 0.36), ((0.24, 0.28, 9),), 0, seed=0)
