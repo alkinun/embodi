@@ -1,0 +1,45 @@
+{
+  "experiment": "020-deterministic-peak-localization",
+  "model_seed": 3993,
+  "loader_seed": 3992,
+  "deterministic_training": true,
+  "reproduction": {
+    "step1000_core_hash": "9a4e5ed4e13f1e251944dcb673740dc82597279acb02b972b8abbf5410786bbc",
+    "final_core_hash": "d5303afe17f90fd42e2384a8c51b1c1fa2b69278dfaf268f952c49cbda3f5d52",
+    "matches_experiment_019": true
+  },
+  "screen": {
+    "evaluation_seed": 20000,
+    "episodes_per_range": 10,
+    "successes": {
+      "700": {"near": 1, "nominal": 3, "far": 1, "total": 5},
+      "800": {"near": 5, "nominal": 3, "far": 1, "total": 9},
+      "900": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "1000": {"near": 1, "nominal": 4, "far": 2, "total": 7},
+      "1100": {"near": 2, "nominal": 6, "far": 6, "total": 14},
+      "1200": {"near": 1, "nominal": 1, "far": 0, "total": 2},
+      "1300": {"near": 1, "nominal": 0, "far": 0, "total": 1}
+    },
+    "selected_step": 1100
+  },
+  "confirmation": {
+    "evaluation_seed": 20500,
+    "episodes_per_range": 50,
+    "successes": {
+      "1000": {"near": 7, "nominal": 15, "far": 17, "total": 39},
+      "1100": {"near": 8, "nominal": 27, "far": 31, "total": 66}
+    },
+    "lifts": {
+      "1000": {"near": 7, "nominal": 17, "far": 24, "total": 48},
+      "1100": {"near": 9, "nominal": 28, "far": 33, "total": 70}
+    },
+    "paired_successes": {
+      "near": {"both": 3, "step1000_only": 4, "step1100_only": 5, "neither": 38, "exact_mcnemar_p": 1.0},
+      "nominal": {"both": 7, "step1000_only": 8, "step1100_only": 20, "neither": 15, "exact_mcnemar_p": 0.03569813817739487},
+      "far": {"both": 9, "step1000_only": 8, "step1100_only": 22, "neither": 11, "exact_mcnemar_p": 0.016124801710247993},
+      "all": {"both": 19, "step1000_only": 20, "step1100_only": 47, "neither": 64, "exact_mcnemar_p": 0.0013071686857636005}
+    }
+  },
+  "selected_checkpoint": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+  "conclusion": "step_1100_is_stronger_but_the_control_peak_is_narrow"
+}
