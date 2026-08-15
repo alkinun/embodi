@@ -32,6 +32,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [023](023-deterministic-expert-transfer.md) | does expert transfer survive deterministic replication? | yes; 63/150 versus 26/150 with matched selection. |
 | [024](024-near-weighted-cube-coverage.md) | can near-weighted data fix approach failures without forgetting? | near improves by 6/50, but retention falls to 70.7%. |
 | [025](025-additive-near-coverage.md) | can additive near data improve control without forgetting? | near gain misses target; unexpected far gain needs confirmation. |
+| [026](026-additive-policy-confirmation.md) | does the additive policy's broad advantage replicate? | experiment in progress. |
 
 ## current decision
 
