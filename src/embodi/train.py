@@ -74,6 +74,10 @@ def resolve_training_seeds(
     )
 
 
+def should_save_checkpoint(step: int, save_every: int, checkpoint_steps: list[int]) -> bool:
+    return step % save_every == 0 or step in checkpoint_steps
+
+
 def configure_deterministic_training(enabled: bool) -> None:
     if not enabled:
         return
@@ -212,6 +216,8 @@ def train(args: argparse.Namespace) -> None:
     for name in ("steps", "batch_size", "accumulation_steps", "eval_every", "validation_batches"):
         if getattr(args, name) <= 0:
             raise ValueError(f"--{name.replace('_', '-')} must be positive")
+    if any(step <= 0 or step > args.steps for step in args.checkpoint_step):
+        raise ValueError("--checkpoint-step must be between 1 and --steps")
     config = EmbodiConfig.load(args.config) if args.config else EmbodiConfig()
     config = replace(
         config,
@@ -601,7 +607,7 @@ def train(args: argparse.Namespace) -> None:
                 progress.write(f"step={step} " + " ".join(f"training_{name}={value:.6f}" for name, value in training_metrics.items()))
             if wandb_run is not None:
                 wandb_run.log({f"validation/{name}": value for name, value in validation_metrics.items()}, step=step)
-        if step % args.save_every == 0:
+        if should_save_checkpoint(step, args.save_every, args.checkpoint_step):
             checkpoint_dir = Path(args.output_dir) / f"step-{step:07d}"
             if args.compact_intermediate_checkpoints:
                 policy.save_checkpoint(checkpoint_dir, step=step)
@@ -647,6 +653,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--warmup-steps", type=int, default=1_000)
     parser.add_argument("--log-every", type=int, default=20)
     parser.add_argument("--save-every", type=int, default=5_000)
+    parser.add_argument("--checkpoint-step", action="append", type=int, default=[])
     parser.add_argument(
         "--compact-intermediate-checkpoints",
         action="store_true",

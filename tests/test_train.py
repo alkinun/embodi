@@ -7,6 +7,7 @@ from embodi.train import (
     gradient_norm,
     prepare_model_batch,
     resolve_training_seeds,
+    should_save_checkpoint,
     split_episode_indices,
 )
 
@@ -33,6 +34,12 @@ def test_training_seed_overrides_are_independent() -> None:
     assert resolve_training_seeds(7, 11, None) == (11, 7)
     assert resolve_training_seeds(7, None, 13) == (7, 13)
     assert resolve_training_seeds(7, 11, 13) == (11, 13)
+
+
+def test_checkpoint_schedule_combines_interval_and_explicit_steps() -> None:
+    assert should_save_checkpoint(500, 500, [750])
+    assert should_save_checkpoint(750, 500, [750])
+    assert not should_save_checkpoint(800, 500, [750])
 
 
 def test_deterministic_training_disabled_preserves_global_setting() -> None:
