@@ -1,0 +1,54 @@
+{
+  "experiment": "024-near-weighted-cube-coverage",
+  "data": {
+    "generator_seed": 11000,
+    "episodes": 105,
+    "attempts": 110,
+    "training_distribution": {"near": 50, "nominal": 25, "far": 25},
+    "validation_distribution": {"near": 3, "nominal": 1, "far": 1}
+  },
+  "model_seed": 3993,
+  "loader_seed": 3992,
+  "deterministic_training": true,
+  "screen": {
+    "evaluation_seed": 24000,
+    "episodes_per_range": 10,
+    "successes": {
+      "700": {"near": 3, "nominal": 2, "far": 1, "total": 6},
+      "800": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "900": {"near": 3, "nominal": 4, "far": 6, "total": 13},
+      "1000": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "1100": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "1200": {"near": 2, "nominal": 2, "far": 1, "total": 5},
+      "1300": {"near": 1, "nominal": 0, "far": 1, "total": 2}
+    },
+    "selected_step": 900
+  },
+  "confirmation": {
+    "evaluation_seed": 24500,
+    "episodes_per_range": 50,
+    "successes": {
+      "center_weighted": {"near": 9, "nominal": 33, "far": 25, "total": 67},
+      "near_weighted": {"near": 15, "nominal": 25, "far": 16, "total": 56}
+    },
+    "lifts": {
+      "center_weighted": {"near": 10, "nominal": 34, "far": 29, "total": 73},
+      "near_weighted": {"near": 16, "nominal": 30, "far": 18, "total": 64}
+    },
+    "paired_successes": {
+      "near": {"both": 2, "center_only": 7, "near_weighted_only": 13, "neither": 28, "exact_mcnemar_p": 0.26317596435546875},
+      "nominal": {"both": 16, "center_only": 17, "near_weighted_only": 9, "neither": 8, "exact_mcnemar_p": 0.16863754391670227},
+      "far": {"both": 6, "center_only": 19, "near_weighted_only": 10, "neither": 15, "exact_mcnemar_p": 0.13604594767093658},
+      "nominal_far": {"both": 22, "center_only": 36, "near_weighted_only": 19, "neither": 23, "exact_mcnemar_p": 0.030028945411892494},
+      "all": {"both": 24, "center_only": 43, "near_weighted_only": 32, "neither": 51, "exact_mcnemar_p": 0.24804574189252795}
+    },
+    "near_gain": 6,
+    "nominal_far_retention": 0.7068965517241379,
+    "gain_requirement_met": true,
+    "retention_requirement_met": false
+  },
+  "baseline_checkpoint": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+  "selected_checkpoint": "outputs/near-weight-exp24-m3993-l3992/step-0000900",
+  "adopt_intervention": false,
+  "conclusion": "near_gain_with_unacceptable_nominal_far_forgetting"
+}
