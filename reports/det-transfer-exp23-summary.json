@@ -1,0 +1,54 @@
+{
+  "experiment": "023-deterministic-expert-transfer",
+  "model_seed": 3993,
+  "loader_seed": 3992,
+  "deterministic_training": true,
+  "screen": {
+    "evaluation_seed": 23000,
+    "episodes_per_range": 10,
+    "successes": {
+      "transfer": {
+        "700": {"near": 1, "nominal": 4, "far": 2, "total": 7},
+        "800": {"near": 2, "nominal": 5, "far": 5, "total": 12},
+        "900": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+        "1000": {"near": 2, "nominal": 5, "far": 3, "total": 10},
+        "1100": {"near": 2, "nominal": 8, "far": 4, "total": 14},
+        "1200": {"near": 2, "nominal": 3, "far": 1, "total": 6},
+        "1300": {"near": 2, "nominal": 1, "far": 0, "total": 3}
+      },
+      "scratch": {
+        "700": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+        "800": {"near": 3, "nominal": 0, "far": 1, "total": 4},
+        "900": {"near": 1, "nominal": 0, "far": 1, "total": 2},
+        "1000": {"near": 1, "nominal": 0, "far": 0, "total": 1},
+        "1100": {"near": 1, "nominal": 0, "far": 1, "total": 2},
+        "1200": {"near": 1, "nominal": 2, "far": 1, "total": 4},
+        "1300": {"near": 0, "nominal": 0, "far": 1, "total": 1}
+      }
+    },
+    "selected_steps": {"transfer": 1100, "scratch": 800}
+  },
+  "confirmation": {
+    "evaluation_seed": 23500,
+    "episodes_per_range": 50,
+    "successes": {
+      "transfer": {"near": 7, "nominal": 26, "far": 30, "total": 63},
+      "scratch": {"near": 9, "nominal": 14, "far": 3, "total": 26}
+    },
+    "lifts": {
+      "transfer": {"near": 7, "nominal": 27, "far": 33, "total": 67},
+      "scratch": {"near": 10, "nominal": 18, "far": 17, "total": 45}
+    },
+    "paired_successes": {
+      "near": {"both": 1, "transfer_only": 6, "scratch_only": 8, "neither": 35, "exact_mcnemar_p": 0.79052734375},
+      "nominal": {"both": 9, "transfer_only": 17, "scratch_only": 5, "neither": 19, "exact_mcnemar_p": 0.01690053939819336},
+      "far": {"both": 1, "transfer_only": 29, "scratch_only": 2, "neither": 18, "exact_mcnemar_p": 4.628673195838928e-7},
+      "all": {"both": 11, "transfer_only": 52, "scratch_only": 15, "neither": 72, "exact_mcnemar_p": 6.459072791237881e-6}
+    }
+  },
+  "selected_checkpoints": {
+    "transfer": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+    "scratch": "outputs/det-transfer-exp23-scratch-m3993-l3992/step-0000800"
+  },
+  "conclusion": "expert_transfer_wins_overall_but_not_near"
+}
