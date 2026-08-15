@@ -29,6 +29,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [020](020-deterministic-peak-localization.md) | can a nearby checkpoint improve the deterministic peak? | step 1,100 reaches 66/150 but the peak is narrow. |
 | [021](021-control-peak-interpolation.md) | can checkpoint interpolation smooth the narrow control peak? | the basin is connected, but interpolation does not improve it. |
 | [022](022-near-failure-telemetry.md) | where does the selected policy fail on near positions? | near failures are approach/alignment failures before lift. |
+| [023](023-deterministic-expert-transfer.md) | does expert transfer survive deterministic replication? | experiment in progress. |
 
 ## current decision
 
