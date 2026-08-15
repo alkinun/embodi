@@ -90,6 +90,11 @@ def evaluate_checkpoint(
                 env.reset()
             policy.reset()
             initial_cube_position = env.data.xpos[env.cube_body_id].copy()
+            diagnostics = env.diagnostic_state()
+            min_ee_cube_distance = diagnostics["ee_cube_distance_m"]
+            min_cube_target_xy_distance = diagnostics["cube_target_xy_distance_m"]
+            max_cube_height = diagnostics["cube_height_m"]
+            min_gripper_opening = diagnostics["gripper_opening"]
             steps = 0
             chunks = 0
             while steps < max_steps and not env.success:
@@ -124,6 +129,18 @@ def evaluate_checkpoint(
                 for action in chunk[:execution_horizon]:
                     env.apply_action(action)
                     env.step_control_period(30.0)
+                    diagnostics = env.diagnostic_state()
+                    min_ee_cube_distance = min(
+                        min_ee_cube_distance, diagnostics["ee_cube_distance_m"]
+                    )
+                    min_cube_target_xy_distance = min(
+                        min_cube_target_xy_distance,
+                        diagnostics["cube_target_xy_distance_m"],
+                    )
+                    max_cube_height = max(max_cube_height, diagnostics["cube_height_m"])
+                    min_gripper_opening = min(
+                        min_gripper_opening, diagnostics["gripper_opening"]
+                    )
                     steps += 1
                     if env.success or steps >= max_steps:
                         break
@@ -134,6 +151,10 @@ def evaluate_checkpoint(
                 "lifted": bool(env.lifted),
                 "steps": steps,
                 "chunks": chunks,
+                "min_ee_cube_distance_m": min_ee_cube_distance,
+                "min_cube_target_xy_distance_m": min_cube_target_xy_distance,
+                "max_cube_height_m": max_cube_height,
+                "min_gripper_opening": min_gripper_opening,
             }
             outcomes.append(outcome)
             print(

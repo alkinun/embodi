@@ -56,6 +56,22 @@ def test_environment_uses_configured_cube_range() -> None:
         env.close()
 
 
+def test_environment_diagnostics_are_finite() -> None:
+    env = SO101PickPlaceEnv(width=64, height=48, seed=3)
+    try:
+        diagnostics = env.diagnostic_state()
+        assert set(diagnostics) == {
+            "ee_cube_distance_m",
+            "cube_target_xy_distance_m",
+            "cube_height_m",
+            "gripper_opening",
+        }
+        assert np.isfinite(list(diagnostics.values())).all()
+        assert diagnostics["cube_height_m"] > 0
+    finally:
+        env.close()
+
+
 def test_environment_rejects_invalid_cube_range() -> None:
     with pytest.raises(ValueError, match="cube ranges"):
         SO101PickPlaceEnv(cube_x_range=(0.32, 0.28))

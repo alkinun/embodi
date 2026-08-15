@@ -254,6 +254,17 @@ class SO101PickPlaceEnv:
     def state(self) -> np.ndarray:
         return self.sim_to_dataset(self.data.qpos[self.qpos_addresses]).copy()
 
+    def diagnostic_state(self) -> dict[str, float]:
+        cube = self.data.xpos[self.cube_body_id]
+        target = self.data.xpos[self.target_body_id]
+        gripper = self.data.site_xpos[self.gripper_site_id]
+        return {
+            "ee_cube_distance_m": float(np.linalg.norm(gripper - cube)),
+            "cube_target_xy_distance_m": float(np.linalg.norm(cube[:2] - target[:2])),
+            "cube_height_m": float(cube[2]),
+            "gripper_opening": float(self.state()[5]),
+        }
+
     @staticmethod
     def _rotation_6d(rotation: np.ndarray) -> np.ndarray:
         return np.asarray(rotation, dtype=np.float32)[:, :2].T.reshape(-1)
