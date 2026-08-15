@@ -1,0 +1,44 @@
+{
+  "experiment": "019-deterministic-model-seed-screen",
+  "deterministic_training": true,
+  "loader_seed": 3992,
+  "screen": {
+    "evaluation_seed": 19000,
+    "episodes_per_range": 10,
+    "successes": {
+      "m3991_step0500": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "m3991_step1000": {"near": 1, "nominal": 3, "far": 2, "total": 6},
+      "m3991_step1500": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "m3991_step2000": {"near": 0, "nominal": 2, "far": 2, "total": 4},
+      "m3991_step2500": {"near": 0, "nominal": 4, "far": 3, "total": 7},
+      "m3992_step2500": {"near": 2, "nominal": 1, "far": 0, "total": 3},
+      "m3993_step0500": {"near": 1, "nominal": 1, "far": 1, "total": 3},
+      "m3993_step1000": {"near": 2, "nominal": 4, "far": 4, "total": 10},
+      "m3993_step1500": {"near": 0, "nominal": 0, "far": 0, "total": 0},
+      "m3993_step2000": {"near": 2, "nominal": 0, "far": 0, "total": 2},
+      "m3993_step2500": {"near": 2, "nominal": 2, "far": 1, "total": 5}
+    },
+    "promotion_threshold": {"total": 10, "minimum_each_range": 1},
+    "promoted": "m3993_step1000"
+  },
+  "confirmation": {
+    "evaluation_seed": 19500,
+    "episodes_per_range": 50,
+    "successes": {
+      "m3993_step1000": {"near": 8, "nominal": 18, "far": 13, "total": 39},
+      "m3992_step2500": {"near": 2, "nominal": 9, "far": 12, "total": 23}
+    },
+    "lifts": {
+      "m3993_step1000": {"near": 8, "nominal": 22, "far": 25, "total": 55},
+      "m3992_step2500": {"near": 2, "nominal": 11, "far": 18, "total": 31}
+    },
+    "paired_successes": {
+      "near": {"both": 1, "candidate_only": 7, "baseline_only": 1, "neither": 41, "exact_mcnemar_p": 0.0703125},
+      "nominal": {"both": 7, "candidate_only": 11, "baseline_only": 2, "neither": 30, "exact_mcnemar_p": 0.0224609375},
+      "far": {"both": 4, "candidate_only": 9, "baseline_only": 8, "neither": 29, "exact_mcnemar_p": 1.0},
+      "all": {"both": 12, "candidate_only": 27, "baseline_only": 11, "neither": 100, "exact_mcnemar_p": 0.013852965261321515}
+    }
+  },
+  "selected_checkpoint": "outputs/det-seed-exp19-center-m3993-l3992/step-0001000",
+  "conclusion": "deterministic_control_peaks_early_and_collapses_despite_improving_validation_loss"
+}
