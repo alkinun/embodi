@@ -1,0 +1,27 @@
+{
+  "experiment": "021-control-peak-interpolation",
+  "evaluation_seed": 21000,
+  "episodes_per_range": 10,
+  "execution_horizon": 16,
+  "successes": {
+    "1000": {"near": 3, "nominal": 3, "far": 3, "total": 9},
+    "1025": {"near": 4, "nominal": 5, "far": 5, "total": 14},
+    "1050": {"near": 5, "nominal": 4, "far": 4, "total": 13},
+    "1075": {"near": 5, "nominal": 4, "far": 4, "total": 13},
+    "1100": {"near": 1, "nominal": 7, "far": 7, "total": 15},
+    "1125": {"near": 4, "nominal": 5, "far": 7, "total": 16},
+    "1150": {"near": 3, "nominal": 4, "far": 4, "total": 11},
+    "1175": {"near": 5, "nominal": 2, "far": 3, "total": 10},
+    "1200": {"near": 3, "nominal": 3, "far": 2, "total": 8}
+  },
+  "best_interpolant": {
+    "effective_step": 1125,
+    "successes": 16,
+    "improvement_over_step1100": 1,
+    "replacement_threshold": 3,
+    "qualified": false
+  },
+  "selected_checkpoint": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+  "confirmation_run": false,
+  "conclusion": "local_weight_basin_is_connected_but_interpolation_does_not_materially_improve_control"
+}

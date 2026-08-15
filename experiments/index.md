@@ -27,7 +27,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [018](018-full-deterministic-reproduction.md) | does strict determinism reproduce a full training run? | yes, exactly, but the deterministic policy is weak. |
 | [019](019-deterministic-model-seed-screen.md) | can deterministic initialization recover strong control? | seed 3993 peaks at step 1,000, then control collapses. |
 | [020](020-deterministic-peak-localization.md) | can a nearby checkpoint improve the deterministic peak? | step 1,100 reaches 66/150 but the peak is narrow. |
-| [021](021-control-peak-interpolation.md) | can checkpoint interpolation smooth the narrow control peak? | experiment in progress. |
+| [021](021-control-peak-interpolation.md) | can checkpoint interpolation smooth the narrow control peak? | the basin is connected, but interpolation does not improve it. |
 
 ## current decision
 
@@ -41,7 +41,6 @@ fresh robot adapters and state path
 one decoder for each robot
 ```
 
-for robot coverage, use deterministic seed 3993 at step 1,100 and test whether
-weight interpolation smooths the narrow control peak. for human pretraining,
-add more sessions and tasks rather than more windows from the same five
-episodes.
+for robot coverage, use deterministic seed 3993 at step 1,100 and diagnose its
+near-range pre-lift failures. for human pretraining, add more sessions and tasks
+rather than more windows from the same five episodes.

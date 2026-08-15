@@ -25,13 +25,42 @@ retain step 1,100 without confirmation.
 
 ## result
 
-pending.
+screen successes over ten scenes per range were:
+
+| effective step | source | near | nominal | far | total |
+| ---: | --- | ---: | ---: | ---: | ---: |
+| 1,000 | endpoint | 3 | 3 | 3 | 9/30 |
+| 1,025 | 1,000→1,100, alpha 0.25 | 4 | 5 | 5 | 14/30 |
+| 1,050 | 1,000→1,100, alpha 0.50 | 5 | 4 | 4 | 13/30 |
+| 1,075 | 1,000→1,100, alpha 0.75 | 5 | 4 | 4 | 13/30 |
+| 1,100 | endpoint | 1 | 7 | 7 | 15/30 |
+| 1,125 | 1,100→1,200, alpha 0.25 | 4 | 5 | 7 | 16/30 |
+| 1,150 | 1,100→1,200, alpha 0.50 | 3 | 4 | 4 | 11/30 |
+| 1,175 | 1,100→1,200, alpha 0.75 | 5 | 2 | 3 | 10/30 |
+| 1,200 | endpoint | 3 | 3 | 2 | 8/30 |
+
+the best interpolant exceeded step 1,100 by only 1/30, below the preregistered
+3/30 replacement threshold. no confirmation was run.
+
+raw rollouts are in
+`reports/interp-exp21-{near,nominal,far}-screen-ik-h16-9model-10.json`; the
+compact result is in `reports/interp-exp21-summary.json`.
 
 ## finding
 
-pending.
+the control peak occupies a connected local weight-space region. every
+interpolant between steps 1,000 and 1,100 scores 13-14/30, and the first
+interpolant beyond step 1,100 scores 16/30. performance then declines toward
+step 1,200.
+
+linear interpolation smooths the apparent checkpoint-to-checkpoint
+discontinuity but does not materially improve the confirmed step-1,100 policy.
+the temporal instability is therefore not evidence of completely disconnected
+solutions along this local path.
 
 ## decision
 
-- treat interpolation as a diagnostic, not additional independent training.
-- stop this line if interpolation does not materially improve the endpoint.
+- retain step 1,100 as the selected deterministic checkpoint.
+- stop checkpoint interpolation; it maps the basin but does not improve the
+  endpoint enough to justify confirmation.
+- diagnose near-range pre-lift failures before changing training again.
