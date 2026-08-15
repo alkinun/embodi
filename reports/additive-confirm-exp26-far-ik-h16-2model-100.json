@@ -1,0 +1,3047 @@
+{
+  "frequency_hz": 30,
+  "max_steps": 500,
+  "execution_horizon": 16,
+  "deterministic_decoder": true,
+  "clip_deterministic_actions": false,
+  "disable_action_limits": false,
+  "embodiment_from": null,
+  "noise_mode": "random",
+  "noise_refresh": "chunk",
+  "cube_x_range": [
+    0.32,
+    0.36
+  ],
+  "cube_y_range": [
+    -0.025,
+    0.025
+  ],
+  "results": [
+    {
+      "checkpoint": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+      "episodes": 100,
+      "seed": 26000,
+      "successes": 59,
+      "success_rate": 0.59,
+      "lifts": 60,
+      "lift_rate": 0.6,
+      "mean_steps": 355.14,
+      "elapsed_seconds": 175.59484464699926,
+      "outcomes": [
+        {
+          "episode": 0,
+          "initial_cube_xy": [
+            0.3262586236133484,
+            -0.02242644600189544
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.018005117974945122,
+          "min_cube_target_xy_distance_m": 0.27572158000219305,
+          "max_cube_height_m": 0.020238916056322897,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 1,
+          "initial_cube_xy": [
+            0.3522979131181455,
+            0.011871391761287466
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 281,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004840829280509508,
+          "min_cube_target_xy_distance_m": 0.03982430945393483,
+          "max_cube_height_m": 0.10089948948376942,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 2,
+          "initial_cube_xy": [
+            0.335698537456098,
+            -0.018314435874733
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01445944965821798,
+          "min_cube_target_xy_distance_m": 0.0592314226696811,
+          "max_cube_height_m": 0.0427612577498634,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 3,
+          "initial_cube_xy": [
+            0.33482662323984924,
+            0.010890521388885716
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.021778058454008813,
+          "min_cube_target_xy_distance_m": 0.30262639365784133,
+          "max_cube_height_m": 0.021254752065727255,
+          "min_gripper_opening": 0.33463987708091736
+        },
+        {
+          "episode": 4,
+          "initial_cube_xy": [
+            0.3522356493775825,
+            -0.014632231825142034
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 258,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.006576245130120856,
+          "min_cube_target_xy_distance_m": 0.052367360161506275,
+          "max_cube_height_m": 0.09898499632925309,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 5,
+          "initial_cube_xy": [
+            0.3438096246910901,
+            0.02170144385538434
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.021455087765078557,
+          "min_cube_target_xy_distance_m": 0.31642788364073887,
+          "max_cube_height_m": 0.02561786023976803,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 6,
+          "initial_cube_xy": [
+            0.3568559320348659,
+            0.012649866687368616
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 258,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.009050974254945322,
+          "min_cube_target_xy_distance_m": 0.05357894555402612,
+          "max_cube_height_m": 0.0863314503633315,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 7,
+          "initial_cube_xy": [
+            0.3573028455963581,
+            0.01678999906709954
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 287,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.008866917545748145,
+          "min_cube_target_xy_distance_m": 0.026558190593810226,
+          "max_cube_height_m": 0.09564064877211066,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 8,
+          "initial_cube_xy": [
+            0.3564170552146024,
+            -0.009584037959038528
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 274,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.009807295840954439,
+          "min_cube_target_xy_distance_m": 0.05468290386191201,
+          "max_cube_height_m": 0.08189338722974873,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 9,
+          "initial_cube_xy": [
+            0.34548066738659244,
+            -0.018424494336919384
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 235,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.007700337483924956,
+          "min_cube_target_xy_distance_m": 0.05247917516068092,
+          "max_cube_height_m": 0.08265656569824073,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 10,
+          "initial_cube_xy": [
+            0.3479527459130658,
+            -0.012060481878218449
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.008318145103618729,
+          "min_cube_target_xy_distance_m": 0.010642990287706364,
+          "max_cube_height_m": 0.06785919763170616,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 11,
+          "initial_cube_xy": [
+            0.33625689133535497,
+            -0.004131143778059527
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.010032472369103932,
+          "min_cube_target_xy_distance_m": 0.04402752702900226,
+          "max_cube_height_m": 0.05780948678214486,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 12,
+          "initial_cube_xy": [
+            0.34217051212751726,
+            0.006143239746631595
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 269,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.006831220196153235,
+          "min_cube_target_xy_distance_m": 0.053984423378507056,
+          "max_cube_height_m": 0.0835052464570856,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 13,
+          "initial_cube_xy": [
+            0.33639537111471407,
+            -0.02205105167411311
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015093007207805877,
+          "min_cube_target_xy_distance_m": 0.28015399688572,
+          "max_cube_height_m": 0.027780400255582136,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 14,
+          "initial_cube_xy": [
+            0.33880912251284523,
+            -0.02378214029153841
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.017241220544009374,
+          "min_cube_target_xy_distance_m": 0.2853661099136471,
+          "max_cube_height_m": 0.023547662963558022,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 15,
+          "initial_cube_xy": [
+            0.32239940246637117,
+            0.007431737841958025
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 230,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.005060751049969681,
+          "min_cube_target_xy_distance_m": 0.054065778526534866,
+          "max_cube_height_m": 0.08728741733022413,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 16,
+          "initial_cube_xy": [
+            0.34401798203660394,
+            0.018161665482183724
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 240,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.0034704367400244605,
+          "min_cube_target_xy_distance_m": 0.04750147321721795,
+          "max_cube_height_m": 0.08123912906418261,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 17,
+          "initial_cube_xy": [
+            0.34161458838781283,
+            0.017752870908680017
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 256,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.006598314727205347,
+          "min_cube_target_xy_distance_m": 0.04646473107654239,
+          "max_cube_height_m": 0.08223020628462148,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 18,
+          "initial_cube_xy": [
+            0.32514342053205614,
+            0.008575363813202286
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 235,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.005730490253821863,
+          "min_cube_target_xy_distance_m": 0.051490055656608,
+          "max_cube_height_m": 0.0788972548441232,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 19,
+          "initial_cube_xy": [
+            0.3308375633084646,
+            0.02264043462461971
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.020480017584107595,
+          "min_cube_target_xy_distance_m": 0.3071630289911925,
+          "max_cube_height_m": 0.01890300027378095,
+          "min_gripper_opening": 0.09988736361265182
+        },
+        {
+          "episode": 20,
+          "initial_cube_xy": [
+            0.3427481293774908,
+            -4.3487589796147724e-05
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 267,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.004527708451382552,
+          "min_cube_target_xy_distance_m": 0.032950399571328955,
+          "max_cube_height_m": 0.10511807922463198,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 21,
+          "initial_cube_xy": [
+            0.340866299871585,
+            -0.018933155349893295
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 237,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.011385307921844435,
+          "min_cube_target_xy_distance_m": 0.05353294803931407,
+          "max_cube_height_m": 0.0708713276209393,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 22,
+          "initial_cube_xy": [
+            0.3299583905343629,
+            0.005419733613670975
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.016747641662889726,
+          "min_cube_target_xy_distance_m": 0.2695246653938044,
+          "max_cube_height_m": 0.0461907210957682,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 23,
+          "initial_cube_xy": [
+            0.338487455359619,
+            0.02343588556427586
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.02110846408631654,
+          "min_cube_target_xy_distance_m": 0.3134683810198844,
+          "max_cube_height_m": 0.02147145784523579,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 24,
+          "initial_cube_xy": [
+            0.35803482028461525,
+            0.009312780890281543
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.012570876889878327,
+          "min_cube_target_xy_distance_m": 0.14970141021068661,
+          "max_cube_height_m": 0.06957986651840067,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 25,
+          "initial_cube_xy": [
+            0.3329000737447139,
+            0.015397990514989628
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01008417507898354,
+          "min_cube_target_xy_distance_m": 0.046375470842657286,
+          "max_cube_height_m": 0.05701243939950031,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 26,
+          "initial_cube_xy": [
+            0.354731101362098,
+            0.013550184546537197
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 286,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005355430919430697,
+          "min_cube_target_xy_distance_m": 0.051335172384567807,
+          "max_cube_height_m": 0.09620301196865778,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 27,
+          "initial_cube_xy": [
+            0.3483218085236686,
+            0.013558700690643508
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 271,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.010234993710681197,
+          "min_cube_target_xy_distance_m": 0.039596437199927524,
+          "max_cube_height_m": 0.0976780162982776,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 28,
+          "initial_cube_xy": [
+            0.3461731654400716,
+            -0.0005676806342976293
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 254,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.004580662104837724,
+          "min_cube_target_xy_distance_m": 0.04900291759713731,
+          "max_cube_height_m": 0.10079601810495875,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 29,
+          "initial_cube_xy": [
+            0.33367032024133897,
+            -0.017492146410293438
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.017396887175880782,
+          "min_cube_target_xy_distance_m": 0.2590749014762605,
+          "max_cube_height_m": 0.03705181491749465,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 30,
+          "initial_cube_xy": [
+            0.34958873552670766,
+            -0.010641990521109524
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.014413514432952938,
+          "min_cube_target_xy_distance_m": 0.20820551158265554,
+          "max_cube_height_m": 0.037822326098015946,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 31,
+          "initial_cube_xy": [
+            0.35630668480513833,
+            -0.011299461396222527
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 283,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.0075099426351235895,
+          "min_cube_target_xy_distance_m": 0.02928905539190837,
+          "max_cube_height_m": 0.10182711688932734,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 32,
+          "initial_cube_xy": [
+            0.35684173090720595,
+            -0.014186259745994079
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 251,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.009159961587929375,
+          "min_cube_target_xy_distance_m": 0.05353389652209933,
+          "max_cube_height_m": 0.08432861866718872,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 33,
+          "initial_cube_xy": [
+            0.3520148321922426,
+            0.006054636371636772
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 256,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.003440625880701664,
+          "min_cube_target_xy_distance_m": 0.04616673773921785,
+          "max_cube_height_m": 0.09781731916749097,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 34,
+          "initial_cube_xy": [
+            0.35894638949769786,
+            0.022575343575608094
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 272,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.008425669743588484,
+          "min_cube_target_xy_distance_m": 0.05243267016436103,
+          "max_cube_height_m": 0.08549683139629558,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 35,
+          "initial_cube_xy": [
+            0.32303717303173846,
+            -0.024940477794280155
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.026135655633082677,
+          "min_cube_target_xy_distance_m": 0.2716413738369652,
+          "max_cube_height_m": 0.02299406164216182,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 36,
+          "initial_cube_xy": [
+            0.34362274558236616,
+            -0.01696491891881917
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 239,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.010187651057839232,
+          "min_cube_target_xy_distance_m": 0.054640174969486345,
+          "max_cube_height_m": 0.08263966224945712,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 37,
+          "initial_cube_xy": [
+            0.34200759903411937,
+            -0.006792433038443096
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 257,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.00835794708202156,
+          "min_cube_target_xy_distance_m": 0.034215846335710565,
+          "max_cube_height_m": 0.09774075300897782,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 38,
+          "initial_cube_xy": [
+            0.32306388147409515,
+            -0.003959244016088041
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 223,
+          "chunks": 14,
+          "min_ee_cube_distance_m": 0.004786166693318908,
+          "min_cube_target_xy_distance_m": 0.0534055770724118,
+          "max_cube_height_m": 0.08099848770489211,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 39,
+          "initial_cube_xy": [
+            0.33322319806572753,
+            0.02287234208603455
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.007608575908897272,
+          "min_cube_target_xy_distance_m": 0.3091120303376732,
+          "max_cube_height_m": 0.01992994934015153,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 40,
+          "initial_cube_xy": [
+            0.3315529474873695,
+            0.02129329283001718
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.017127989154973017,
+          "min_cube_target_xy_distance_m": 0.30681551008454505,
+          "max_cube_height_m": 0.02131456230028345,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 41,
+          "initial_cube_xy": [
+            0.3353802820677307,
+            -0.006191048116824176
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 232,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.007506789849346691,
+          "min_cube_target_xy_distance_m": 0.05440910295802917,
+          "max_cube_height_m": 0.08810335516585768,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 42,
+          "initial_cube_xy": [
+            0.35117150950686404,
+            -0.005664345650397591
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 269,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.004934424442552777,
+          "min_cube_target_xy_distance_m": 0.03393225776055004,
+          "max_cube_height_m": 0.10549329181179495,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 43,
+          "initial_cube_xy": [
+            0.3471490744004916,
+            -0.00012650458738688863
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 267,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.0048078096021679255,
+          "min_cube_target_xy_distance_m": 0.03523788518807037,
+          "max_cube_height_m": 0.10343251163326021,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 44,
+          "initial_cube_xy": [
+            0.3530450981059589,
+            0.010680801775370688
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 273,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.01079222597244434,
+          "min_cube_target_xy_distance_m": 0.05446852126904524,
+          "max_cube_height_m": 0.0990623816929596,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 45,
+          "initial_cube_xy": [
+            0.33761550905689175,
+            0.007522175528496808
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01435927325500759,
+          "min_cube_target_xy_distance_m": 0.3026973677773003,
+          "max_cube_height_m": 0.02054576488398542,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 46,
+          "initial_cube_xy": [
+            0.3498802228406883,
+            0.018055445691965127
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 272,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.005095981159641005,
+          "min_cube_target_xy_distance_m": 0.0513544378187126,
+          "max_cube_height_m": 0.09245273657009716,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 47,
+          "initial_cube_xy": [
+            0.33875240877767737,
+            -0.019710313307888968
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.014637311740581969,
+          "min_cube_target_xy_distance_m": 0.2875682464330031,
+          "max_cube_height_m": 0.02449899798904835,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 48,
+          "initial_cube_xy": [
+            0.3549977949118449,
+            0.015462888644658154
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 274,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.006134727116516632,
+          "min_cube_target_xy_distance_m": 0.05133957874942535,
+          "max_cube_height_m": 0.10016936138649506,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 49,
+          "initial_cube_xy": [
+            0.33357391886336535,
+            0.012450587645519193
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01172635704493268,
+          "min_cube_target_xy_distance_m": 0.06928070756824031,
+          "max_cube_height_m": 0.0640711722747296,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 50,
+          "initial_cube_xy": [
+            0.32545432218508674,
+            -0.023280486363778965
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.005069786562601733,
+          "min_cube_target_xy_distance_m": 0.0811388210751306,
+          "max_cube_height_m": 0.1523714336507572,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 51,
+          "initial_cube_xy": [
+            0.33614306675398997,
+            -0.008459375044641417
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 223,
+          "chunks": 14,
+          "min_ee_cube_distance_m": 0.010167102248890478,
+          "min_cube_target_xy_distance_m": 0.05325877077251689,
+          "max_cube_height_m": 0.07514881164230536,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 52,
+          "initial_cube_xy": [
+            0.3393386379622971,
+            0.017173139520272954
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 248,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.009145343073738208,
+          "min_cube_target_xy_distance_m": 0.05160297847868874,
+          "max_cube_height_m": 0.0797496133172058,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 53,
+          "initial_cube_xy": [
+            0.35281325348405507,
+            0.022180499049980013
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 273,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005072888785305856,
+          "min_cube_target_xy_distance_m": 0.04510656973467736,
+          "max_cube_height_m": 0.09556958583429379,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 54,
+          "initial_cube_xy": [
+            0.3274571493123162,
+            0.011642591849813075
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.02267683341461348,
+          "min_cube_target_xy_distance_m": 0.2969445454267287,
+          "max_cube_height_m": 0.022680076067604818,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 55,
+          "initial_cube_xy": [
+            0.3300010444662407,
+            -0.01451513310953555
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.010914532998312536,
+          "min_cube_target_xy_distance_m": 0.011562196420455388,
+          "max_cube_height_m": 0.06978299945249351,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 56,
+          "initial_cube_xy": [
+            0.345654448642358,
+            0.01445021602793644
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.019316422218758626,
+          "min_cube_target_xy_distance_m": 0.3133001670141464,
+          "max_cube_height_m": 0.022269295289220996,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 57,
+          "initial_cube_xy": [
+            0.3499757792005204,
+            -0.017153937005180697
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 258,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.00678034240944933,
+          "min_cube_target_xy_distance_m": 0.049864042649011946,
+          "max_cube_height_m": 0.10406108042477999,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 58,
+          "initial_cube_xy": [
+            0.32429455428346365,
+            0.012087822380358486
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 248,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.00738844116841814,
+          "min_cube_target_xy_distance_m": 0.05194571122039472,
+          "max_cube_height_m": 0.08214830028084118,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 59,
+          "initial_cube_xy": [
+            0.3289251224677517,
+            0.005274343706705587
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 237,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.004002857748454293,
+          "min_cube_target_xy_distance_m": 0.03672485232208036,
+          "max_cube_height_m": 0.09547339798394522,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 60,
+          "initial_cube_xy": [
+            0.3236642625341957,
+            0.013516496766878848
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 232,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.0074314161059237886,
+          "min_cube_target_xy_distance_m": 0.05367654347313312,
+          "max_cube_height_m": 0.08689150964754964,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 61,
+          "initial_cube_xy": [
+            0.3234069418166969,
+            -0.013422926210356862
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 226,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.008483331785467094,
+          "min_cube_target_xy_distance_m": 0.054636086666394024,
+          "max_cube_height_m": 0.08076998978809857,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 62,
+          "initial_cube_xy": [
+            0.3545611903470973,
+            0.015141400800772552
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 283,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005168949162620297,
+          "min_cube_target_xy_distance_m": 0.039520538868597355,
+          "max_cube_height_m": 0.104573262233488,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 63,
+          "initial_cube_xy": [
+            0.3594059505134682,
+            0.01025051542968633
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 285,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004931813987433666,
+          "min_cube_target_xy_distance_m": 0.043147628583579,
+          "max_cube_height_m": 0.11821634136920718,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 64,
+          "initial_cube_xy": [
+            0.3234905816919317,
+            -0.01982372627030428
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015304998692323017,
+          "min_cube_target_xy_distance_m": 0.2697971458904554,
+          "max_cube_height_m": 0.03837340173667032,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 65,
+          "initial_cube_xy": [
+            0.32130536492668743,
+            0.014001518488981048
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.016906515932666417,
+          "min_cube_target_xy_distance_m": 0.2943002781537332,
+          "max_cube_height_m": 0.019031697854077465,
+          "min_gripper_opening": 0.044081225991249084
+        },
+        {
+          "episode": 66,
+          "initial_cube_xy": [
+            0.3495956693350608,
+            -0.006559203427480065
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 262,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.010721191443518225,
+          "min_cube_target_xy_distance_m": 0.052958735867207084,
+          "max_cube_height_m": 0.08037100525383382,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 67,
+          "initial_cube_xy": [
+            0.3256666553160979,
+            -0.009835137599056881
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 230,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.008308082200988358,
+          "min_cube_target_xy_distance_m": 0.05185733839650491,
+          "max_cube_height_m": 0.08402815678221212,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 68,
+          "initial_cube_xy": [
+            0.32524588440510754,
+            0.020728826921817704
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.016539608037339795,
+          "min_cube_target_xy_distance_m": 0.30170808805673094,
+          "max_cube_height_m": 0.02458771134233264,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 69,
+          "initial_cube_xy": [
+            0.34942890673680216,
+            -0.007077465734510492
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 272,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.008301058865926731,
+          "min_cube_target_xy_distance_m": 0.033927492398827724,
+          "max_cube_height_m": 0.09908034416802879,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 70,
+          "initial_cube_xy": [
+            0.35256423316906227,
+            -0.00011747882619860331
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 267,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.004872882996021388,
+          "min_cube_target_xy_distance_m": 0.036290817904813345,
+          "max_cube_height_m": 0.0993431131446848,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 71,
+          "initial_cube_xy": [
+            0.33400007827050865,
+            0.020972688264355492
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.019376739120480938,
+          "min_cube_target_xy_distance_m": 0.3084575466069942,
+          "max_cube_height_m": 0.024987291354730375,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 72,
+          "initial_cube_xy": [
+            0.32895470476516386,
+            -0.014656948974774327
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.0060236343562824835,
+          "min_cube_target_xy_distance_m": 0.04445749047775462,
+          "max_cube_height_m": 0.05861038049557267,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 73,
+          "initial_cube_xy": [
+            0.3275225775411019,
+            0.01437761335324158
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.004643594628875818,
+          "min_cube_target_xy_distance_m": 0.009805293521799735,
+          "max_cube_height_m": 0.06760231036247946,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 74,
+          "initial_cube_xy": [
+            0.35577232937388137,
+            -0.0123274725688605
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.009219649169709307,
+          "min_cube_target_xy_distance_m": 0.010039498599845096,
+          "max_cube_height_m": 0.06792430517534528,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 75,
+          "initial_cube_xy": [
+            0.3523173971571957,
+            0.002925258574148843
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 268,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.005456635016923175,
+          "min_cube_target_xy_distance_m": 0.036449640541619505,
+          "max_cube_height_m": 0.10668797536670274,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 76,
+          "initial_cube_xy": [
+            0.34581836301073793,
+            -0.023451789570909733
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.011129643125659354,
+          "min_cube_target_xy_distance_m": 0.2914344004777566,
+          "max_cube_height_m": 0.026840441328129898,
+          "min_gripper_opening": 0.027086203917860985
+        },
+        {
+          "episode": 77,
+          "initial_cube_xy": [
+            0.33264124358735836,
+            -0.014561862588791398
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015615187353200666,
+          "min_cube_target_xy_distance_m": 0.2854675559988605,
+          "max_cube_height_m": 0.0254408322184514,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 78,
+          "initial_cube_xy": [
+            0.34705482497180073,
+            -0.020596295601183468
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.018946196050303767,
+          "min_cube_target_xy_distance_m": 0.2940163728724291,
+          "max_cube_height_m": 0.023216060560798026,
+          "min_gripper_opening": 0.12659595906734467
+        },
+        {
+          "episode": 79,
+          "initial_cube_xy": [
+            0.3336438666567111,
+            -0.0023445299199454997
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 223,
+          "chunks": 14,
+          "min_ee_cube_distance_m": 0.010189214867563887,
+          "min_cube_target_xy_distance_m": 0.049787427140021795,
+          "max_cube_height_m": 0.07204440469588534,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 80,
+          "initial_cube_xy": [
+            0.33987394400994686,
+            -0.0012819368628436204
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 254,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.005955641795510534,
+          "min_cube_target_xy_distance_m": 0.03175803073696266,
+          "max_cube_height_m": 0.09599057401566712,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 81,
+          "initial_cube_xy": [
+            0.34298616576639046,
+            -0.008420112115695245
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 237,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.008692964763753561,
+          "min_cube_target_xy_distance_m": 0.052027439872163135,
+          "max_cube_height_m": 0.07653454850783145,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 82,
+          "initial_cube_xy": [
+            0.3516680601919313,
+            0.011866409176038553
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 249,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.005584736968943332,
+          "min_cube_target_xy_distance_m": 0.054192332155918156,
+          "max_cube_height_m": 0.08091828081653686,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 83,
+          "initial_cube_xy": [
+            0.33740583896228216,
+            0.01604092924481123
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 260,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.00584403563142066,
+          "min_cube_target_xy_distance_m": 0.054119820188958674,
+          "max_cube_height_m": 0.09096881918949322,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 84,
+          "initial_cube_xy": [
+            0.35486101603290676,
+            0.0041888310574341794
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 273,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004527191881952183,
+          "min_cube_target_xy_distance_m": 0.04220845535239236,
+          "max_cube_height_m": 0.10761858439623687,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 85,
+          "initial_cube_xy": [
+            0.3462485345938625,
+            -0.005278427083013643
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 254,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.005520639149250695,
+          "min_cube_target_xy_distance_m": 0.03596308192224842,
+          "max_cube_height_m": 0.09839296876275447,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 86,
+          "initial_cube_xy": [
+            0.35312617974620136,
+            -0.021138824913285222
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.018435462667369406,
+          "min_cube_target_xy_distance_m": 0.29884734534845936,
+          "max_cube_height_m": 0.03534854553497782,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 87,
+          "initial_cube_xy": [
+            0.3357618630158859,
+            -0.00371216006471305
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 230,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.008356259084255522,
+          "min_cube_target_xy_distance_m": 0.05294709087441948,
+          "max_cube_height_m": 0.07261969830677645,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 88,
+          "initial_cube_xy": [
+            0.32295791703162846,
+            0.018809326438480767
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 245,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.009466595156947033,
+          "min_cube_target_xy_distance_m": 0.021669735231532997,
+          "max_cube_height_m": 0.10248085780947497,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 89,
+          "initial_cube_xy": [
+            0.33346713665937705,
+            0.01847595226254762
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.022271335171121537,
+          "min_cube_target_xy_distance_m": 0.306430428525715,
+          "max_cube_height_m": 0.019592835553485132,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 90,
+          "initial_cube_xy": [
+            0.35153906859271833,
+            0.01686615115731721
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 270,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.010534635287679605,
+          "min_cube_target_xy_distance_m": 0.05297295330882065,
+          "max_cube_height_m": 0.09552205621912813,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 91,
+          "initial_cube_xy": [
+            0.35324432475667833,
+            -0.010605643236807844
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 274,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.00897749269464227,
+          "min_cube_target_xy_distance_m": 0.042699475004730335,
+          "max_cube_height_m": 0.10570314963279152,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 92,
+          "initial_cube_xy": [
+            0.3388491112167133,
+            -0.021786085004502898
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015518678595521163,
+          "min_cube_target_xy_distance_m": 0.28649701713451486,
+          "max_cube_height_m": 0.026044997567093296,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 93,
+          "initial_cube_xy": [
+            0.3403220472672255,
+            0.011043909530633292
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.020771815653998337,
+          "min_cube_target_xy_distance_m": 0.3068165916950698,
+          "max_cube_height_m": 0.028938342669362824,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 94,
+          "initial_cube_xy": [
+            0.35463419965053633,
+            -0.018317094035593215
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 258,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.0069387405161919075,
+          "min_cube_target_xy_distance_m": 0.04827065851122637,
+          "max_cube_height_m": 0.09133602202407723,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 95,
+          "initial_cube_xy": [
+            0.32193083229124536,
+            0.0021613038053236826
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 221,
+          "chunks": 14,
+          "min_ee_cube_distance_m": 0.0054401879854727424,
+          "min_cube_target_xy_distance_m": 0.05136210534845047,
+          "max_cube_height_m": 0.08392468381885358,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 96,
+          "initial_cube_xy": [
+            0.3276567154718282,
+            0.00120390624009159
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 213,
+          "chunks": 14,
+          "min_ee_cube_distance_m": 0.007787317049274892,
+          "min_cube_target_xy_distance_m": 0.02426570530492325,
+          "max_cube_height_m": 0.07057395976054628,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 97,
+          "initial_cube_xy": [
+            0.32159011166979956,
+            0.020549470805254745
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.023212764019284512,
+          "min_cube_target_xy_distance_m": 0.29886831185340135,
+          "max_cube_height_m": 0.02181852551444498,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 98,
+          "initial_cube_xy": [
+            0.3209837367043986,
+            0.01851555093547047
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 235,
+          "chunks": 15,
+          "min_ee_cube_distance_m": 0.009635272482225416,
+          "min_cube_target_xy_distance_m": 0.052448036192726616,
+          "max_cube_height_m": 0.07761577534876342,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 99,
+          "initial_cube_xy": [
+            0.3423291183590097,
+            0.023499047958072228
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.020754522453329746,
+          "min_cube_target_xy_distance_m": 0.3164415651024636,
+          "max_cube_height_m": 0.021621266746279844,
+          "min_gripper_opening": 0.0
+        }
+      ]
+    },
+    {
+      "checkpoint": "outputs/additive-near-exp25-m3993-l3992/step-0001000",
+      "episodes": 100,
+      "seed": 26000,
+      "successes": 74,
+      "success_rate": 0.74,
+      "lifts": 83,
+      "lift_rate": 0.83,
+      "mean_steps": 344.88,
+      "elapsed_seconds": 170.76029605699296,
+      "outcomes": [
+        {
+          "episode": 0,
+          "initial_cube_xy": [
+            0.3262586236133484,
+            -0.02242644600189544
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.012592239588139896,
+          "min_cube_target_xy_distance_m": 0.2757215800012861,
+          "max_cube_height_m": 0.02660140393083167,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 1,
+          "initial_cube_xy": [
+            0.3522979131181455,
+            0.011871391761287466
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 298,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.004855936174913226,
+          "min_cube_target_xy_distance_m": 0.037923292989020974,
+          "max_cube_height_m": 0.11739976281938595,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 2,
+          "initial_cube_xy": [
+            0.335698537456098,
+            -0.018314435874733
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 270,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.008548256867023535,
+          "min_cube_target_xy_distance_m": 0.039328613909649375,
+          "max_cube_height_m": 0.10529579522153548,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 3,
+          "initial_cube_xy": [
+            0.33482662323984924,
+            0.010890521388885716
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 298,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.007898606746052054,
+          "min_cube_target_xy_distance_m": 0.01739304937389146,
+          "max_cube_height_m": 0.11789835988627839,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 4,
+          "initial_cube_xy": [
+            0.3522356493775825,
+            -0.014632231825142034
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 270,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.012173587899393792,
+          "min_cube_target_xy_distance_m": 0.0545647820087016,
+          "max_cube_height_m": 0.08741480898311745,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 5,
+          "initial_cube_xy": [
+            0.3438096246910901,
+            0.02170144385538434
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 286,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004758926673179651,
+          "min_cube_target_xy_distance_m": 0.037767610333436855,
+          "max_cube_height_m": 0.11308261457337936,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 6,
+          "initial_cube_xy": [
+            0.3568559320348659,
+            0.012649866687368616
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 304,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.007645971763515549,
+          "min_cube_target_xy_distance_m": 0.027356524499652906,
+          "max_cube_height_m": 0.11455479036630319,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 7,
+          "initial_cube_xy": [
+            0.3573028455963581,
+            0.01678999906709954
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 297,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.006093042066665816,
+          "min_cube_target_xy_distance_m": 0.03471127338680671,
+          "max_cube_height_m": 0.10160874288890932,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 8,
+          "initial_cube_xy": [
+            0.3564170552146024,
+            -0.009584037959038528
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.018504952919125243,
+          "min_cube_target_xy_distance_m": 0.3074394072929971,
+          "max_cube_height_m": 0.02207912575633177,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 9,
+          "initial_cube_xy": [
+            0.34548066738659244,
+            -0.018424494336919384
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 289,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.005004309529886245,
+          "min_cube_target_xy_distance_m": 0.049002899290488365,
+          "max_cube_height_m": 0.11908694165639319,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 10,
+          "initial_cube_xy": [
+            0.3479527459130658,
+            -0.012060481878218449
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01150980807252513,
+          "min_cube_target_xy_distance_m": 0.23004769805408887,
+          "max_cube_height_m": 0.07106946537734715,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 11,
+          "initial_cube_xy": [
+            0.33625689133535497,
+            -0.004131143778059527
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 271,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.0074702597516638205,
+          "min_cube_target_xy_distance_m": 0.03548648551606463,
+          "max_cube_height_m": 0.11266244898083914,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 12,
+          "initial_cube_xy": [
+            0.34217051212751726,
+            0.006143239746631595
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 297,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.004777294451759385,
+          "min_cube_target_xy_distance_m": 0.051633726192464806,
+          "max_cube_height_m": 0.12096158056136855,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 13,
+          "initial_cube_xy": [
+            0.33639537111471407,
+            -0.02205105167411311
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 279,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.007902924279580132,
+          "min_cube_target_xy_distance_m": 0.033415826612247526,
+          "max_cube_height_m": 0.11110934387510875,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 14,
+          "initial_cube_xy": [
+            0.33880912251284523,
+            -0.02378214029153841
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 263,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.004707913553241694,
+          "min_cube_target_xy_distance_m": 0.03931622605235308,
+          "max_cube_height_m": 0.10360129613359415,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 15,
+          "initial_cube_xy": [
+            0.32239940246637117,
+            0.007431737841958025
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.0015434608319202865,
+          "min_cube_target_xy_distance_m": 0.29084729768016654,
+          "max_cube_height_m": 0.07985750584253748,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 16,
+          "initial_cube_xy": [
+            0.34401798203660394,
+            0.018161665482183724
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.006297831636268959,
+          "min_cube_target_xy_distance_m": 0.04295536838301225,
+          "max_cube_height_m": 0.11501749539348012,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 17,
+          "initial_cube_xy": [
+            0.34161458838781283,
+            0.017752870908680017
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 304,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.005451040493412246,
+          "min_cube_target_xy_distance_m": 0.03262911981776322,
+          "max_cube_height_m": 0.12064182790672845,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 18,
+          "initial_cube_xy": [
+            0.32514342053205614,
+            0.008575363813202286
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 419,
+          "chunks": 27,
+          "min_ee_cube_distance_m": 0.004818230681412896,
+          "min_cube_target_xy_distance_m": 0.029405169762408336,
+          "max_cube_height_m": 0.10711782888857196,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 19,
+          "initial_cube_xy": [
+            0.3308375633084646,
+            0.02264043462461971
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.007395693925469126,
+          "min_cube_target_xy_distance_m": 0.02653019666355485,
+          "max_cube_height_m": 0.12210437330621896,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 20,
+          "initial_cube_xy": [
+            0.3427481293774908,
+            -4.3487589796147724e-05
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.009283982444490425,
+          "min_cube_target_xy_distance_m": 0.17473243246504122,
+          "max_cube_height_m": 0.10748331498374349,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 21,
+          "initial_cube_xy": [
+            0.340866299871585,
+            -0.018933155349893295
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 296,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.005041512813205755,
+          "min_cube_target_xy_distance_m": 0.03772296355540417,
+          "max_cube_height_m": 0.11319432012524687,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 22,
+          "initial_cube_xy": [
+            0.3299583905343629,
+            0.005419733613670975
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.01192905937230692,
+          "min_cube_target_xy_distance_m": 0.02177678705651905,
+          "max_cube_height_m": 0.11102057613649298,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 23,
+          "initial_cube_xy": [
+            0.338487455359619,
+            0.02343588556427586
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.011530336762442011,
+          "min_cube_target_xy_distance_m": 0.019176528433359704,
+          "max_cube_height_m": 0.10925827536073465,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 24,
+          "initial_cube_xy": [
+            0.35803482028461525,
+            0.009312780890281543
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 266,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.007425999070807226,
+          "min_cube_target_xy_distance_m": 0.050806720798780805,
+          "max_cube_height_m": 0.08526820911744472,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 25,
+          "initial_cube_xy": [
+            0.3329000737447139,
+            0.015397990514989628
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.007200947007179288,
+          "min_cube_target_xy_distance_m": 0.3040112153319169,
+          "max_cube_height_m": 0.029317888518044646,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 26,
+          "initial_cube_xy": [
+            0.354731101362098,
+            0.013550184546537197
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01371209150768193,
+          "min_cube_target_xy_distance_m": 0.3199212527156426,
+          "max_cube_height_m": 0.049311526201137205,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 27,
+          "initial_cube_xy": [
+            0.3483218085236686,
+            0.013558700690643508
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 282,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.006022321643472749,
+          "min_cube_target_xy_distance_m": 0.03408509451567548,
+          "max_cube_height_m": 0.11868118578700264,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 28,
+          "initial_cube_xy": [
+            0.3461731654400716,
+            -0.0005676806342976293
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005039897385981405,
+          "min_cube_target_xy_distance_m": 0.03953465098093477,
+          "max_cube_height_m": 0.11618453109497372,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 29,
+          "initial_cube_xy": [
+            0.33367032024133897,
+            -0.017492146410293438
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 299,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.009628019761661723,
+          "min_cube_target_xy_distance_m": 0.04364816635658329,
+          "max_cube_height_m": 0.11385972394566858,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 30,
+          "initial_cube_xy": [
+            0.34958873552670766,
+            -0.010641990521109524
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 412,
+          "chunks": 26,
+          "min_ee_cube_distance_m": 0.011100553032626791,
+          "min_cube_target_xy_distance_m": 0.049142177524227816,
+          "max_cube_height_m": 0.07890351102998833,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 31,
+          "initial_cube_xy": [
+            0.35630668480513833,
+            -0.011299461396222527
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.014112301890767967,
+          "min_cube_target_xy_distance_m": 0.30684358947353796,
+          "max_cube_height_m": 0.020773938627872312,
+          "min_gripper_opening": 0.14871278405189514
+        },
+        {
+          "episode": 32,
+          "initial_cube_xy": [
+            0.35684173090720595,
+            -0.014186259745994079
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.004721482732373093,
+          "min_cube_target_xy_distance_m": 0.055164038094634514,
+          "max_cube_height_m": 0.11701189681633396,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 33,
+          "initial_cube_xy": [
+            0.3520148321922426,
+            0.006054636371636772
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 293,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.004945183564943386,
+          "min_cube_target_xy_distance_m": 0.017410991121002046,
+          "max_cube_height_m": 0.10385652629628951,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 34,
+          "initial_cube_xy": [
+            0.35894638949769786,
+            0.022575343575608094
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.013190532843064847,
+          "min_cube_target_xy_distance_m": 0.3248851851376403,
+          "max_cube_height_m": 0.02412340742152143,
+          "min_gripper_opening": 0.3169010579586029
+        },
+        {
+          "episode": 35,
+          "initial_cube_xy": [
+            0.32303717303173846,
+            -0.024940477794280155
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015577636691222339,
+          "min_cube_target_xy_distance_m": 0.2716413738374829,
+          "max_cube_height_m": 0.03757520413934349,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 36,
+          "initial_cube_xy": [
+            0.34362274558236616,
+            -0.01696491891881917
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 286,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.006366135147428148,
+          "min_cube_target_xy_distance_m": 0.03305016653595068,
+          "max_cube_height_m": 0.10262524587092028,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 37,
+          "initial_cube_xy": [
+            0.34200759903411937,
+            -0.006792433038443096
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 281,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005744737728478206,
+          "min_cube_target_xy_distance_m": 0.032086696690997146,
+          "max_cube_height_m": 0.10531139634714577,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 38,
+          "initial_cube_xy": [
+            0.32306388147409515,
+            -0.003959244016088041
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 413,
+          "chunks": 26,
+          "min_ee_cube_distance_m": 0.007255432469685333,
+          "min_cube_target_xy_distance_m": 0.02702933862203947,
+          "max_cube_height_m": 0.09840181804214032,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 39,
+          "initial_cube_xy": [
+            0.33322319806572753,
+            0.02287234208603455
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 273,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.011359992815815224,
+          "min_cube_target_xy_distance_m": 0.03000742642330308,
+          "max_cube_height_m": 0.1044459747919355,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 40,
+          "initial_cube_xy": [
+            0.3315529474873695,
+            0.02129329283001718
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.01191115751846794,
+          "min_cube_target_xy_distance_m": 0.021508566929103957,
+          "max_cube_height_m": 0.1083849375499002,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 41,
+          "initial_cube_xy": [
+            0.3353802820677307,
+            -0.006191048116824176
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 281,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005441703163351365,
+          "min_cube_target_xy_distance_m": 0.04187436403858849,
+          "max_cube_height_m": 0.12621189259541596,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 42,
+          "initial_cube_xy": [
+            0.35117150950686404,
+            -0.005664345650397591
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 278,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005310701979821338,
+          "min_cube_target_xy_distance_m": 0.025573652784956432,
+          "max_cube_height_m": 0.0970882471181835,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 43,
+          "initial_cube_xy": [
+            0.3471490744004916,
+            -0.00012650458738688863
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 286,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.008982466376139914,
+          "min_cube_target_xy_distance_m": 0.03775218411988947,
+          "max_cube_height_m": 0.10435970035430568,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 44,
+          "initial_cube_xy": [
+            0.3530450981059589,
+            0.010680801775370688
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 281,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004958060496720569,
+          "min_cube_target_xy_distance_m": 0.04081605577650904,
+          "max_cube_height_m": 0.10889968537882316,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 45,
+          "initial_cube_xy": [
+            0.33761550905689175,
+            0.007522175528496808
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 303,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.006861929253267323,
+          "min_cube_target_xy_distance_m": 0.035443320994839884,
+          "max_cube_height_m": 0.1237825078884387,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 46,
+          "initial_cube_xy": [
+            0.3498802228406883,
+            0.018055445691965127
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 259,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.011171040249392394,
+          "min_cube_target_xy_distance_m": 0.049286754204467986,
+          "max_cube_height_m": 0.08949144824440154,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 47,
+          "initial_cube_xy": [
+            0.33875240877767737,
+            -0.019710313307888968
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 274,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.007850298828662255,
+          "min_cube_target_xy_distance_m": 0.04938348809019515,
+          "max_cube_height_m": 0.096628115642835,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 48,
+          "initial_cube_xy": [
+            0.3549977949118449,
+            0.015462888644658154
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 285,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.010397444594977018,
+          "min_cube_target_xy_distance_m": 0.05487407686324408,
+          "max_cube_height_m": 0.08049526337033772,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 49,
+          "initial_cube_xy": [
+            0.33357391886336535,
+            0.012450587645519193
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 281,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005341028183706821,
+          "min_cube_target_xy_distance_m": 0.031490864503632705,
+          "max_cube_height_m": 0.11150253077019331,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 50,
+          "initial_cube_xy": [
+            0.32545432218508674,
+            -0.023280486363778965
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01674339520744991,
+          "min_cube_target_xy_distance_m": 0.27457359184975216,
+          "max_cube_height_m": 0.05399427993263773,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 51,
+          "initial_cube_xy": [
+            0.33614306675398997,
+            -0.008459375044641417
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 278,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004802115073262657,
+          "min_cube_target_xy_distance_m": 0.03533918241257136,
+          "max_cube_height_m": 0.11658383558895884,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 52,
+          "initial_cube_xy": [
+            0.3393386379622971,
+            0.017173139520272954
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 302,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.008400124739573224,
+          "min_cube_target_xy_distance_m": 0.029432612888587843,
+          "max_cube_height_m": 0.11909285619518681,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 53,
+          "initial_cube_xy": [
+            0.35281325348405507,
+            0.022180499049980013
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 317,
+          "chunks": 20,
+          "min_ee_cube_distance_m": 0.005446925740022601,
+          "min_cube_target_xy_distance_m": 0.037017898152328,
+          "max_cube_height_m": 0.12184926750709069,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 54,
+          "initial_cube_xy": [
+            0.3274571493123162,
+            0.011642591849813075
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 283,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.009023478348064854,
+          "min_cube_target_xy_distance_m": 0.01836615409734536,
+          "max_cube_height_m": 0.11261590841854893,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 55,
+          "initial_cube_xy": [
+            0.3300010444662407,
+            -0.01451513310953555
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.014186156374775891,
+          "min_cube_target_xy_distance_m": 0.2833473515410305,
+          "max_cube_height_m": 0.04701191413864866,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 56,
+          "initial_cube_xy": [
+            0.345654448642358,
+            0.01445021602793644
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 301,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.006370277877074816,
+          "min_cube_target_xy_distance_m": 0.035504329640719035,
+          "max_cube_height_m": 0.11933760857020895,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 57,
+          "initial_cube_xy": [
+            0.3499757792005204,
+            -0.017153937005180697
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.011931423004345456,
+          "min_cube_target_xy_distance_m": 0.29833995779952105,
+          "max_cube_height_m": 0.027182016846617765,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 58,
+          "initial_cube_xy": [
+            0.32429455428346365,
+            0.012087822380358486
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.007648243303731908,
+          "min_cube_target_xy_distance_m": 0.11967077535439942,
+          "max_cube_height_m": 0.095259385480401,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 59,
+          "initial_cube_xy": [
+            0.3289251224677517,
+            0.005274343706705587
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 247,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.013919340411265076,
+          "min_cube_target_xy_distance_m": 0.047805885730338546,
+          "max_cube_height_m": 0.07937174958188624,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 60,
+          "initial_cube_xy": [
+            0.3236642625341957,
+            0.013516496766878848
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.02090365295726231,
+          "min_cube_target_xy_distance_m": 0.2957606073429845,
+          "max_cube_height_m": 0.02006491404680947,
+          "min_gripper_opening": 0.07176697254180908
+        },
+        {
+          "episode": 61,
+          "initial_cube_xy": [
+            0.3234069418166969,
+            -0.013422926210356862
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.013294178444749923,
+          "min_cube_target_xy_distance_m": 0.27867289635737663,
+          "max_cube_height_m": 0.024961996990173874,
+          "min_gripper_opening": 0.20921285450458527
+        },
+        {
+          "episode": 62,
+          "initial_cube_xy": [
+            0.3545611903470973,
+            0.015141400800772552
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 290,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.01035790951730151,
+          "min_cube_target_xy_distance_m": 0.03553443794426587,
+          "max_cube_height_m": 0.09796354830417306,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 63,
+          "initial_cube_xy": [
+            0.3594059505134682,
+            0.01025051542968633
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 286,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005624399173486008,
+          "min_cube_target_xy_distance_m": 0.033116171664837615,
+          "max_cube_height_m": 0.10461062810535596,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 64,
+          "initial_cube_xy": [
+            0.3234905816919317,
+            -0.01982372627030428
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.007619330564131113,
+          "min_cube_target_xy_distance_m": 0.08451483913075426,
+          "max_cube_height_m": 0.072508218896105,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 65,
+          "initial_cube_xy": [
+            0.32130536492668743,
+            0.014001518488981048
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 406,
+          "chunks": 26,
+          "min_ee_cube_distance_m": 0.007153011782902939,
+          "min_cube_target_xy_distance_m": 0.01785199077630702,
+          "max_cube_height_m": 0.10592627491783167,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 66,
+          "initial_cube_xy": [
+            0.3495956693350608,
+            -0.006559203427480065
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 297,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.005605390559568311,
+          "min_cube_target_xy_distance_m": 0.0359312368734858,
+          "max_cube_height_m": 0.10497772135675822,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 67,
+          "initial_cube_xy": [
+            0.3256666553160979,
+            -0.009835137599056881
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.013243495141631076,
+          "min_cube_target_xy_distance_m": 0.2826331893417446,
+          "max_cube_height_m": 0.02964349896181727,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 68,
+          "initial_cube_xy": [
+            0.32524588440510754,
+            0.020728826921817704
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.010642676370606315,
+          "min_cube_target_xy_distance_m": 0.30170808805673094,
+          "max_cube_height_m": 0.024119939667163415,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 69,
+          "initial_cube_xy": [
+            0.34942890673680216,
+            -0.007077465734510492
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 296,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.0048513776996758,
+          "min_cube_target_xy_distance_m": 0.02772238393911319,
+          "max_cube_height_m": 0.10978370662020388,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 70,
+          "initial_cube_xy": [
+            0.35256423316906227,
+            -0.00011747882619860331
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 283,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005239057534036375,
+          "min_cube_target_xy_distance_m": 0.042211691950803744,
+          "max_cube_height_m": 0.11233993960181646,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 71,
+          "initial_cube_xy": [
+            0.33400007827050865,
+            0.020972688264355492
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 271,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.00528512684565334,
+          "min_cube_target_xy_distance_m": 0.03170984932432831,
+          "max_cube_height_m": 0.11439213989679181,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 72,
+          "initial_cube_xy": [
+            0.32895470476516386,
+            -0.014656948974774327
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.01888694131726281,
+          "min_cube_target_xy_distance_m": 0.282415618117047,
+          "max_cube_height_m": 0.02018133617770223,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 73,
+          "initial_cube_xy": [
+            0.3275225775411019,
+            0.01437761335324158
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.017197257288803114,
+          "min_cube_target_xy_distance_m": 0.275721637403516,
+          "max_cube_height_m": 0.07633844120061033,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 74,
+          "initial_cube_xy": [
+            0.35577232937388137,
+            -0.0123274725688605
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 290,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.009300438106051231,
+          "min_cube_target_xy_distance_m": 0.03926772634627806,
+          "max_cube_height_m": 0.09407629376365077,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 75,
+          "initial_cube_xy": [
+            0.3523173971571957,
+            0.002925258574148843
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.0048277880821892966,
+          "min_cube_target_xy_distance_m": 0.031378332901116,
+          "max_cube_height_m": 0.10202655609246525,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 76,
+          "initial_cube_xy": [
+            0.34581836301073793,
+            -0.023451789570909733
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 288,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.007564293283808759,
+          "min_cube_target_xy_distance_m": 0.026965546114127794,
+          "max_cube_height_m": 0.10540935348224603,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 77,
+          "initial_cube_xy": [
+            0.33264124358735836,
+            -0.014561862588791398
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 270,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.005963024990952045,
+          "min_cube_target_xy_distance_m": 0.05307595887948274,
+          "max_cube_height_m": 0.08943998028903909,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 78,
+          "initial_cube_xy": [
+            0.34705482497180073,
+            -0.020596295601183468
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 288,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.004613472794982131,
+          "min_cube_target_xy_distance_m": 0.05148676785888188,
+          "max_cube_height_m": 0.11960146872396545,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 79,
+          "initial_cube_xy": [
+            0.3336438666567111,
+            -0.0023445299199454997
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 273,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.00509118879285081,
+          "min_cube_target_xy_distance_m": 0.03359410915181854,
+          "max_cube_height_m": 0.11898157183371243,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 80,
+          "initial_cube_xy": [
+            0.33987394400994686,
+            -0.0012819368628436204
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 265,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.005168046462809831,
+          "min_cube_target_xy_distance_m": 0.0364672636552215,
+          "max_cube_height_m": 0.11250407221579223,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 81,
+          "initial_cube_xy": [
+            0.34298616576639046,
+            -0.008420112115695245
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 266,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.005907887291163762,
+          "min_cube_target_xy_distance_m": 0.04169727993209913,
+          "max_cube_height_m": 0.1132308273497771,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 82,
+          "initial_cube_xy": [
+            0.3516680601919313,
+            0.011866409176038553
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 293,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.005324470052195854,
+          "min_cube_target_xy_distance_m": 0.03172260589535904,
+          "max_cube_height_m": 0.10864615432179688,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 83,
+          "initial_cube_xy": [
+            0.33740583896228216,
+            0.01604092924481123
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015834344718341595,
+          "min_cube_target_xy_distance_m": 0.30788565785459077,
+          "max_cube_height_m": 0.05978981858813297,
+          "min_gripper_opening": 0.0
+        },
+        {
+          "episode": 84,
+          "initial_cube_xy": [
+            0.35486101603290676,
+            0.0041888310574341794
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 272,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.004120451106779264,
+          "min_cube_target_xy_distance_m": 0.021963130260201445,
+          "max_cube_height_m": 0.10206042951856344,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 85,
+          "initial_cube_xy": [
+            0.3462485345938625,
+            -0.005278427083013643
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 279,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005748767977059561,
+          "min_cube_target_xy_distance_m": 0.03981594136084113,
+          "max_cube_height_m": 0.10549746266437592,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 86,
+          "initial_cube_xy": [
+            0.35312617974620136,
+            -0.021138824913285222
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 258,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.010578430986492651,
+          "min_cube_target_xy_distance_m": 0.05060797117563183,
+          "max_cube_height_m": 0.07654011982267922,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 87,
+          "initial_cube_xy": [
+            0.3357618630158859,
+            -0.00371216006471305
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 285,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.00490521126373825,
+          "min_cube_target_xy_distance_m": 0.04849255358828012,
+          "max_cube_height_m": 0.12022475292177008,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 88,
+          "initial_cube_xy": [
+            0.32295791703162846,
+            0.018809326438480767
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 263,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.010613579647368278,
+          "min_cube_target_xy_distance_m": 0.024359495062607095,
+          "max_cube_height_m": 0.10906671209718154,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 89,
+          "initial_cube_xy": [
+            0.33346713665937705,
+            0.01847595226254762
+          ],
+          "success": false,
+          "lifted": false,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.015394343086358385,
+          "min_cube_target_xy_distance_m": 0.306430428525715,
+          "max_cube_height_m": 0.029898011234176663,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 90,
+          "initial_cube_xy": [
+            0.35153906859271833,
+            0.01686615115731721
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 296,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.00841690902113805,
+          "min_cube_target_xy_distance_m": 0.032540834385953246,
+          "max_cube_height_m": 0.10805858832304475,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 91,
+          "initial_cube_xy": [
+            0.35324432475667833,
+            -0.010605643236807844
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 305,
+          "chunks": 20,
+          "min_ee_cube_distance_m": 0.007234353998456079,
+          "min_cube_target_xy_distance_m": 0.025838287118592533,
+          "max_cube_height_m": 0.10292302177959009,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 92,
+          "initial_cube_xy": [
+            0.3388491112167133,
+            -0.021786085004502898
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 280,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.005368838388551029,
+          "min_cube_target_xy_distance_m": 0.03025519509639566,
+          "max_cube_height_m": 0.11182385684016777,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 93,
+          "initial_cube_xy": [
+            0.3403220472672255,
+            0.011043909530633292
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 312,
+          "chunks": 20,
+          "min_ee_cube_distance_m": 0.004772144068135442,
+          "min_cube_target_xy_distance_m": 0.03503912658348657,
+          "max_cube_height_m": 0.12755688924262573,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 94,
+          "initial_cube_xy": [
+            0.35463419965053633,
+            -0.018317094035593215
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 300,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.004630274728089996,
+          "min_cube_target_xy_distance_m": 0.05367124210738723,
+          "max_cube_height_m": 0.11444695509714335,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 95,
+          "initial_cube_xy": [
+            0.32193083229124536,
+            0.0021613038053236826
+          ],
+          "success": false,
+          "lifted": true,
+          "steps": 500,
+          "chunks": 32,
+          "min_ee_cube_distance_m": 0.0076964560886609605,
+          "min_cube_target_xy_distance_m": 0.10288521153726854,
+          "max_cube_height_m": 0.09486232995120043,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 96,
+          "initial_cube_xy": [
+            0.3276567154718282,
+            0.00120390624009159
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 276,
+          "chunks": 18,
+          "min_ee_cube_distance_m": 0.008551371596480272,
+          "min_cube_target_xy_distance_m": 0.02096356787789103,
+          "max_cube_height_m": 0.10493897177038927,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 97,
+          "initial_cube_xy": [
+            0.32159011166979956,
+            0.020549470805254745
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 268,
+          "chunks": 17,
+          "min_ee_cube_distance_m": 0.01222772074586644,
+          "min_cube_target_xy_distance_m": 0.02276645687032658,
+          "max_cube_height_m": 0.10520624169456615,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 98,
+          "initial_cube_xy": [
+            0.3209837367043986,
+            0.01851555093547047
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 253,
+          "chunks": 16,
+          "min_ee_cube_distance_m": 0.013550032544698309,
+          "min_cube_target_xy_distance_m": 0.011516239010200931,
+          "max_cube_height_m": 0.1007261130580146,
+          "min_gripper_opening": 0.3452998995780945
+        },
+        {
+          "episode": 99,
+          "initial_cube_xy": [
+            0.3423291183590097,
+            0.023499047958072228
+          ],
+          "success": true,
+          "lifted": true,
+          "steps": 297,
+          "chunks": 19,
+          "min_ee_cube_distance_m": 0.004937003702515495,
+          "min_cube_target_xy_distance_m": 0.033982956735043375,
+          "max_cube_height_m": 0.12193214316067898,
+          "min_gripper_opening": 0.3452998995780945
+        }
+      ]
+    }
+  ]
+}

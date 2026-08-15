@@ -1,0 +1,27 @@
+{
+  "experiment": "026-additive-policy-confirmation",
+  "evaluation_seed": 26000,
+  "episodes_per_range": 100,
+  "successes": {
+    "center_weighted": {"near": 25, "nominal": 56, "far": 59, "total": 140},
+    "additive_near": {"near": 28, "nominal": 52, "far": 74, "total": 154}
+  },
+  "lifts": {
+    "center_weighted": {"near": 26, "nominal": 60, "far": 60, "total": 146},
+    "additive_near": {"near": 29, "nominal": 60, "far": 83, "total": 172}
+  },
+  "paired_successes": {
+    "near": {"both": 10, "center_only": 15, "additive_only": 18, "neither": 57, "exact_mcnemar_p": 0.7283324808813632},
+    "nominal": {"both": 29, "center_only": 27, "additive_only": 23, "neither": 21, "exact_mcnemar_p": 0.6718110337653656},
+    "far": {"both": 44, "center_only": 15, "additive_only": 30, "neither": 11, "exact_mcnemar_p": 0.035697803555194696},
+    "all": {"both": 83, "center_only": 57, "additive_only": 71, "neither": 89, "exact_mcnemar_p": 0.2504398806192594}
+  },
+  "aggregate_advantage": 14,
+  "largest_range_regression": 4,
+  "aggregate_superiority_met": false,
+  "range_retention_met": true,
+  "replace_baseline": false,
+  "baseline_checkpoint": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+  "candidate_checkpoint": "outputs/additive-near-exp25-m3993-l3992/step-0001000",
+  "conclusion": "far_advantage_replicates_without_aggregate_superiority"
+}
