@@ -6,6 +6,15 @@ import torch
 from torch import Tensor
 
 
+def camera_frame_to_tensor(frame: Any, *, processor_rescales: bool) -> Tensor:
+    """Convert an HWC uint8 camera frame without applying rescaling twice."""
+    tensor = torch.as_tensor(frame)
+    if tensor.ndim != 3 or tensor.shape[-1] != 3 or tensor.dtype != torch.uint8:
+        raise ValueError("camera frames must be HWC uint8 RGB images")
+    tensor = tensor.permute(2, 0, 1)
+    return tensor if processor_rescales else tensor.float() / 255.0
+
+
 class EmbodiProcessor:
     def __init__(self, processor: Any, do_rescale: bool = True) -> None:
         self.processor = processor

@@ -24,6 +24,9 @@ train = [
   "tqdm>=4.67",
   "wandb>=0.19",
 ]
+hardware = [
+  "lerobot[dataset,hardware,feetech]>=0.6.1,<0.7",
+]
 test = ["pytest>=8"]
 sim = [
   "fastapi>=0.116",
@@ -37,6 +40,9 @@ embodi-train = "embodi.train:main"
 embodi-sim = "embodi.sim.cli:main"
 embodi-generate = "embodi.sim.data:main"
 embodi-preview = "embodi.preview:main"
+embodi-convert-so101 = "embodi.convert_so101:main"
+embodi-record-so101 = "embodi.record_so101:main"
+embodi-so101-preflight = "embodi.physical.preflight:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/embodi"]

@@ -554,8 +554,20 @@ class EmbodiPolicy(nn.Module):
             raise RuntimeError(f"unexpected token core keys: {incompatible.unexpected_keys}")
 
     def load_embodiment_checkpoint(self, directory: str | Path) -> None:
-        payload = torch.load(Path(directory) / "embodiment.pt", map_location="cpu", weights_only=True)
-        if payload.get("format_version") != 3 or payload.get("signature") != self.config.embodiment_signature():
+        directory = Path(directory)
+        payload = torch.load(directory / "embodiment.pt", map_location="cpu", weights_only=True)
+        expected_signature = self.config.embodiment_signature()
+        saved_signature = payload.get("signature")
+        signature_matches = saved_signature == expected_signature
+        if not signature_matches and isinstance(saved_signature, dict):
+            legacy_signature = dict(expected_signature)
+            legacy_signature.pop("decoder_residual")
+            saved_config = EmbodiConfig.load(directory / "config.json")
+            signature_matches = (
+                saved_signature == legacy_signature
+                and saved_config.decoder_residual == self.config.decoder_residual
+            )
+        if payload.get("format_version") != 3 or not signature_matches:
             raise ValueError("token embodiment checkpoint schema or architecture does not match")
         self.state_adapter.load_state_dict(payload["state_adapter"])
         self.action_decoder.load_state_dict(payload["action_decoder"])

@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw
 import torch
 
 from ..checkpoints import load_inference_policy
-from ..processing import EmbodiProcessor
+from ..processing import EmbodiProcessor, camera_frame_to_tensor
 from .environment import SO101PickPlaceEnv, TASK
 
 
@@ -251,10 +251,12 @@ class SimulationRuntime:
                     continue
                 policy.reset()
                 state = torch.from_numpy(observation.state).unsqueeze(0)
-                # Preserve the float [0,1] preprocessing used during training.
                 camera_images = {"top": observation.top, "wrist": observation.wrist}
                 images = [
-                    torch.from_numpy(camera_images[name].copy()).permute(2, 0, 1).float() / 255.0
+                    camera_frame_to_tensor(
+                        camera_images[name].copy(),
+                        processor_rescales=policy.config.image_do_rescale,
+                    )
                     for name in policy.config.camera_names
                 ]
                 if getattr(policy.config, "format_version", None) == 3:

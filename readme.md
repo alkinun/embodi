@@ -15,6 +15,10 @@ the current recipe is simple:
 
 see the [experiment index](experiments/index.md) for evidence and decisions.
 
+the selected checkpoints are canonical policies validated in simulation with
+deterministic ik. they are not physical-arm controllers. physical setup and
+acceptance gates are documented in [docs/physical-so101.md](docs/physical-so101.md).
+
 ## setup
 
 ```bash
@@ -150,6 +154,23 @@ for transfer, add these arguments:
 train decoders on policy predictions. reuse one cached teacher dataset across
 comparisons. see `scripts/distill_so101_decoder.py`.
 
+physical lerobot recordings require calibrated canonical labels before training:
+
+```bash
+uv run embodi-convert-so101 \
+  --source-root datasets/physical-so101-raw \
+  --source-repo-id embodi/physical-so101-raw \
+  --output-root datasets/physical-so101 \
+  --output-repo-id embodi/physical-so101 \
+  --calibration configs/so101-physical-calibration.json \
+  --lerobot-calibration /path/to/so101_follower_main.json
+```
+
+do not use the example calibration unchanged. measure joint signs, model zero
+offsets, and physical gripper endpoints on the assembled follower first.
+Record with `embodi-record-so101 --robot.max_relative_target=5`, not the stock
+LeRobot recorder, so the dataset stores post-clipping commands and provenance.
+
 ## evaluation
 
 run closed-loop evaluation:
@@ -160,7 +181,7 @@ uv run python scripts/evaluate_so101.py \
   --episodes 100 \
   --seed 65000 \
   --max-steps 500 \
-  --execution-horizon 8 \
+  --execution-horizon 16 \
   --output reports/evaluation.json
 ```
 
@@ -172,8 +193,8 @@ offline loss is not enough. use paired scenes and multiple training seeds.
 uv run embodi-sim --checkpoint outputs/<robot-run>/final
 ```
 
-open `http://localhost:8080`. the server binds to `0.0.0.0` by default. use a
-firewall or a local host binding on shared networks.
+open `http://localhost:8080`. the server binds to localhost by default. pass an
+explicit `--host` only when remote access is required and protected.
 
 the first run caches pinned apache-2.0 mujoco assets in `~/.cache/embodi`.
 

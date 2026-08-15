@@ -1,0 +1,20 @@
+{
+  "status": "simulation_only",
+  "source_git_commit": "4d79fd421765f2d106fb56d0d1b2236a60520da0",
+  "general": {
+    "path": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+    "config_sha256": "a906d494a8f7955de536098cf873efcdeb6566de84f245bc248dea03104dda65",
+    "core_sha256": "bec0de7d3983268e7cb41404b2c2cd5b6df54786d57335656517774303db9c59",
+    "embodiment_sha256": "181974db8c262bd97047e716bae89798f4505e18a3b386944eb51834dd2ef4a3",
+    "validated_control_path": "canonical policy plus deterministic simulator ik",
+    "report": "reports/additive-confirm-exp26-summary.json"
+  },
+  "far_specialist": {
+    "path": "outputs/additive-near-exp25-m3993-l3992/step-0001000",
+    "config_sha256": "a906d494a8f7955de536098cf873efcdeb6566de84f245bc248dea03104dda65",
+    "core_sha256": "87d4c91a387f11c32d9de93836ab4f56d27025d5237225cb14c70efe03ea62de",
+    "embodiment_sha256": "64d3448ba35978487793990b2886f24d2863549cca0a2af40cb8bdede34fc737",
+    "validated_control_path": "canonical policy plus deterministic simulator ik",
+    "report": "reports/additive-confirm-exp26-summary.json"
+  }
+}

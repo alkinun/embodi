@@ -490,7 +490,7 @@ def select_multi_episode_xperience_split(
     balanced_anchors = _nested_balanced_sample(
         [anchor for _, anchor in train_pool], train_clips, random.Random(seed + 1)
     )
-    locations = {id(anchor): index for index, anchor in train_pool}
+    locations = {id(anchor): episode_index for episode_index, anchor in train_pool}
     train = [(locations[id(anchor)], anchor) for anchor in balanced_anchors]
     validation = random.Random(seed + 2).sample(validation_pool, validation_clips)
     sort_key = lambda item: (item[0], item[1].frame_index)

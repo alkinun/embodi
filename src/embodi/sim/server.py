@@ -17,7 +17,7 @@ main{width:min(94vw,1000px)}h1{font-size:18px;font-weight:500;letter-spacing:.08
 img{display:block;width:100%;border:1px solid #293140;background:#111;border-radius:8px}
 footer{display:flex;align-items:center;gap:16px;margin-top:12px}button{background:#e9eef6;border:0;border-radius:5px;padding:10px 18px;cursor:pointer}
 #status{color:#9eabbc}
-</style></head><body><main><h1>embodi00-so100-pickplace / mujoco</h1>
+</style></head><body><main><h1>embodi / so101 pick-place / mujoco</h1>
 <img src="/stream.mjpg"><footer><button onclick="resetEpisode()">reset episode</button><span id="status">connecting</span></footer>
 </main><script>
 async function resetEpisode(){document.querySelector('button').disabled=true;await fetch('/api/reset',{method:'POST'});document.querySelector('button').disabled=false}

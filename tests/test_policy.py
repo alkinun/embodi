@@ -291,3 +291,28 @@ def test_checkpoint_allows_camera_only_warm_start(tmp_path) -> None:
     source.save_checkpoint(tmp_path, step=10)
     top_only = make_policy(camera_names=("top",))
     assert top_only.load_checkpoint(tmp_path, allow_camera_mismatch=True) == 10
+
+
+def test_embodiment_load_accepts_legacy_signature_with_matching_config(tmp_path) -> None:
+    source = make_policy()
+    source.save_checkpoint(tmp_path)
+    payload = torch.load(tmp_path / "embodiment.pt", weights_only=True)
+    payload["signature"].pop("decoder_residual")
+    torch.save(payload, tmp_path / "embodiment.pt")
+    target = make_policy()
+    target.load_embodiment_checkpoint(tmp_path)
+
+
+def test_embodiment_load_rejects_legacy_signature_with_different_residual_mode(tmp_path) -> None:
+    source = make_policy(decoder_residual=True)
+    source.save_checkpoint(tmp_path)
+    payload = torch.load(tmp_path / "embodiment.pt", weights_only=True)
+    payload["signature"].pop("decoder_residual")
+    torch.save(payload, tmp_path / "embodiment.pt")
+    target = make_policy(decoder_residual=False)
+    try:
+        target.load_embodiment_checkpoint(tmp_path)
+    except ValueError as error:
+        assert "schema or architecture" in str(error)
+    else:
+        raise AssertionError("legacy checkpoint with different residual semantics was accepted")

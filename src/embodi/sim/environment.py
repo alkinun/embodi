@@ -75,6 +75,7 @@ class SO101PickPlaceEnv:
         seed: int = 0,
         cube_x_range: tuple[float, float] = (0.28, 0.32),
         cube_y_range: tuple[float, float] = (-0.025, 0.025),
+        render: bool = True,
     ) -> None:
         import mujoco
 
@@ -103,7 +104,7 @@ class SO101PickPlaceEnv:
         self._calibrate_wrist_camera()
         self.data = mujoco.MjData(self.model)
         self.fk_data = mujoco.MjData(self.model)
-        self.renderer = mujoco.Renderer(self.model, height=height, width=width)
+        self.renderer = mujoco.Renderer(self.model, height=height, width=width) if render else None
         self.joint_ids = np.array(
             [mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_JOINT, name) for name in JOINT_NAMES]
         )
@@ -395,10 +396,14 @@ class SO101PickPlaceEnv:
         self.success = self.lifted and in_target and cube_position[2] < 0.09
 
     def render_top(self) -> np.ndarray:
+        if self.renderer is None:
+            raise RuntimeError("environment was created without rendering")
         self.renderer.update_scene(self.data, camera="top")
         return self.renderer.render().copy()
 
     def render_wrist(self) -> np.ndarray:
+        if self.renderer is None:
+            raise RuntimeError("environment was created without rendering")
         self.renderer.update_scene(self.data, camera="wrist_cam")
         # The physical feed is vertically inverted; preserve claw handedness.
         return np.flipud(self.renderer.render()).copy()
@@ -407,4 +412,5 @@ class SO101PickPlaceEnv:
         return self.render_top(), self.render_wrist()
 
     def close(self) -> None:
-        self.renderer.close()
+        if self.renderer is not None:
+            self.renderer.close()

@@ -1,0 +1,8 @@
+{
+  "format_version": 1,
+  "joint_signs": [1, 1, 1, 1, 1],
+  "joint_offsets_degrees": [0.0, 0.0, 0.0, 0.0, 0.0],
+  "gripper_closed_native": 0.0,
+  "gripper_open_native": 100.0,
+  "source_calibration_sha256": "replace-with-lerobot-calibration-hash"
+}

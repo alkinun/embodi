@@ -7,12 +7,16 @@ from pathlib import Path
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="run the embodi mujoco evaluation server")
-    parser.add_argument("--checkpoint", type=Path, default=Path("outputs/embodi00-so100-pickplace/final"))
-    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument(
+        "--checkpoint",
+        type=Path,
+        default=Path("outputs/det-peak-exp20-center-m3993-l3992/step-0001100"),
+    )
+    parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--frequency", type=float, default=30.0)
-    parser.add_argument("--execution-horizon", type=int, default=32)
+    parser.add_argument("--execution-horizon", type=int, default=16)
     parser.add_argument("--episode-seconds", type=float, default=30.0)
     parser.add_argument("--asset-dir", type=Path)
     parser.add_argument("--no-policy", action="store_true")

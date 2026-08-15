@@ -1,0 +1,17 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --frozen --extra train --extra sim --extra test --extra hardware
+      - run: uv run embodi-so101-preflight --canonical-calibration configs/so101-physical-calibration.example.json
+      - run: uv run pytest

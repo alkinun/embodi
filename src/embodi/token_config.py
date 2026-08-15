@@ -213,6 +213,7 @@ class EmbodiConfig:
             "inactive_action_modes": self.inactive_action_modes,
             "decoder_hidden_width": self.decoder_hidden_width,
             "decoder_layers": self.decoder_layers,
+            "decoder_residual": self.decoder_residual,
         }
 
     def save(self, path: str | Path) -> None:

@@ -12,7 +12,7 @@ import numpy as np
 import torch
 
 from embodi.checkpoints import load_inference_policy
-from embodi.processing import EmbodiProcessor
+from embodi.processing import EmbodiProcessor, camera_frame_to_tensor
 from embodi.sim.environment import SO101PickPlaceEnv, TASK
 
 
@@ -40,8 +40,12 @@ def model_batch(policy, processor, env: SO101PickPlaceEnv, device: torch.device)
     camera_frames = {"top": env.render_top, "wrist": env.render_wrist}
     images = []
     for camera_name in policy.config.camera_names:
-        frame = torch.from_numpy(camera_frames[camera_name]().copy()).permute(2, 0, 1)
-        images.append(frame if policy.config.image_do_rescale else frame.float() / 255.0)
+        images.append(
+            camera_frame_to_tensor(
+                camera_frames[camera_name]().copy(),
+                processor_rescales=policy.config.image_do_rescale,
+            )
+        )
     state = torch.from_numpy(env.state()).unsqueeze(0)
     canonical_state = torch.from_numpy(env.canonical_state()).unsqueeze(0)
     batch = processor(

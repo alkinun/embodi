@@ -45,6 +45,8 @@ def test_multi_episode_split_is_episode_disjoint() -> None:
     assert len(split.validation) == 30
     assert train_episodes.isdisjoint(validation_episodes)
     assert 2 not in train_episodes | validation_episodes
+    assert train_episodes == set(split.train_episode_indices)
+    assert validation_episodes == set(split.validation_episode_indices)
     assert split.rejection_counts == {"rejected": 4}
 
 

@@ -25,3 +25,9 @@ def test_rotation_channels_cannot_be_partially_masked() -> None:
         assert "rotation6d" in str(error)
     else:
         raise AssertionError("partial rotation representation was accepted")
+
+
+def test_embodiment_signature_includes_decoder_interpretation() -> None:
+    residual = EmbodiConfig(decoder_residual=True)
+    absolute = EmbodiConfig(decoder_residual=False)
+    assert residual.embodiment_signature() != absolute.embodiment_signature()

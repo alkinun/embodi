@@ -1,8 +1,10 @@
 from types import SimpleNamespace
 
+import numpy as np
+import pytest
 import torch
 
-from embodi.processing import EmbodiProcessor, split_lerobot_batch
+from embodi.processing import EmbodiProcessor, camera_frame_to_tensor, split_lerobot_batch
 
 
 def test_split_lerobot_batch_selects_configured_cameras() -> None:
@@ -39,3 +41,25 @@ def test_split_batch_does_not_require_native_state_for_core_pretraining() -> Non
     )
     assert len(images) == 2
     assert tasks == ["first", "second"]
+
+
+def test_camera_frame_preserves_uint8_when_processor_rescales() -> None:
+    frame = np.full((2, 3, 3), 255, dtype=np.uint8)
+    tensor = camera_frame_to_tensor(frame, processor_rescales=True)
+    assert tensor.shape == (3, 2, 3)
+    assert tensor.dtype == torch.uint8
+    assert tensor.max() == 255
+
+
+def test_camera_frame_scales_once_when_processor_does_not_rescale() -> None:
+    frame = np.full((2, 3, 3), 255, dtype=np.uint8)
+    tensor = camera_frame_to_tensor(frame, processor_rescales=False)
+    assert tensor.dtype == torch.float32
+    torch.testing.assert_close(tensor, torch.ones_like(tensor))
+
+
+def test_camera_frame_rejects_non_uint8_or_non_rgb() -> None:
+    with pytest.raises(ValueError, match="HWC uint8 RGB"):
+        camera_frame_to_tensor(np.zeros((2, 3, 3), dtype=np.float32), processor_rescales=True)
+    with pytest.raises(ValueError, match="HWC uint8 RGB"):
+        camera_frame_to_tensor(np.zeros((2, 3), dtype=np.uint8), processor_rescales=True)
