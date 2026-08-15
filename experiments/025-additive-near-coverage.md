@@ -31,12 +31,47 @@ far successes.
 
 ## result
 
-pending.
+screen successes over ten scenes per range were:
+
+| step | near | nominal | far | total |
+| ---: | ---: | ---: | ---: | ---: |
+| 700 | 0 | 0 | 0 | 0/30 |
+| 800 | 0 | 0 | 0 | 0/30 |
+| 900 | 0 | 0 | 0 | 0/30 |
+| 1,000 | 5 | 2 | 6 | 13/30 |
+| 1,100 | 0 | 0 | 1 | 1/30 |
+| 1,200 | 2 | 5 | 4 | 11/30 |
+| 1,300 | 1 | 0 | 2 | 3/30 |
+
+the pre-registered ranking selected step 1,000. confirmation on new scenes
+produced:
+
+| dataset | near | nominal | far | nominal + far | total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| center-weighted | 11 | 26 | 25 | 51/100 | 62/150 |
+| additive near | 13 | 26 | 37 | 63/100 | 76/150 |
+
+additive data gained only 2/50 near successes, below the required 5/50, while
+retaining 123.5% of baseline nominal-plus-far success. paired baseline-only
+versus additive-only successes were 9 vs 11 near (`p=0.824`), 9 vs 9 nominal
+(`p=1.0`), and 8 vs 20 far (`p=0.0357`). the aggregate was 26 vs 40
+(`p=0.109`).
+
+raw rollouts are in
+`reports/additive-near-exp25-{near,nominal,far}-{screen,confirm}-*.json`; the
+compact analysis is in `reports/additive-near-exp25-summary.json`.
 
 ## finding
 
-pending.
+adding near demonstrations avoids the nominal/far forgetting caused by fixed-
+budget reallocation, but it does not meet the intended near-improvement target.
+the significant far gain and 14-success aggregate improvement are unexpected,
+post-hoc evidence that the additive dataset may support a stronger broad policy.
+they require independent confirmation before replacing the selected controller.
 
 ## decision
 
-- adopt additive near coverage only if it meets both criteria.
+- reject additive coverage as a confirmed near-failure fix.
+- retain center-weighted step 1,100 under the pre-registered decision rule.
+- independently confirm additive step 1,000 as a broad-policy candidate on new
+  paired scenes before considering replacement.
