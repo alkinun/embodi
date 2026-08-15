@@ -603,7 +603,10 @@ def train(args: argparse.Namespace) -> None:
                 wandb_run.log({f"validation/{name}": value for name, value in validation_metrics.items()}, step=step)
         if step % args.save_every == 0:
             checkpoint_dir = Path(args.output_dir) / f"step-{step:07d}"
-            policy.save_checkpoint(checkpoint_dir, optimizer, scheduler, step)
+            if args.compact_intermediate_checkpoints:
+                policy.save_checkpoint(checkpoint_dir, step=step)
+            else:
+                policy.save_checkpoint(checkpoint_dir, optimizer, scheduler, step)
             if wandb_run is not None:
                 wandb_run.summary["checkpoint/latest"] = str(checkpoint_dir)
     if args.steps % args.eval_every:
@@ -644,6 +647,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--warmup-steps", type=int, default=1_000)
     parser.add_argument("--log-every", type=int, default=20)
     parser.add_argument("--save-every", type=int, default=5_000)
+    parser.add_argument(
+        "--compact-intermediate-checkpoints",
+        action="store_true",
+        help="omit optimizer and scheduler state from periodic checkpoints",
+    )
     parser.add_argument("--eval-every", type=int, default=500)
     parser.add_argument("--validation-episodes", type=int, default=5)
     parser.add_argument("--validation-batches", type=int, default=10)

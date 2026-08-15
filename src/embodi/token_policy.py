@@ -582,8 +582,12 @@ class EmbodiPolicy(nn.Module):
         if optimizer is not None:
             if trainer.get("stage") != self.stage:
                 raise ValueError("cannot resume an optimizer under a different training stage")
+            if "optimizer" not in trainer:
+                raise ValueError("checkpoint does not contain optimizer state")
             optimizer.load_state_dict(trainer["optimizer"])
         if scheduler is not None:
+            if "scheduler" not in trainer:
+                raise ValueError("checkpoint does not contain scheduler state")
             scheduler.load_state_dict(trainer["scheduler"])
         return int(trainer.get("step", 0))
 

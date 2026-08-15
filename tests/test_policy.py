@@ -215,6 +215,23 @@ def test_checkpoint_restores_split_training_state(tmp_path) -> None:
     )
 
 
+def test_compact_checkpoint_loads_for_inference_but_cannot_resume(tmp_path) -> None:
+    policy = make_policy()
+    policy.configure_stage("core")
+    policy.save_checkpoint(tmp_path, step=7)
+
+    restored = make_policy()
+    restored.configure_stage("core")
+    assert restored.load_checkpoint(tmp_path) == 7
+    optimizer = torch.optim.AdamW(restored.get_optim_params(), lr=1e-3)
+    try:
+        restored.load_checkpoint(tmp_path, optimizer)
+    except ValueError as error:
+        assert str(error) == "checkpoint does not contain optimizer state"
+    else:
+        raise AssertionError("compact checkpoint was accepted for optimizer resume")
+
+
 def test_core_load_ignores_native_embodiment_dimensions(tmp_path) -> None:
     source = make_policy()
     source.save_checkpoint(tmp_path)
