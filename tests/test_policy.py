@@ -2,6 +2,7 @@ import torch
 from torch import nn
 
 from embodi import EmbodiConfig, EmbodiPolicy, PartDescriptor
+from embodi.checkpoints import interpolate_checkpoints
 
 
 class FakeBackbone(nn.Module):
@@ -230,6 +231,28 @@ def test_compact_checkpoint_loads_for_inference_but_cannot_resume(tmp_path) -> N
         assert str(error) == "checkpoint does not contain optimizer state"
     else:
         raise AssertionError("compact checkpoint was accepted for optimizer resume")
+
+
+def test_checkpoint_interpolation_creates_loadable_midpoint(tmp_path) -> None:
+    first = make_policy()
+    second = make_policy()
+    with torch.no_grad():
+        first.expert.action_projection.weight.zero_()
+        second.expert.action_projection.weight.fill_(2.0)
+    first_dir = tmp_path / "first"
+    second_dir = tmp_path / "second"
+    output_dir = tmp_path / "output"
+    first.save_checkpoint(first_dir, step=100)
+    second.save_checkpoint(second_dir, step=200)
+
+    interpolate_checkpoints(first_dir, second_dir, output_dir, 0.25)
+
+    restored = make_policy()
+    assert restored.load_checkpoint(output_dir) == 125
+    torch.testing.assert_close(
+        restored.expert.action_projection.weight,
+        torch.full_like(restored.expert.action_projection.weight, 0.5),
+    )
 
 
 def test_core_load_ignores_native_embodiment_dimensions(tmp_path) -> None:
