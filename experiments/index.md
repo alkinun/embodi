@@ -31,6 +31,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [022](022-near-failure-telemetry.md) | where does the selected policy fail on near positions? | near failures are approach/alignment failures before lift. |
 | [023](023-deterministic-expert-transfer.md) | does expert transfer survive deterministic replication? | yes; 63/150 versus 26/150 with matched selection. |
 | [024](024-near-weighted-cube-coverage.md) | can near-weighted data fix approach failures without forgetting? | near improves by 6/50, but retention falls to 70.7%. |
+| [025](025-additive-near-coverage.md) | can additive near data improve control without forgetting? | experiment in progress. |
 
 ## current decision
 
