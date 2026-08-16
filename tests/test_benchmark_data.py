@@ -1,7 +1,3 @@
-import os
-
-os.environ.setdefault("MUJOCO_GL", "egl")
-
 import json
 from pathlib import Path
 
@@ -23,6 +19,7 @@ BENCHMARK_DIRECTORY = Path(__file__).parents[1] / "benchmarks" / "sim-v1"
 DEFINITION_PATH = BENCHMARK_DIRECTORY / "definition.json"
 TRAIN_MANIFEST_PATH = BENCHMARK_DIRECTORY / "manifests" / "train.json"
 DEVELOPMENT_MANIFEST_PATH = BENCHMARK_DIRECTORY / "manifests" / "development.json"
+pytestmark = pytest.mark.simulation
 
 
 def _benchmark() -> tuple[BenchmarkDefinition, ScenarioManifest]:

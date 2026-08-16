@@ -1,7 +1,3 @@
-import os
-
-os.environ.setdefault("MUJOCO_GL", "egl")
-
 from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
@@ -26,6 +22,7 @@ from embodi.sim.morphology import PANDA, SO101
 
 
 BENCHMARK_DIRECTORY = Path(__file__).parents[1] / "benchmarks" / "sim-v1"
+pytestmark = pytest.mark.simulation
 
 
 @pytest.mark.parametrize("morphology", ["so101", "panda"])

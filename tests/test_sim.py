@@ -1,12 +1,11 @@
-import os
-
-os.environ.setdefault("MUJOCO_GL", "egl")
-
 import numpy as np
 import pytest
 
 from embodi.sim.data import build_cube_x_schedule
 from embodi.sim.environment import HOME_STATE, SO101PickPlaceEnv
+
+
+pytestmark = pytest.mark.simulation
 
 
 def test_state_action_conversion_round_trip() -> None:
