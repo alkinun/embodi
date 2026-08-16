@@ -28,6 +28,7 @@ hardware = [
   "lerobot[dataset,hardware,feetech]==0.6.1",
 ]
 test = [
+  "hypothesis>=6,<7",
   "mypy>=1.19,<1.20",
   "pytest>=8",
   "pytest-cov>=7,<8",
