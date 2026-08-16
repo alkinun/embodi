@@ -110,6 +110,7 @@ def test_generation_rejects_modified_train_manifest(tmp_path: Path) -> None:
         )
 
 
+@pytest.mark.timeout(120)
 @pytest.mark.parametrize("morphology", ["so101", "panda"])
 def test_manifest_scenario_rollout_emits_training_frame_contract(morphology: str) -> None:
     definition, manifest = _benchmark()
