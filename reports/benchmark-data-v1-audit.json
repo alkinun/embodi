@@ -1,0 +1,87 @@
+{
+  "format_version": 1,
+  "status": "verified_complete",
+  "verified_on": "2026-08-16",
+  "benchmark_id": "embodi-sim-v1",
+  "definition_sha256": "9b14210d0c296f53c12dd3c5efec2f022a31ceb4d9bb2a1037bf068f443fd45f",
+  "scenario_manifests": {
+    "train_sha256": "0466044de94c55adf53d20de54a5b44f3f64490303055fcde83ed51aa3bc1154",
+    "validation_sha256": "09d38b323b90b7a7d5e4c78dab2016c1443767cdceb4f1811ab3b8ee3b55a4ae"
+  },
+  "generator_commit": "c20a4439a5ddd9ebeb12679bdb4e41e869213696",
+  "benchmark_freeze_commit": "9ccf8fe86d10723ac9f1a4fbc96e3234c343bfb0",
+  "control": {
+    "frequency_hz": 30,
+    "image_width": 640,
+    "image_height": 480,
+    "camera_names": [
+      "top"
+    ]
+  },
+  "datasets": {
+    "train": {
+      "root": "datasets/embodi-sim-v1-train-v2",
+      "generation_manifest_sha256": "9d858858c217c2b1200507a503148c99562a06f0beecea054a2b9cc184b840af",
+      "bytes": 2211112044,
+      "episodes": 3000,
+      "frames": 626292,
+      "command_clipping_rate": 0.0,
+      "outputs": {
+        "so101": {
+          "repo_id": "embodi/sim-v1-train-v2-so101",
+          "episodes": 1500,
+          "frames": 382877,
+          "features_sha256": "713b92c9419ebf8a3c2656574e722a1c70dfc3de05b98eb6d822d1c335afcbeb"
+        },
+        "panda": {
+          "repo_id": "embodi/sim-v1-train-v2-panda",
+          "episodes": 1500,
+          "frames": 243415,
+          "features_sha256": "12c34957912eba74fc0b2ac56a73416a2817e531518b806cf24e21260a2a393f"
+        }
+      }
+    },
+    "validation": {
+      "root": "datasets/embodi-sim-v1-validation-v2",
+      "generation_manifest_sha256": "2735a044d11db30172ae6039f09dfe06adc49462f3b47d5e7b99cb312c354f45",
+      "bytes": 441627960,
+      "episodes": 600,
+      "frames": 125063,
+      "command_clipping_rate": 0.0,
+      "outputs": {
+        "so101": {
+          "repo_id": "embodi/sim-v1-validation-v2-so101",
+          "episodes": 300,
+          "frames": 76389,
+          "features_sha256": "713b92c9419ebf8a3c2656574e722a1c70dfc3de05b98eb6d822d1c335afcbeb"
+        },
+        "panda": {
+          "repo_id": "embodi/sim-v1-validation-v2-panda",
+          "episodes": 300,
+          "frames": 48674,
+          "features_sha256": "12c34957912eba74fc0b2ac56a73416a2817e531518b806cf24e21260a2a393f"
+        }
+      }
+    }
+  },
+  "verification": {
+    "method": "embodi.sim.benchmark_data.verify_benchmark_dataset",
+    "checks": [
+      "frozen definition and split hashes",
+      "scenario order and episode mapping",
+      "LeRobot identity, schema, task, episode, and frame counts",
+      "all Parquet payloads",
+      "all video streams and packets",
+      "complete file inventories and hashes",
+      "pinned robot asset inventories",
+      "zero pending episodes",
+      "command clipping admission gate"
+    ],
+    "passed": true
+  },
+  "excluded_candidate": {
+    "root": "datasets/embodi-sim-v1-train",
+    "reason": "generation stopped fail-closed before train-so101-push_to_zone-0378 under the superseded oracle implementation",
+    "admitted_for_training": false
+  }
+}

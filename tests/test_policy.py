@@ -1,3 +1,6 @@
+from dataclasses import replace
+
+import pytest
 import torch
 from torch import nn
 
@@ -268,6 +271,33 @@ def test_core_load_ignores_native_embodiment_dimensions(tmp_path) -> None:
         inactive_action_modes=("hold", "hold"),
     )
     target.load_core_checkpoint(tmp_path)
+
+
+def test_policies_can_share_one_core_across_native_dimensions() -> None:
+    so101 = make_policy()
+    panda_config = replace(
+        so101.config,
+        state_dim=8,
+        action_dim=8,
+        action_group_state_dims=(8,),
+        action_group_native_dims=(8,),
+    )
+    panda = EmbodiPolicy(panda_config, core=so101.core)
+    assert so101.core is panda.core
+    assert so101.state_adapter is not panda.state_adapter
+    assert so101.action_decoder is not panda.action_decoder
+    assert so101.state_mean.shape == (6,)
+    assert panda.state_mean.shape == (8,)
+
+
+def test_shared_core_rejects_architecture_or_backbone_mismatch() -> None:
+    source = make_policy()
+    config = source.config
+    with pytest.raises(ValueError, match="mutually exclusive"):
+        EmbodiPolicy(config, backbone=FakeBackbone(), core=source.core)
+    incompatible = replace(config, expert_width=64, expert_heads=4)
+    with pytest.raises(ValueError, match="architecture"):
+        EmbodiPolicy(incompatible, core=source.core)
 
 
 def test_core_load_can_select_expert_component(tmp_path) -> None:

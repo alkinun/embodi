@@ -42,6 +42,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [033](033-calibration-error-robustness.md) | what joint-offset accuracy does geometry-first control require? | sampled fixed offsets retain aggregate success through 5 degrees; physical gates remain required. |
 | [034](034-session-task-diversity.md) | does session/task breadth help at fixed human pretraining volume? | yes; five sessions reduce three-seed held-out loss by 23.0%. |
 | [035](035-diversity-transfer.md) | does broader human pretraining improve expert-only SO-101 transfer? | fixed-step single-pair screen favors five sessions 7/30 to 3/30, but is not significant. |
+| [036](036-joint-canonical-core.md) | can one canonical core learn SO-101 and Panda jointly at matched exposure? | pre-registered; pending. |
 
 ## current decision
 

@@ -28,6 +28,7 @@ TrainingStage = Literal["core", "decoder", "predicted_decoder", "refine"]
 class EmbodiCore(nn.Module):
     def __init__(self, config: EmbodiConfig, backbone: nn.Module | None = None) -> None:
         super().__init__()
+        self.signature = config.core_signature()
         self.backbone = backbone or LFMBackboneAdapter.from_pretrained(
             config.backbone_name,
             state_dim=CANONICAL_BLOCK_WIDTH,
@@ -59,10 +60,15 @@ class EmbodiPolicy(nn.Module):
         backbone: nn.Module | None = None,
         state_adapter: EmbodimentStateAdapter | None = None,
         action_decoder: PartTokenActionDecoder | None = None,
+        core: EmbodiCore | None = None,
     ) -> None:
         super().__init__()
+        if core is not None and backbone is not None:
+            raise ValueError("shared core and backbone overrides are mutually exclusive")
+        if core is not None and core.signature != config.core_signature():
+            raise ValueError("shared core architecture does not match the embodiment config")
         self.config = config
-        self.core = EmbodiCore(config, backbone)
+        self.core = core or EmbodiCore(config, backbone)
         self.state_adapter = state_adapter or EmbodimentStateAdapter(
             config.parts, config.action_group_part_names, config.action_group_state_dims
         )
