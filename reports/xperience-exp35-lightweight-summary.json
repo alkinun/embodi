@@ -1,0 +1,72 @@
+{
+  "experiment": "035-diversity-transfer-lightweight-screen",
+  "scope": "single completed seed pair at fixed step 1100",
+  "human_seed": 81001,
+  "robot_model_seed": 35001,
+  "robot_loader_seed": 35101,
+  "evaluation_seed": 35200,
+  "episodes_per_range": 10,
+  "execution_horizon": 16,
+  "max_steps": 500,
+  "deterministic_ik": true,
+  "checkpoints": {
+    "one_session": {
+      "path": "outputs/diversity-transfer-exp35-one-h81001-r35001-l35101/step-0001100",
+      "core_sha256": "567e34d1a076fe9e5c867c6e178abce9b92877293b04673ce11f94cbbe0cc114"
+    },
+    "five_session": {
+      "path": "outputs/diversity-transfer-exp35-five-h81001-r35001-l35101/step-0001100",
+      "core_sha256": "2cfb7d73615e8699565549a5ba7e07b89794a524993d48a37f5a100ade7d9fdb"
+    }
+  },
+  "successes": {
+    "one_session": {
+      "near": 0,
+      "nominal": 3,
+      "far": 0,
+      "total": 3
+    },
+    "five_session": {
+      "near": 0,
+      "nominal": 6,
+      "far": 1,
+      "total": 7
+    }
+  },
+  "lifts": {
+    "one_session": {
+      "near": 0,
+      "nominal": 4,
+      "far": 0,
+      "total": 4
+    },
+    "five_session": {
+      "near": 0,
+      "nominal": 6,
+      "far": 2,
+      "total": 8
+    }
+  },
+  "paired_successes": {
+    "both": 2,
+    "five_session_only": 5,
+    "one_session_only": 1,
+    "neither": 22,
+    "exact_mcnemar_p": 0.21875
+  },
+  "raw_reports": {
+    "near": {
+      "path": "reports/xperience-exp35-lightweight-near-h16-2model-10.json",
+      "sha256": "185764cd489ff2e4f58d63a5024d46434de43331fc2ef2254efdd5c7d7853051"
+    },
+    "nominal": {
+      "path": "reports/xperience-exp35-lightweight-nominal-h16-2model-10.json",
+      "sha256": "324dfefae03a80aed1a277cd23899d7d1be1b12559f4d836c05e8324bd52e50b"
+    },
+    "far": {
+      "path": "reports/xperience-exp35-lightweight-far-h16-2model-10.json",
+      "sha256": "2dc3bc244fa005da27694ae3bb9ed569d00f94087c21ba9435009b3bda090df7"
+    }
+  },
+  "conclusion": "five-session transfer is directionally stronger in this fixed-step single-pair screen, but the paired difference is not statistically significant"
+}
