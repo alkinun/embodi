@@ -163,6 +163,7 @@ def validate_benchmark_dataset_lineage(metadata, expected_split: str) -> dict | 
         or output.get("repo_id") != metadata.repo_id
         or output.get("repo_id") != contract_output.get("repo_id")
         or output.get("morphology") != benchmark_metadata.get("morphology")
+        or output.get("morphology") != contract_output.get("morphology")
         or output.get("scenario_ids") != contract_output.get("scenario_ids")
         or output.get("episodes") != metadata.total_episodes
         or output.get("frames") != metadata.total_frames
