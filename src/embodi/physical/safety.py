@@ -5,7 +5,7 @@ from typing import Mapping
 
 import numpy as np
 
-from .so101 import BODY_LIMITS_DEGREES, SO101_POSITION_NAMES
+from .so101 import SO101_POSITION_NAMES
 
 
 def observation_vector(observation: Mapping[str, object]) -> np.ndarray:
@@ -15,10 +15,6 @@ def observation_vector(observation: Mapping[str, object]) -> np.ndarray:
     values = np.asarray([observation[name] for name in SO101_POSITION_NAMES], dtype=np.float32)
     if values.shape != (6,) or not np.isfinite(values).all():
         raise ValueError("SO101 observation positions must be finite scalars")
-    if np.any(values[:5] < BODY_LIMITS_DEGREES[:, 0]) or np.any(
-        values[:5] > BODY_LIMITS_DEGREES[:, 1]
-    ):
-        raise ValueError("SO101 body observation is outside conservative limits")
     if not 0.0 <= values[5] <= 100.0:
         raise ValueError("SO101 gripper observation must be in [0, 100]")
     return values
@@ -52,25 +48,17 @@ def limit_action(
     if any(value.shape != (6,) or not np.isfinite(value).all() for value in vectors):
         raise ValueError("requested, current, and session_start must be finite six-dimensional vectors")
     requested, current, session_start = vectors
-    if np.any(session_start[:5] < BODY_LIMITS_DEGREES[:, 0]) or np.any(
-        session_start[:5] > BODY_LIMITS_DEGREES[:, 1]
-    ) or not 0.0 <= session_start[5] <= 100.0:
-        raise ValueError("SO101 session start is outside conservative limits")
+    if not 0.0 <= session_start[5] <= 100.0:
+        raise ValueError("SO101 session start gripper is outside [0, 100]")
     lower = np.concatenate(
         (
-            np.maximum(
-                BODY_LIMITS_DEGREES[:, 0],
-                session_start[:5] - limits.body_session_envelope_degrees,
-            ),
+            session_start[:5] - limits.body_session_envelope_degrees,
             [max(0.0, session_start[5] - limits.gripper_session_envelope_percent)],
         )
     )
     upper = np.concatenate(
         (
-            np.minimum(
-                BODY_LIMITS_DEGREES[:, 1],
-                session_start[:5] + limits.body_session_envelope_degrees,
-            ),
+            session_start[:5] + limits.body_session_envelope_degrees,
             [min(100.0, session_start[5] + limits.gripper_session_envelope_percent)],
         )
     )

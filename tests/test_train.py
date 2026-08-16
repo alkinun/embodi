@@ -1,3 +1,8 @@
+from dataclasses import asdict
+import json
+from types import SimpleNamespace
+
+import pytest
 import torch
 
 from embodi import EmbodiConfig, EmbodiPolicy
@@ -9,6 +14,9 @@ from embodi.train import (
     resolve_training_seeds,
     should_save_checkpoint,
     split_episode_indices,
+    validate_lerobot_training_dataset,
+    write_checkpoint_data_manifest,
+    write_or_validate_data_manifest,
 )
 
 
@@ -144,3 +152,75 @@ def test_prepare_batch_rejects_mismatched_supervision_padding() -> None:
         assert "padding masks disagree" in str(error)
     else:
         raise AssertionError("mismatched padding masks were accepted")
+
+
+def test_lerobot_training_admission_validates_schema_cameras_and_stats(tmp_path) -> None:
+    config = EmbodiConfig(camera_names=("top",))
+    (tmp_path / "meta").mkdir()
+    (tmp_path / "meta" / "embodi.json").write_text(
+        json.dumps(
+            {
+                "format_version": 3,
+                "parts": [asdict(part) for part in config.parts],
+            }
+        )
+    )
+    features = {
+        "observation.images.top": {"dtype": "video", "shape": (480, 640, 3)},
+        "observation.state": {"dtype": "float32", "shape": (6,)},
+        "action": {"dtype": "float32", "shape": (6,)},
+        "canonical_action": {"dtype": "float32", "shape": (1, 10)},
+        "canonical_state": {"dtype": "float32", "shape": (1, 10)},
+        "canonical_part_mask": {
+            "dtype": "bool",
+            "shape": (1,),
+            "names": ["primary_effector"],
+        },
+    }
+    metadata = SimpleNamespace(
+        fps=30,
+        total_episodes=2,
+        total_frames=4,
+        features=features,
+        stats={
+            "observation.state": {"mean": [0.0] * 6, "std": [1.0] * 6},
+            "action": {"mean": [0.0] * 6, "std": [1.0] * 6},
+        },
+        root=tmp_path,
+        robot_type="so101_sim",
+        repo_id="embodi/sim",
+    )
+    validate_lerobot_training_dataset(metadata, config, "refine")
+    bad_camera = dict(features)
+    bad_camera["observation.images.top"] = {"dtype": "video", "shape": (480, 640, 1)}
+    metadata.features = bad_camera
+    with pytest.raises(ValueError, match="HWC RGB"):
+        validate_lerobot_training_dataset(metadata, config, "refine")
+    metadata.features = features
+    metadata.stats["action"]["std"][0] = float("nan")
+    with pytest.raises(ValueError, match="finite and nonnegative"):
+        validate_lerobot_training_dataset(metadata, config, "refine")
+
+
+def test_resume_preserves_and_validates_dataset_lineage(tmp_path) -> None:
+    report = {"format_version": 1, "repo_id": "embodi/data"}
+    checkpoint = tmp_path / "checkpoint"
+    checkpoint.mkdir()
+    write_checkpoint_data_manifest(checkpoint, report)
+    output = tmp_path / "output"
+    output.mkdir()
+    write_or_validate_data_manifest(output, dict(report), resume_checkpoint=checkpoint)
+    with pytest.raises(ValueError, match="dataset lineage"):
+        write_or_validate_data_manifest(
+            output,
+            {"format_version": 1, "repo_id": "embodi/other"},
+            resume_checkpoint=checkpoint,
+        )
+    unverified = tmp_path / "unverified"
+    unverified.mkdir()
+    with pytest.raises(ValueError, match="missing verified dataset lineage"):
+        write_or_validate_data_manifest(
+            tmp_path / "physical-output",
+            {"robot_type": "so_follower"},
+            resume_checkpoint=unverified,
+        )

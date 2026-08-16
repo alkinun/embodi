@@ -18,14 +18,14 @@ dependencies = [
 [project.optional-dependencies]
 train = [
   "h5py>=3.12",
-  "lerobot[dataset]>=0.6.1,<0.7",
+  "lerobot[dataset]==0.6.1",
   "matplotlib>=3.10",
   "accelerate>=1.2",
   "tqdm>=4.67",
   "wandb>=0.19",
 ]
 hardware = [
-  "lerobot[dataset,hardware,feetech]>=0.6.1,<0.7",
+  "lerobot[dataset,hardware,feetech]==0.6.1",
 ]
 test = ["pytest>=8"]
 sim = [
@@ -41,6 +41,7 @@ embodi-sim = "embodi.sim.cli:main"
 embodi-generate = "embodi.sim.data:main"
 embodi-preview = "embodi.preview:main"
 embodi-convert-so101 = "embodi.convert_so101:main"
+embodi-init-so101-calibration = "embodi.physical.calibration:main"
 embodi-record-so101 = "embodi.record_so101:main"
 embodi-so101-preflight = "embodi.physical.preflight:main"
 

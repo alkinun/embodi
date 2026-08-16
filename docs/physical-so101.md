@@ -68,6 +68,38 @@ preserve the generated calibration files and record their sha-256 hashes. do
 not edit or replace them after collecting a dataset without creating a new
 dataset revision.
 
+initialize the ignored canonical calibration from the exact follower file:
+
+```bash
+uv run embodi-init-so101-calibration \
+  --lerobot-calibration /path/to/so101_follower_main.json \
+  --output configs/so101-physical-calibration.json
+```
+
+this only binds provenance. the generated file remains intentionally invalid
+for hardware and conversion until the measured fields are updated and
+`physical_validation_complete` is set to `true` after the FK checks below.
+
+with the follower torque off, measure and enter:
+
+- the sign of each body joint relative to the pinned model;
+- each model-zero offset in degrees;
+- the native gripper value at physical closure;
+- the native gripper value at the chosen fully open pose.
+
+validate nominal forward kinematics against measured full tool poses in the
+physical base frame at no fewer than three separated configurations. include
+translation and orientation, define the physical tcp to match `gripperframe`,
+and include wrist-roll-sensitive poses. the converter produces encoder-fk
+labels; it cannot correct backlash, flex, assembly error, base-axis mismatch,
+or an incorrect tool center. only then set `physical_validation_complete=true`.
+
+for this gate, place the base origin at the model's base yaw axis on the mounting
+plane, use +z upward, +x from the base toward the nominal workspace, and +y to
+complete a right-handed frame. use at least five separated poses spanning the
+working volume; every measured tcp must be within 15 mm and 5 degrees of model
+fk, including at least two poses that isolate wrist-roll orientation.
+
 ## torque-off follower gate
 
 with the arm physically supported:
@@ -78,14 +110,23 @@ uv run embodi-so101-preflight \
   --port=/dev/serial/by-id/<follower> \
   --robot-id=so101_follower_main \
   --canonical-calibration=configs/so101-physical-calibration.json \
+  --raw-only \
   --reads=500
 ```
+
+the first `--raw-only` pass verifies calibration-file identity, on-motor
+calibration, torque state, native values, and disconnect behavior without
+trusting unfinished canonical signs or offsets. after completing the full-pose
+measurements above, rerun the same command without `--raw-only`.
+the JSON report includes native per-joint minima and maxima for both passes and
+calibrated model-coordinate ranges for the validated pass; retain both reports
+with the calibration measurements.
 
 go criteria:
 
 - all six expected motors respond;
 - saved and on-motor calibration agree;
-- all 500 readings are finite and inside conservative limits;
+- the validated pass maps all 500 readings inside model and gripper limits;
 - torque remains off;
 - disconnect leaves the arm torque-free.
 
@@ -112,6 +153,7 @@ uv run lerobot-teleoperate \
   --robot.port=/dev/serial/by-id/<follower> \
   --robot.id=so101_follower_main \
   --robot.max_relative_target=5 \
+  --robot.disable_torque_on_disconnect=true \
   --robot.cameras='{"top":{"type":"opencv","index_or_path":"/dev/v4l/by-id/<camera>","width":640,"height":480,"fps":30,"fourcc":"MJPG"}}' \
   --teleop.type=so101_leader \
   --teleop.port=/dev/serial/by-id/<leader> \
@@ -122,6 +164,9 @@ uv run lerobot-teleoperate \
 
 verify joint direction, gripper direction, reachable limits, backlash, camera
 latency, and emergency power removal before recording demonstrations.
+if teleoperation or recording presents an unexpected calibration prompt, stop;
+do not accept or rewrite calibration in a powered-motion workflow. rerun
+calibration followed by the torque-off preflight instead.
 
 ## recording
 
@@ -134,6 +179,7 @@ uv run embodi-record-so101 \
   --robot.port=/dev/serial/by-id/<follower> \
   --robot.id=so101_follower_main \
   --robot.max_relative_target=5 \
+  --robot.disable_torque_on_disconnect=true \
   --robot.cameras='{"top":{"type":"opencv","index_or_path":"/dev/v4l/by-id/<camera>","width":640,"height":480,"fps":30,"fourcc":"MJPG"}}' \
   --teleop.type=so101_leader \
   --teleop.port=/dev/serial/by-id/<leader> \
@@ -156,21 +202,10 @@ substitute `lerobot-record`: the embodi wrapper stores the command actually sent
 and writes `meta/embodi-recording.json` with its calibration and safety provenance.
 resume is intentionally unsupported because existing episodes cannot be proven to
 share that provenance; create a new immutable raw dataset for each recording run.
-
-## canonical calibration
-
-copy `configs/so101-physical-calibration.example.json` to an ignored local file
-named `configs/so101-physical-calibration.json`. before conversion, measure:
-
-- the sign of each body joint relative to the pinned model;
-- each model-zero offset in degrees;
-- the native gripper value at physical closure;
-- the native gripper value at the chosen fully open pose;
-- the sha-256 of the lerobot follower calibration file.
-
-validate the nominal forward kinematics against measured tool positions in at
-least three separated poses. the current converter produces encoder-fk labels;
-it cannot correct backlash, flex, assembly error, or an incorrect tool center.
+the wrapper is pinned to lerobot 0.6.1, refuses hub upload during collection, and
+writes a completed manifest only after local finalization. the manifest binds the
+repo id, fps, schema, frame and episode counts, and every metadata, parquet, and
+video file by size and sha-256. conversion rejects any later modification.
 
 ## conversion
 
@@ -187,9 +222,22 @@ uv run embodi-convert-so101 \
 `--lerobot-calibration` must be the unchanged follower calibration used for
 recording; its sha-256 must match `source_calibration_sha256` in the canonical
 calibration. conversion is fail-closed: it requires 30 hz data, exact six-joint
-names, finite values, calibrated model limits, post-clipping sent-action provenance,
-a matching trusted recording manifest, a separate output root, and writes
-canonical provenance to `meta/embodi.json`.
+names, exactly one 640x480 rgb `top` video, finite values, calibrated model and
+gripper limits, post-clipping sent-action provenance, an unchanged immutable
+recording manifest, a separate output root, and writes canonical provenance to
+`meta/embodi.json`.
+
+the converted dataset also receives a completed `meta/conversion.json` inventory
+covering its metadata, canonical parquet data, and videos. treat the output as
+immutable. `embodi-train` verifies this inventory, physical calibration status,
+feature schemas, cameras, normalization statistics, and dataset counts before
+constructing loaders; modified or partially converted physical data is rejected.
+the admitted data manifest is copied into every checkpoint and must match on
+resume; physical checkpoints without verified dataset lineage cannot be resumed.
+physical datasets contain only the fixed `top` camera, so every physical training
+invocation must use a top-camera config such as `configs/so101-exp0-top.json` or
+pass `--cameras top`; the default two-camera model configuration is intentionally
+rejected.
 
 ## policy-motion gate
 
@@ -203,6 +251,12 @@ do not add autonomous motion until all of these pass:
 - a five-minute observation-only policy soak produces finite actions with low
   safety-filter clipping;
 - a physical power-cut stop is held by an operator.
+
+the current selected checkpoints are not eligible for the observation-only soak:
+they were validated through canonical policy plus deterministic simulator ik,
+not the learned physical-native decoder. no hardware soak command is exposed
+until a physical dataset has trained or validated that complete native path and
+a clipping acceptance threshold has been pre-registered.
 
 the first policy test should be 5 hz, horizon one, at most ten seconds, in an
 empty padded workspace. do not begin with autonomous pick-and-place.

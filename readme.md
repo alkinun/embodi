@@ -157,6 +157,10 @@ comparisons. see `scripts/distill_so101_decoder.py`.
 physical lerobot recordings require calibrated canonical labels before training:
 
 ```bash
+uv run embodi-init-so101-calibration \
+  --lerobot-calibration /path/to/so101_follower_main.json \
+  --output configs/so101-physical-calibration.json
+
 uv run embodi-convert-so101 \
   --source-root datasets/physical-so101-raw \
   --source-repo-id embodi/physical-so101-raw \
@@ -167,9 +171,13 @@ uv run embodi-convert-so101 \
 ```
 
 do not use the example calibration unchanged. measure joint signs, model zero
-offsets, and physical gripper endpoints on the assembled follower first.
+offsets, and physical gripper endpoints on the assembled follower, validate FK,
+then set `physical_validation_complete` to `true`.
 Record with `embodi-record-so101 --robot.max_relative_target=5`, not the stock
-LeRobot recorder, so the dataset stores post-clipping commands and provenance.
+LeRobot recorder, so the dataset stores post-clipping commands and immutable
+file provenance.
+Physical training admission verifies the completed conversion inventory and
+rejects modified data, incomplete conversion, schema mismatches, or invalid stats.
 
 ## evaluation
 

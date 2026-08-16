@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import asdict, replace
+import hashlib
 import json
 import math
 import os
@@ -21,6 +22,7 @@ from .token_config import (
 from .token_canonical import reanchor_canonical_actions
 from .token_policy import EmbodiPolicy
 from .processing import EmbodiProcessor, split_lerobot_batch
+from .record_so101 import dataset_inventory
 from .xperience import (
     CachedXperienceDataset,
     CachedXperienceEpisode,
@@ -63,6 +65,156 @@ def split_episode_indices(total_episodes: int, validation_episodes: int) -> tupl
         raise ValueError("validation_episodes must be between 1 and total_episodes - 1")
     boundary = total_episodes - validation_episodes
     return list(range(boundary)), list(range(boundary, total_episodes))
+
+
+def load_json_object(path: Path) -> dict:
+    def reject_duplicates(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError(f"duplicate JSON field in {path}: {key}")
+            value[key] = item
+        return value
+
+    value = json.loads(path.read_text(), object_pairs_hook=reject_duplicates)
+    if not isinstance(value, dict):
+        raise ValueError(f"{path} must contain a JSON object")
+    return value
+
+
+def validate_lerobot_training_dataset(metadata, config: EmbodiConfig, stage: str) -> dict:
+    if not isinstance(metadata.fps, (int, float)) or not math.isfinite(metadata.fps) or metadata.fps <= 0:
+        raise ValueError("dataset FPS must be finite and positive")
+    if metadata.total_episodes <= 0 or metadata.total_frames <= 0:
+        raise ValueError("training dataset must contain frames and episodes")
+    features = metadata.features
+    expected_shape = (config.part_count, CANONICAL_BLOCK_WIDTH)
+    for feature_name in ("canonical_action", "canonical_state"):
+        feature = features.get(feature_name)
+        if feature is None:
+            raise ValueError(f"dataset is missing required {feature_name} labels")
+        if feature.get("dtype") != "float32" or tuple(feature.get("shape", ())) != expected_shape:
+            raise ValueError(f"{feature_name} must be float32 with frame shape {expected_shape}")
+    part_mask = features.get("canonical_part_mask")
+    expected_part_names = [part.name for part in config.parts]
+    if (
+        part_mask is None
+        or part_mask.get("dtype") != "bool"
+        or tuple(part_mask.get("shape", ())) != (config.part_count,)
+        or part_mask.get("names") != expected_part_names
+    ):
+        raise ValueError("canonical_part_mask schema does not match configured parts")
+    state = features.get("observation.state")
+    if state is None or state.get("dtype") != "float32" or tuple(state.get("shape", ())) != (
+        config.state_dim,
+    ):
+        raise ValueError("observation.state schema does not match the model config")
+    needs_action = stage in ("decoder", "predicted_decoder", "refine")
+    action = features.get("action")
+    if needs_action and (
+        action is None
+        or action.get("dtype") != "float32"
+        or tuple(action.get("shape", ())) != (config.action_dim,)
+    ):
+        raise ValueError(f"{stage} stage requires matching native action labels")
+    for camera_name in config.camera_names:
+        camera = features.get(f"observation.images.{camera_name}")
+        if (
+            camera is None
+            or camera.get("dtype") not in ("image", "video")
+            or len(camera.get("shape", ())) != 3
+            or camera["shape"][-1] != 3
+        ):
+            raise ValueError(f"configured camera {camera_name!r} is missing or is not HWC RGB")
+    stats_features = [("observation.state", config.state_dim)]
+    if needs_action:
+        stats_features.append(("action", config.action_dim))
+    for feature_name, width in stats_features:
+        stats = metadata.stats.get(feature_name)
+        if stats is None or "mean" not in stats or "std" not in stats:
+            raise ValueError(f"dataset is missing normalization stats for {feature_name}")
+        try:
+            mean = torch.as_tensor(stats["mean"], dtype=torch.float64)
+            std = torch.as_tensor(stats["std"], dtype=torch.float64)
+        except (TypeError, ValueError) as error:
+            raise ValueError(f"dataset normalization stats for {feature_name} are not numeric") from error
+        if mean.shape != (width,) or std.shape != (width,):
+            raise ValueError(f"dataset normalization stats for {feature_name} have the wrong shape")
+        if not torch.isfinite(mean).all() or not torch.isfinite(std).all() or torch.any(std < 0):
+            raise ValueError(f"dataset normalization stats for {feature_name} must be finite and nonnegative")
+    schema_path = Path(metadata.root) / "meta" / "embodi.json"
+    if not schema_path.is_file():
+        raise FileNotFoundError("dataset is missing meta/embodi.json part descriptors")
+    schema = load_json_object(schema_path)
+    configured_parts = json.loads(json.dumps([asdict(part) for part in config.parts]))
+    if schema.get("format_version") != 3 or schema.get("parts") != configured_parts:
+        raise ValueError("dataset part descriptors do not match the model config")
+    if metadata.robot_type == "so_follower":
+        if metadata.fps != 30 or schema.get("producer") != "embodi.so101_physical_conversion":
+            raise ValueError("physical SO101 training requires a completed Embodi conversion")
+        report_path = Path(metadata.root) / "meta" / "conversion.json"
+        if not report_path.is_file():
+            raise FileNotFoundError("physical SO101 dataset is missing meta/conversion.json")
+        report = load_json_object(report_path)
+        conversion_provenance = {
+            "source_repo_id": report.get("source_repo_id"),
+            "output_repo_id": report.get("output_repo_id"),
+            "recording": report.get("recording"),
+            "calibration": report.get("calibration"),
+        }
+        provenance_sha256 = hashlib.sha256(
+            json.dumps(conversion_provenance, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        feature_json = json.dumps(features, sort_keys=True, separators=(",", ":"))
+        expected_output = {
+            "repo_id": metadata.repo_id,
+            "fps": metadata.fps,
+            "episodes": metadata.total_episodes,
+            "frames": metadata.total_frames,
+            "features_sha256": hashlib.sha256(feature_json.encode()).hexdigest(),
+        }
+        if (
+            report.get("format_version") != 1
+            or report.get("complete") is not True
+            or report.get("output") != expected_output
+            or report.get("output_repo_id") != metadata.repo_id
+            or report.get("fps") != metadata.fps
+            or report.get("episodes") != metadata.total_episodes
+            or report.get("frames") != metadata.total_frames
+            or report.get("conversion_provenance_sha256") != provenance_sha256
+            or schema.get("conversion_provenance_sha256") != provenance_sha256
+            or report.get("calibration", {}).get("physical_validation_complete") is not True
+            or report.get("files")
+            != dataset_inventory(Path(metadata.root), excluded_paths={"meta/conversion.json"})
+        ):
+            raise ValueError("physical SO101 conversion integrity validation failed")
+    return schema
+
+
+def write_or_validate_data_manifest(
+    output_dir: Path,
+    data_report: dict,
+    resume_checkpoint: Path | None = None,
+) -> None:
+    if resume_checkpoint is not None:
+        checkpoint_manifest = resume_checkpoint / "data_manifest.json"
+        if checkpoint_manifest.is_file():
+            if load_json_object(checkpoint_manifest) != data_report:
+                raise ValueError("resume checkpoint dataset lineage does not match the current dataset")
+        elif data_report.get("robot_type") == "so_follower":
+            raise ValueError("physical resume checkpoint is missing verified dataset lineage")
+        else:
+            print("warning: legacy resume checkpoint has no dataset lineage manifest")
+    path = output_dir / "data_manifest.json"
+    if path.is_file():
+        if load_json_object(path) != data_report:
+            raise ValueError("output directory dataset lineage does not match the current dataset")
+        return
+    path.write_text(json.dumps(data_report, indent=2) + "\n")
+
+
+def write_checkpoint_data_manifest(checkpoint_dir: Path, data_report: dict) -> None:
+    (checkpoint_dir / "data_manifest.json").write_text(json.dumps(data_report, indent=2) + "\n")
 
 
 def resolve_training_seeds(
@@ -383,7 +535,6 @@ def train(args: argparse.Namespace) -> None:
             "train": train_records,
             "validation": validation_records,
         }
-        (output_dir / "data_manifest.json").write_text(json.dumps(data_report, indent=2) + "\n")
         train_units = len(split.train)
         validation_units = len(split.validation)
     else:
@@ -398,25 +549,25 @@ def train(args: argparse.Namespace) -> None:
             )
         metadata = LeRobotDatasetMetadata(args.dataset, root=args.dataset_root)
         features = metadata.features
-        if "canonical_action" not in features:
-            raise ValueError("dataset is missing required canonical_action labels")
-        if "canonical_state" not in features:
-            raise ValueError("dataset is missing canonical_state required to anchor action chunks")
-        if "canonical_part_mask" not in features:
-            raise ValueError("dataset is missing canonical_part_mask")
-        expected_shape = (config.part_count, CANONICAL_BLOCK_WIDTH)
-        for feature_name in ("canonical_action", "canonical_state"):
-            if tuple(features[feature_name]["shape"]) != expected_shape:
-                raise ValueError(f"{feature_name} must have frame shape {expected_shape}")
-        schema_path = Path(metadata.root) / "meta" / "embodi.json"
-        if not schema_path.is_file():
-            raise FileNotFoundError("dataset is missing meta/embodi.json part descriptors")
-        schema = json.loads(schema_path.read_text())
-        configured_parts = json.loads(json.dumps([asdict(part) for part in config.parts]))
-        if schema.get("format_version") != 3 or schema.get("parts") != configured_parts:
-            raise ValueError("dataset part descriptors do not match the model config")
-        if args.stage in ("decoder", "predicted_decoder", "refine") and "action" not in features:
-            raise ValueError(f"{args.stage} stage requires native action labels")
+        schema = validate_lerobot_training_dataset(metadata, config, args.stage)
+        metadata_root = Path(metadata.root) / "meta"
+        provenance_files = {}
+        for name in ("info.json", "stats.json", "embodi.json", "conversion.json"):
+            path = metadata_root / name
+            if path.is_file():
+                provenance_files[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+        data_report = {
+            "format_version": 1,
+            "dataset_format": "lerobot",
+            "repo_id": args.dataset,
+            "root": str(metadata.root),
+            "robot_type": metadata.robot_type,
+            "fps": metadata.fps,
+            "episodes": metadata.total_episodes,
+            "frames": metadata.total_frames,
+            "schema": schema,
+            "metadata_sha256": provenance_files,
+        }
         offsets = [step / metadata.fps for step in range(config.chunk_size)]
         delta_timestamps = {"canonical_action": offsets, "canonical_state": offsets}
         if "action" in features:
@@ -502,6 +653,12 @@ def train(args: argparse.Namespace) -> None:
         if args.init_embodiment:
             policy.load_embodiment_checkpoint(args.init_embodiment)
             print(f"initialized embodiment from {args.init_embodiment}")
+
+    write_or_validate_data_manifest(
+        output_dir,
+        data_report,
+        resume_checkpoint=Path(args.resume) if args.resume else None,
+    )
 
     validation_metrics = evaluate(
         policy,
@@ -613,6 +770,7 @@ def train(args: argparse.Namespace) -> None:
                 policy.save_checkpoint(checkpoint_dir, step=step)
             else:
                 policy.save_checkpoint(checkpoint_dir, optimizer, scheduler, step)
+            write_checkpoint_data_manifest(checkpoint_dir, data_report)
             if wandb_run is not None:
                 wandb_run.summary["checkpoint/latest"] = str(checkpoint_dir)
     if args.steps % args.eval_every:
@@ -629,6 +787,7 @@ def train(args: argparse.Namespace) -> None:
             wandb_run.log({f"validation/{name}": value for name, value in validation_metrics.items()}, step=args.steps)
     final_dir = Path(args.output_dir) / "final"
     policy.save_checkpoint(final_dir, optimizer, scheduler, args.steps)
+    write_checkpoint_data_manifest(final_dir, data_report)
     if wandb_run is not None:
         wandb_run.summary["checkpoint/final"] = str(final_dir)
         wandb_run.finish()
