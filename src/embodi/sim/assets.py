@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import re
+from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
 
 
@@ -11,11 +12,21 @@ RAW_ROOT = "https://raw.githubusercontent.com/google-deepmind/mujoco_menagerie"
 
 
 def _download(url: str, destination: Path) -> None:
-    temporary = destination.with_suffix(destination.suffix + ".part")
-    with urlopen(url, timeout=120) as response, temporary.open("wb") as output:
-        while chunk := response.read(1024 * 1024):
-            output.write(chunk)
-    os.replace(temporary, destination)
+    temporary_file = NamedTemporaryFile(
+        "wb",
+        dir=destination.parent,
+        prefix=f"{destination.name}.",
+        suffix=".part",
+        delete=False,
+    )
+    temporary = Path(temporary_file.name)
+    try:
+        with temporary_file as output, urlopen(url, timeout=120) as response:
+            while chunk := response.read(1024 * 1024):
+                output.write(chunk)
+        os.replace(temporary, destination)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def _mesh_files(model_xml: str) -> tuple[str, ...]:
