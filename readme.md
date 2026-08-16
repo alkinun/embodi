@@ -33,9 +33,12 @@ the lfm integration needs transformers 5.1.x.
 ## checks
 
 ```bash
-uv run pytest
+uv run ruff check .
+uv run mypy
+uv run pytest --cov
 uv run embodi-train --smoke-test
 uv run embodi-sim --smoke-test
+uv build
 ```
 
 ## model
