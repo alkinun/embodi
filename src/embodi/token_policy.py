@@ -305,6 +305,23 @@ class EmbodiPolicy(nn.Module):
         return part_mask[:, indices].to(device=device, dtype=torch.bool)
 
     @staticmethod
+    def _select_batch_rows(
+        batch: dict[str, Any], rows: Tensor, batch_size: int
+    ) -> dict[str, Any]:
+        return {
+            name: value[rows]
+            if isinstance(value, Tensor) and value.ndim > 0 and value.shape[0] == batch_size
+            else value
+            for name, value in batch.items()
+        }
+
+    @staticmethod
+    def _select_tensor_rows(value: Tensor | None, rows: Tensor, batch_size: int) -> Tensor | None:
+        if value is not None and value.ndim > 0 and value.shape[0] == batch_size:
+            return value[rows]
+        return value
+
+    @staticmethod
     def _masked_native_mse(
         predicted: Tensor,
         target: Tensor,
@@ -373,6 +390,27 @@ class EmbodiPolicy(nn.Module):
         normalized = torch.where(valid_channels.unsqueeze(1), normalized, 0.0)
         metrics: dict[str, float] = {}
         total: Tensor | None = None
+
+        active_rows = descriptors["part_mask"].any(dim=-1)
+        if active_rows.any() and not active_rows.all():
+            _state, encoded_descriptors, _adapter_loss = self._canonical_state(batch)
+            if stage in ("core", "predicted_decoder", "refine"):
+                for name in ("part_kind", "channel_mask", "part_mask"):
+                    if not torch.equal(descriptors[name], encoded_descriptors[name]):
+                        raise ValueError("canonical action and state descriptors disagree")
+            batch_size = canonical.shape[0]
+            selected_loss, selected_metrics = self.forward(
+                self._select_batch_rows(batch, active_rows, batch_size),
+                noise=self._select_tensor_rows(noise, active_rows, batch_size),
+                time=self._select_tensor_rows(time, active_rows, batch_size),
+                reduction=reduction,
+                stage=stage,
+            )
+            if reduction == "none":
+                loss = selected_loss.new_zeros(batch_size)
+                loss[active_rows] = selected_loss
+                return loss, selected_metrics
+            return selected_loss, selected_metrics
 
         if stage in ("core", "predicted_decoder", "refine"):
             context, context_mask, encoded_descriptors, adapter_loss = self.encode(batch)
@@ -478,6 +516,17 @@ class EmbodiPolicy(nn.Module):
         if not group_mask.any():
             safe = self.action_decoder.safe_native_action(native_state).unsqueeze(1)
             return safe.expand(-1, self.config.chunk_size, -1).clone()
+        active_rows = group_mask.any(dim=-1)
+        if not active_rows.all():
+            self._canonical_state(batch)
+            batch_size = native_state.shape[0]
+            safe = self.action_decoder.safe_native_action(native_state).unsqueeze(1)
+            actions = safe.expand(-1, self.config.chunk_size, -1).clone()
+            actions[active_rows] = self.predict_action_chunk(
+                self._select_batch_rows(batch, active_rows, batch_size),
+                noise=self._select_tensor_rows(noise, active_rows, batch_size),
+            )
+            return actions
         normalized, descriptors = self._sample_normalized(batch, noise)
         if normalized.shape[2] != self.config.part_count:
             raise ValueError("native decoding requires the configured embodiment part layout")
