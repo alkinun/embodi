@@ -55,6 +55,10 @@ class MultiEpisodeXperienceSplit:
     rejection_counts: dict[str, int]
 
 
+def _sample_sort_key(item: tuple[int, XperienceAnchor]) -> tuple[int, int]:
+    return item[0], item[1].frame_index
+
+
 def normalized_hand_opening(
     thumb_tip: Tensor,
     index_tip: Tensor,
@@ -493,10 +497,9 @@ def select_multi_episode_xperience_split(
     locations = {id(anchor): episode_index for episode_index, anchor in train_pool}
     train = [(locations[id(anchor)], anchor) for anchor in balanced_anchors]
     validation = random.Random(seed + 2).sample(validation_pool, validation_clips)
-    sort_key = lambda item: (item[0], item[1].frame_index)
     return MultiEpisodeXperienceSplit(
-        train=tuple(sorted(train, key=sort_key)),
-        validation=tuple(sorted(validation, key=sort_key)),
+        train=tuple(sorted(train, key=_sample_sort_key)),
+        validation=tuple(sorted(validation, key=_sample_sort_key)),
         train_episode_indices=tuple(sorted(training_indices)),
         validation_episode_indices=tuple(sorted(validation_indices)),
         rejection_counts=rejection_counts,
@@ -547,10 +550,63 @@ def select_fixed_episode_xperience_split(
     if len(validation_pool) < validation_clips:
         raise RuntimeError("not enough valid anchors in fixed validation episodes")
     validation = random.Random(seed + 2).sample(validation_pool, validation_clips)
-    sort_key = lambda item: (item[0], item[1].frame_index)
     return MultiEpisodeXperienceSplit(
-        train=tuple(sorted(train, key=sort_key)),
-        validation=tuple(sorted(validation, key=sort_key)),
+        train=tuple(sorted(train, key=_sample_sort_key)),
+        validation=tuple(sorted(validation, key=_sample_sort_key)),
+        train_episode_indices=tuple(sorted(train_indices)),
+        validation_episode_indices=tuple(sorted(validation_indices)),
+        rejection_counts=rejection_counts,
+    )
+
+
+def select_pooled_fixed_episode_xperience_split(
+    episodes: Sequence[CachedXperienceEpisode],
+    *,
+    train_episode_indices: Sequence[int],
+    validation_episode_indices: Sequence[int],
+    train_clips: int,
+    validation_clips: int,
+    seed: int,
+) -> MultiEpisodeXperienceSplit:
+    train_indices = tuple(dict.fromkeys(train_episode_indices))
+    validation_indices = tuple(dict.fromkeys(validation_episode_indices))
+    if not train_indices or not validation_indices:
+        raise ValueError("fixed splitting requires train and validation episodes")
+    if set(train_indices) & set(validation_indices):
+        raise ValueError("train and validation episodes must be disjoint")
+    if train_clips <= 0 or validation_clips <= 0:
+        raise ValueError("train and validation clip counts must be positive")
+    if any(index < 0 or index >= len(episodes) for index in train_indices + validation_indices):
+        raise IndexError("episode index is out of range")
+
+    anchors_by_episode: dict[int, list[XperienceAnchor]] = {}
+    rejection_counts: dict[str, int] = {}
+    for index in train_indices + validation_indices:
+        anchors, rejected = episodes[index].valid_anchors()
+        anchors_by_episode[index] = anchors
+        for name, count in rejected.items():
+            rejection_counts[name] = rejection_counts.get(name, 0) + count
+    train_pool = [
+        (index, anchor)
+        for index in train_indices
+        for anchor in anchors_by_episode[index]
+    ]
+    selected_anchors = _nested_balanced_sample(
+        [anchor for _, anchor in train_pool], train_clips, random.Random(seed + 1)
+    )
+    locations = {id(anchor): index for index, anchor in train_pool}
+    train = [(locations[id(anchor)], anchor) for anchor in selected_anchors]
+    validation_pool = [
+        (index, anchor)
+        for index in validation_indices
+        for anchor in anchors_by_episode[index]
+    ]
+    if len(validation_pool) < validation_clips:
+        raise RuntimeError("not enough valid anchors in fixed validation episodes")
+    validation = random.Random(seed + 2).sample(validation_pool, validation_clips)
+    return MultiEpisodeXperienceSplit(
+        train=tuple(sorted(train, key=_sample_sort_key)),
+        validation=tuple(sorted(validation, key=_sample_sort_key)),
         train_episode_indices=tuple(sorted(train_indices)),
         validation_episode_indices=tuple(sorted(validation_indices)),
         rejection_counts=rejection_counts,

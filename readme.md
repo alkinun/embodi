@@ -13,7 +13,9 @@ the current recipe is simple:
 - start robot perception adapters and state paths from scratch.
 - train one decoder for each robot.
 
-see the [experiment index](experiments/index.md) for evidence and decisions.
+see the [experiment index](experiments/index.md) for evidence and decisions and
+the [data research plan](docs/data-research.md) for scaling and generalization
+criteria.
 
 the selected checkpoints are canonical policies validated in simulation with
 deterministic ik. they are not physical-arm controllers. physical setup and

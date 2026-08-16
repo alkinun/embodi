@@ -13,6 +13,7 @@ from embodi.xperience import (
     quaternion_wxyz_to_matrix,
     select_multi_episode_xperience_split,
     select_fixed_episode_xperience_split,
+    select_pooled_fixed_episode_xperience_split,
     validate_right_hand_sample,
 )
 
@@ -77,6 +78,22 @@ def test_fixed_episode_split_balances_training_episodes() -> None:
     counts = {index: sum(sample_index == index for sample_index, _ in split.train) for index in range(3)}
     assert counts == {0: 334, 1: 333, 2: 333}
     assert {index for index, _ in split.validation} == {3}
+
+
+def test_pooled_fixed_split_preserves_global_motion_balance() -> None:
+    episodes = [FakeEpisode(index, 600) for index in range(4)]
+    split = select_pooled_fixed_episode_xperience_split(
+        episodes,
+        train_episode_indices=(0, 1, 2),
+        validation_episode_indices=(3,),
+        train_clips=100,
+        validation_clips=100,
+        seed=13,
+    )
+    bins = [anchor.motion_bin for _, anchor in split.train]
+    assert bins.count("meaningful") == 50
+    assert bins.count("small") == 25
+    assert bins.count("stationary") == 25
 
 
 def test_caption_terminal_frame_reference_maps_to_last_timestamp() -> None:

@@ -8,6 +8,7 @@ import torch
 from embodi import EmbodiConfig, EmbodiPolicy
 from embodi.train import (
     _SmokeBackbone,
+    append_metrics,
     configure_deterministic_training,
     gradient_norm,
     prepare_model_batch,
@@ -17,6 +18,7 @@ from embodi.train import (
     validate_lerobot_training_dataset,
     write_checkpoint_data_manifest,
     write_or_validate_data_manifest,
+    xperience_manifest_samples,
 )
 
 
@@ -42,6 +44,40 @@ def test_training_seed_overrides_are_independent() -> None:
     assert resolve_training_seeds(7, 11, None) == (11, 7)
     assert resolve_training_seeds(7, None, 13) == (7, 13)
     assert resolve_training_seeds(7, 11, 13) == (11, 13)
+
+
+def test_prepared_xperience_records_restore_typed_anchors() -> None:
+    samples = xperience_manifest_samples(
+        [
+            {
+                "episode_path": "session/ep1",
+                "frame_index": 3,
+                "timestamp_ns": 4,
+                "segment_id": 5,
+                "prompt": "move",
+                "motion_bin": "small",
+            }
+        ],
+        {"session/ep1": 0},
+    )
+    assert samples[0][0] == 0
+    assert samples[0][1].frame_index == 3
+    with pytest.raises(ValueError, match="unknown episode"):
+        xperience_manifest_samples(
+            [{**asdict(samples[0][1]), "episode_path": "other/ep1"}],
+            {"session/ep1": 0},
+        )
+
+
+def test_metrics_are_persisted_as_json_lines(tmp_path) -> None:
+    path = tmp_path / "metrics.jsonl"
+    append_metrics(path, 10, "validation", {"flow_loss": 0.25})
+    append_metrics(path, 20, "train", {"flow_loss": 0.1})
+    records = [json.loads(line) for line in path.read_text().splitlines()]
+    assert records == [
+        {"metrics": {"flow_loss": 0.25}, "split": "validation", "step": 10},
+        {"metrics": {"flow_loss": 0.1}, "split": "train", "step": 20},
+    ]
 
 
 def test_checkpoint_schedule_combines_interval_and_explicit_steps() -> None:

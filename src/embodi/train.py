@@ -27,10 +27,36 @@ from .xperience import (
     CachedXperienceDataset,
     CachedXperienceEpisode,
     MultiEpisodeCachedXperienceDataset,
+    XperienceAnchor,
     select_fixed_episode_xperience_split,
     select_multi_episode_xperience_split,
     select_xperience_split,
 )
+
+
+def xperience_manifest_samples(
+    records: list[dict], path_indices: dict[str, int]
+) -> tuple[tuple[int, XperienceAnchor], ...]:
+    samples = []
+    for record in records:
+        episode_path = record.get("episode_path")
+        if episode_path not in path_indices:
+            raise ValueError(f"split record references an unknown episode: {episode_path}")
+        samples.append(
+            (
+                path_indices[episode_path],
+                XperienceAnchor(
+                    frame_index=int(record["frame_index"]),
+                    timestamp_ns=int(record["timestamp_ns"]),
+                    segment_id=int(record["segment_id"]),
+                    prompt=str(record["prompt"]),
+                    motion_bin=str(record["motion_bin"]),
+                ),
+            )
+        )
+    if not samples:
+        raise ValueError("split records must not be empty")
+    return tuple(samples)
 
 
 class _SmokeBackbone(nn.Module):
@@ -217,6 +243,12 @@ def write_checkpoint_data_manifest(checkpoint_dir: Path, data_report: dict) -> N
     (checkpoint_dir / "data_manifest.json").write_text(json.dumps(data_report, indent=2) + "\n")
 
 
+def append_metrics(path: Path, step: int, split: str, metrics: dict[str, float]) -> None:
+    record = {"step": step, "split": split, "metrics": metrics}
+    with path.open("a") as stream:
+        stream.write(json.dumps(record, sort_keys=True) + "\n")
+
+
 def resolve_training_seeds(
     seed: int, model_seed: int | None, loader_seed: int | None
 ) -> tuple[int, int]:
@@ -388,6 +420,9 @@ def train(args: argparse.Namespace) -> None:
     )
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    metrics_path = output_dir / "metrics.jsonl"
+    if metrics_path.exists() and not args.resume:
+        raise FileExistsError(f"refusing to append metrics to an existing run: {metrics_path}")
     run_manifest = {
         "format_version": 1,
         "arguments": vars(args),
@@ -438,13 +473,53 @@ def train(args: argparse.Namespace) -> None:
             raise FileNotFoundError("Xperience cache is missing xperience_manifest.json")
         source_manifest = json.loads(source_manifest_path.read_text())
         episode_paths = [entry["path"] for entry in source_manifest.get("episodes", [])]
+        prepared_manifest = (
+            json.loads(args.xperience_split_manifest.read_text())
+            if args.xperience_split_manifest
+            else None
+        )
         fixed_train_paths = args.xperience_train_episode_path
         fixed_validation_paths = args.xperience_validation_episode_path
         if bool(fixed_train_paths) != bool(fixed_validation_paths):
             raise ValueError("fixed Xperience splitting requires both train and validation episode paths")
         if args.xperience_episode_path and fixed_train_paths:
             raise ValueError("--xperience-episode-path cannot be combined with fixed episode paths")
-        if fixed_train_paths:
+        if prepared_manifest and any(
+            (args.xperience_episode_path, fixed_train_paths, fixed_validation_paths)
+        ):
+            raise ValueError("--xperience-split-manifest cannot be combined with episode selection")
+        if prepared_manifest:
+            if prepared_manifest.get("dataset_format") != "xperience":
+                raise ValueError("prepared split is not an Xperience manifest")
+            prepared_source = prepared_manifest.get("source", {})
+            if (
+                prepared_source.get("repo_id") != source_manifest.get("repo_id")
+                or prepared_source.get("revision") != source_manifest.get("revision")
+            ):
+                raise ValueError("prepared split source does not match the Xperience cache")
+            cache_hash = hashlib.sha256(source_manifest_path.read_bytes()).hexdigest()
+            if prepared_source.get("cache_manifest_sha256") != cache_hash:
+                raise ValueError("prepared split cache manifest hash does not match")
+            if prepared_manifest.get("seed") != args.seed:
+                raise ValueError("prepared split seed does not match --seed")
+            if prepared_manifest.get("target_fps") != 30 or prepared_manifest.get("horizon") != 32:
+                raise ValueError("prepared split geometry does not match Xperience training")
+            expected_opening = {
+                "closed_ratio": args.xperience_closed_ratio,
+                "open_ratio": args.xperience_open_ratio,
+            }
+            if prepared_manifest.get("opening_calibration") != expected_opening:
+                raise ValueError("prepared split opening calibration does not match training")
+            if (
+                len(prepared_manifest.get("train", [])) != args.xperience_train_clips
+                or len(prepared_manifest.get("validation", []))
+                != args.xperience_validation_clips
+            ):
+                raise ValueError("prepared split clip counts do not match training arguments")
+            selected_paths = list(prepared_source.get("episode_paths", []))
+            if not selected_paths or set(selected_paths) - set(episode_paths):
+                raise ValueError("prepared split contains episodes absent from the cache")
+        elif fixed_train_paths:
             selected_paths = list(dict.fromkeys(fixed_train_paths + fixed_validation_paths))
         else:
             selected_paths = [args.xperience_episode_path] if args.xperience_episode_path else episode_paths
@@ -458,7 +533,27 @@ def train(args: argparse.Namespace) -> None:
             )
             for episode_path in selected_paths
         ]
-        if fixed_train_paths:
+        if prepared_manifest:
+            path_indices = {path: index for index, path in enumerate(selected_paths)}
+            train_samples = xperience_manifest_samples(prepared_manifest.get("train", []), path_indices)
+            validation_samples = xperience_manifest_samples(
+                prepared_manifest.get("validation", []), path_indices
+            )
+            train_paths = set(prepared_manifest.get("train_episode_paths", []))
+            validation_paths = set(prepared_manifest.get("validation_episode_paths", []))
+            if not train_paths or not validation_paths or train_paths & validation_paths:
+                raise ValueError("prepared split episode partitions are invalid")
+            if {selected_paths[index] for index, _ in train_samples} - train_paths:
+                raise ValueError("prepared training records violate the episode partition")
+            if {selected_paths[index] for index, _ in validation_samples} - validation_paths:
+                raise ValueError("prepared validation records violate the episode partition")
+            train_dataset = MultiEpisodeCachedXperienceDataset(episodes, train_samples)
+            validation_dataset = MultiEpisodeCachedXperienceDataset(episodes, validation_samples)
+            training_evaluation_dataset = MultiEpisodeCachedXperienceDataset(episodes, train_samples)
+            data_report = prepared_manifest
+            train_units = len(train_samples)
+            validation_units = len(validation_samples)
+        elif fixed_train_paths:
             path_indices = {path: index for index, path in enumerate(selected_paths)}
             split = select_fixed_episode_xperience_split(
                 episodes,
@@ -515,28 +610,29 @@ def train(args: argparse.Namespace) -> None:
             rejection_counts = split.rejection_counts
             train_episode_paths = [selected_paths[index] for index in split.train_episode_indices]
             validation_episode_paths = [selected_paths[index] for index in split.validation_episode_indices]
-        data_report = {
-            "source": {
-                "repo_id": source_manifest.get("repo_id"),
-                "revision": source_manifest.get("revision"),
-                "episode_paths": selected_paths,
-                "source_fps": [episode.source_fps for episode in episodes],
-            },
-            "target_fps": 30,
-            "horizon": 32,
-            "seed": args.seed,
-            "opening_calibration": {
-                "closed_ratio": args.xperience_closed_ratio,
-                "open_ratio": args.xperience_open_ratio,
-            },
-            "train_episode_paths": train_episode_paths,
-            "validation_episode_paths": validation_episode_paths,
-            "rejection_counts": rejection_counts,
-            "train": train_records,
-            "validation": validation_records,
-        }
-        train_units = len(split.train)
-        validation_units = len(split.validation)
+        if not prepared_manifest:
+            data_report = {
+                "source": {
+                    "repo_id": source_manifest.get("repo_id"),
+                    "revision": source_manifest.get("revision"),
+                    "episode_paths": selected_paths,
+                    "source_fps": [episode.source_fps for episode in episodes],
+                },
+                "target_fps": 30,
+                "horizon": 32,
+                "seed": args.seed,
+                "opening_calibration": {
+                    "closed_ratio": args.xperience_closed_ratio,
+                    "open_ratio": args.xperience_open_ratio,
+                },
+                "train_episode_paths": train_episode_paths,
+                "validation_episode_paths": validation_episode_paths,
+                "rejection_counts": rejection_counts,
+                "train": train_records,
+                "validation": validation_records,
+            }
+            train_units = len(split.train)
+            validation_units = len(split.validation)
     else:
         try:
             from lerobot.datasets.lerobot_dataset import LeRobotDataset
@@ -668,11 +764,13 @@ def train(args: argparse.Namespace) -> None:
         args.validation_batches,
         args.validation_seed,
     )
+    append_metrics(metrics_path, start_step, "validation", validation_metrics)
     print(f"step={start_step} " + " ".join(f"validation_{name}={value:.6f}" for name, value in validation_metrics.items()))
     if training_evaluation_loader is not None:
         training_metrics = evaluate(
             policy, training_evaluation_loader, processor, device, len(training_evaluation_loader), args.validation_seed
         )
+        append_metrics(metrics_path, start_step, "training_evaluation", training_metrics)
         print(f"step={start_step} " + " ".join(f"training_{name}={value:.6f}" for name, value in training_metrics.items()))
     if wandb_run is not None:
         wandb_run.log({f"validation/{name}": value for name, value in validation_metrics.items()}, step=start_step)
@@ -732,6 +830,7 @@ def train(args: argparse.Namespace) -> None:
             progress.set_postfix(loss=f"{sum(accumulated_metrics.values()):.4f}", lr=f"{optimizer.param_groups[0]['lr']:.2e}")
             if args.no_progress:
                 print(f"step={step} " + " ".join(f"{name}={value:.6f}" for name, value in accumulated_metrics.items()))
+            append_metrics(metrics_path, step, "train", accumulated_metrics)
             if wandb_run is not None:
                 wandb_run.log(
                     {
@@ -751,6 +850,7 @@ def train(args: argparse.Namespace) -> None:
                 args.validation_batches,
                 args.validation_seed,
             )
+            append_metrics(metrics_path, step, "validation", validation_metrics)
             progress.write(f"step={step} " + " ".join(f"validation_{name}={value:.6f}" for name, value in validation_metrics.items()))
             if training_evaluation_loader is not None:
                 training_metrics = evaluate(
@@ -761,6 +861,7 @@ def train(args: argparse.Namespace) -> None:
                     len(training_evaluation_loader),
                     args.validation_seed,
                 )
+                append_metrics(metrics_path, step, "training_evaluation", training_metrics)
                 progress.write(f"step={step} " + " ".join(f"training_{name}={value:.6f}" for name, value in training_metrics.items()))
             if wandb_run is not None:
                 wandb_run.log({f"validation/{name}": value for name, value in validation_metrics.items()}, step=step)
@@ -782,6 +883,7 @@ def train(args: argparse.Namespace) -> None:
             args.validation_batches,
             args.validation_seed,
         )
+        append_metrics(metrics_path, args.steps, "validation", validation_metrics)
         print(f"step={args.steps} " + " ".join(f"validation_{name}={value:.6f}" for name, value in validation_metrics.items()))
         if wandb_run is not None:
             wandb_run.log({f"validation/{name}": value for name, value in validation_metrics.items()}, step=args.steps)
@@ -829,6 +931,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--xperience-episode-path")
     parser.add_argument("--xperience-train-episode-path", action="append", default=[])
     parser.add_argument("--xperience-validation-episode-path", action="append", default=[])
+    parser.add_argument("--xperience-split-manifest", type=Path)
     parser.add_argument("--xperience-train-clips", type=int, default=100)
     parser.add_argument("--xperience-validation-clips", type=int, default=20)
     parser.add_argument("--xperience-closed-ratio", type=float, default=0.18)

@@ -1,0 +1,96 @@
+{
+  "format_version": 1,
+  "manifest": "reports/xperience-exp34-one-session-split.json",
+  "manifest_sha256": "64dc080575f97c4d5c65dcffc4157f77b198c151a5630ef2d80ac5401f2c4953",
+  "source": {
+    "repo_id": "ropedia-ai/xperience-10m",
+    "revision": "ce943cf271a758b60240084892d05cf6dc12dd90",
+    "cache_manifest_sha256": "e99f8084bf2cc4c577028967f36fd53bbe9914117ed8c5e04bc701389a86d1c0",
+    "episode_paths": [
+      "a550bb1e-6a60-4f64-a33a-bdd7e968f347/ep5",
+      "d6599141-ea9f-4f2e-9aa6-7c7fac26ac81/ep2",
+      "7f655b32-37dd-4bda-b6dd-52b2dd96ac0e/ep5"
+    ],
+    "source_fps": [
+      20.00013320088712,
+      20.0001000005,
+      20.000200002000017
+    ]
+  },
+  "target_fps": 30.0,
+  "horizon": 32,
+  "horizon_seconds": 1.0666666666666667,
+  "episode_disjoint": true,
+  "train_validation_overlap": {
+    "main_tasks": [],
+    "prompts": []
+  },
+  "train": {
+    "clips": 1000,
+    "sessions": 1,
+    "episodes": 1,
+    "main_tasks": 1,
+    "prompts": 6,
+    "caption_segments": 17,
+    "motion_bins": {
+      "meaningful": 500,
+      "small": 250,
+      "stationary": 250
+    },
+    "task_names": [
+      "Crafting with cardboard"
+    ],
+    "temporal": {
+      "labeled_window_seconds": 1066.6666666666667,
+      "union_labeled_seconds": 241.5327772663004,
+      "window_overlap_factor": 4.416239811173207,
+      "nonoverlapping_window_capacity": 185,
+      "clips_per_nonoverlapping_window": 5.405405405405405,
+      "episodes": [
+        {
+          "episode_path": "a550bb1e-6a60-4f64-a33a-bdd7e968f347/ep5",
+          "clips": 1000,
+          "union_labeled_seconds": 241.5327772663004,
+          "nonoverlapping_window_capacity": 185
+        }
+      ]
+    }
+  },
+  "validation": {
+    "clips": 1000,
+    "sessions": 2,
+    "episodes": 2,
+    "main_tasks": 2,
+    "prompts": 8,
+    "caption_segments": 14,
+    "motion_bins": {
+      "meaningful": 992,
+      "small": 8
+    },
+    "task_names": [
+      "Cleaning and organizing retail shelves",
+      "Cleaning the workspace"
+    ],
+    "temporal": {
+      "labeled_window_seconds": 1066.6666666666667,
+      "union_labeled_seconds": 121.81068379666249,
+      "window_overlap_factor": 8.756757892002677,
+      "nonoverlapping_window_capacity": 96,
+      "clips_per_nonoverlapping_window": 10.416666666666666,
+      "episodes": [
+        {
+          "episode_path": "7f655b32-37dd-4bda-b6dd-52b2dd96ac0e/ep5",
+          "clips": 487,
+          "union_labeled_seconds": 61.36259248065471,
+          "nonoverlapping_window_capacity": 47
+        },
+        {
+          "episode_path": "d6599141-ea9f-4f2e-9aa6-7c7fac26ac81/ep2",
+          "clips": 513,
+          "union_labeled_seconds": 60.448091316007776,
+          "nonoverlapping_window_capacity": 49
+        }
+      ]
+    }
+  }
+}
