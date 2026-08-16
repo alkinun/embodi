@@ -90,7 +90,7 @@ robot-specific `embodiment.pt`.
 
 ```text
 observation.state              float [b, native_state_dim]
-canonical_state               float [b, p, 10]
+canonical_state                float [b, p, 10]
 action                         float [b, 32, native_action_dim]
 canonical_action               float [b, 32, p, 10]
 canonical_part_mask            bool  [b, p]
