@@ -34,12 +34,33 @@ generalization.
 
 ## result
 
-pre-registered; execution pending.
+the full training matrix was stopped for compute cost after the first paired
+robot seed completed. the completed human-seed-81001 pair used robot model seed
+35001, loader seed 35101, and fixed step 1,100. it was screened on the 30 paired
+scenes reserved by the pre-registration:
+
+| pretraining | near | nominal | far | total | lifts |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| one session | 0/10 | 3/10 | 0/10 | 3/30 | 4/30 |
+| five sessions | 0/10 | 6/10 | 1/10 | 7/30 | 8/30 |
+
+paired outcomes contained two shared successes, five five-session-only
+successes, one one-session-only success, and 22 shared failures. the two-sided
+exact mcnemar p value was 0.21875. raw outcomes are in
+`reports/xperience-exp35-lightweight-{near,nominal,far}-h16-2model-10.json`; the
+compact report is `reports/xperience-exp35-lightweight-summary.json`.
 
 ## finding
 
-pending.
+the fixed-step screen directionally favors broader human pretraining, doubling
+nominal success and improving total success by 4/30. the difference is not
+statistically significant, both conditions fail every near scene, and one
+completed seed pair cannot satisfy the original three-pair confirmation gate.
 
 ## decision
 
-pending.
+- retain experiment 034's five-session expert as the stronger human-pretraining
+  result.
+- treat improved SO-101 transfer as suggestive rather than confirmed.
+- do not use this single-pair screen as evidence of unseen-task robot
+  generalization or broad workspace robustness.
