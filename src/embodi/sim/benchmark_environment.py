@@ -163,7 +163,21 @@ def _prepare_panda_xml(root: Path) -> str:
         )
     text = ET.tostring(tree.getroot(), encoding="unicode")
     if not destination.exists() or destination.read_text() != text:
-        destination.write_text(text)
+        temporary_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                dir=root,
+                prefix=f".{destination.name}.",
+                suffix=".tmp",
+                delete=False,
+            ) as stream:
+                temporary_path = Path(stream.name)
+                stream.write(text)
+            temporary_path.replace(destination)
+        finally:
+            if temporary_path is not None:
+                temporary_path.unlink(missing_ok=True)
     return destination.name
 
 

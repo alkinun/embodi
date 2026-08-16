@@ -2,15 +2,30 @@ import os
 
 os.environ.setdefault("MUJOCO_GL", "egl")
 
+from concurrent.futures import ThreadPoolExecutor
+import json
+from pathlib import Path
+import xml.etree.ElementTree as ET
+
 import numpy as np
 import pytest
 
-from embodi.sim.benchmark_environment import BenchmarkManipulationEnv, default_scenario
+from embodi.sim.benchmark_environment import (
+    BenchmarkManipulationEnv,
+    _prepare_panda_xml,
+    default_scenario,
+    runtime_scenario,
+)
 from embodi.sim.benchmark_expert import (
     BenchmarkPhase,
     PrivilegedBenchmarkExpert,
     run_benchmark_expert_episode,
 )
+from embodi.sim.environment import SO101PickPlaceEnv
+from embodi.sim.morphology import PANDA, SO101
+
+
+BENCHMARK_DIRECTORY = Path(__file__).parents[1] / "benchmarks" / "sim-v1"
 
 
 @pytest.mark.parametrize("morphology", ["so101", "panda"])
@@ -93,3 +108,51 @@ def test_default_benchmark_cell_passes_privileged_admission(morphology: str, tas
         assert env.success
     finally:
         env.close()
+
+
+@pytest.mark.parametrize(
+    ("split", "scenario_id"),
+    [
+        ("train", "train-so101-push_to_zone-0378"),
+        ("validation", "validation-so101-push_to_zone-0049"),
+    ],
+)
+def test_so101_workspace_edge_pushes_pass_privileged_admission(
+    split: str,
+    scenario_id: str,
+) -> None:
+    values = json.loads((BENCHMARK_DIRECTORY / "manifests" / f"{split}.json").read_text())
+    scenario = next(value for value in values["scenarios"] if value["scenario_id"] == scenario_id)
+    env = BenchmarkManipulationEnv(
+        scenario["morphology"],
+        scenario["task"],
+        runtime_scenario(scenario["factors"]),
+        render=False,
+    )
+    try:
+        success, phase = run_benchmark_expert_episode(env)
+        assert success, (scenario_id, phase, env.diagnostic_state())
+    finally:
+        env.close()
+
+
+@pytest.mark.parametrize("morphology", [SO101, PANDA])
+def test_derived_robot_xml_publication_is_concurrency_safe(tmp_path: Path, morphology) -> None:
+    source_root = morphology.ensure_assets()
+    root = tmp_path / morphology.id
+    root.mkdir()
+    (root / morphology.model_filename).write_bytes(
+        (source_root / morphology.model_filename).read_bytes()
+    )
+
+    def prepare() -> Path:
+        if morphology.id == SO101.id:
+            SO101PickPlaceEnv._write_scaled_robot_xml(root)
+            return root / "so101_visual_1_2x.xml"
+        return root / _prepare_panda_xml(root)
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        paths = list(executor.map(lambda _index: prepare(), range(32)))
+    assert len(set(paths)) == 1
+    assert paths[0].stat().st_size > 0
+    ET.parse(paths[0])

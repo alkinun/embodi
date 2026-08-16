@@ -151,7 +151,24 @@ class SO101PickPlaceEnv:
             position = [float(value) for value in gripper_site.get("pos", "0 0 0").split()]
             position[0] *= -1
             gripper_site.set("pos", " ".join(str(value) for value in position))
-        tree.write(destination, encoding="unicode")
+        text = ET.tostring(tree.getroot(), encoding="unicode")
+        if destination.exists() and destination.read_text() == text:
+            return
+        temporary_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                dir=root,
+                prefix=f".{destination.name}.",
+                suffix=".tmp",
+                delete=False,
+            ) as stream:
+                temporary_path = Path(stream.name)
+                stream.write(text)
+            os.replace(temporary_path, destination)
+        finally:
+            if temporary_path is not None:
+                temporary_path.unlink(missing_ok=True)
 
     @staticmethod
     def _write_table_texture(path: Path) -> None:

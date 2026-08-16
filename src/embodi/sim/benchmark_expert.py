@@ -212,10 +212,14 @@ class PrivilegedBenchmarkExpert:
             if target_distance <= env.scenario.target_tolerance * 0.75:
                 action = env.state()
             else:
+                if env.morphology.id == SO101.id:
+                    push_through = 0.018 if env.scenario.target_tolerance < 0.052 else 0.020
+                else:
+                    push_through = 0.015
                 goal = np.array(
                     [
-                        object_position[0] + direction[0] * 0.015,
-                        object_position[1] + direction[1] * 0.015,
+                        object_position[0] + direction[0] * push_through,
+                        object_position[1] + direction[1] * push_through,
                         object_position[2] + 0.012,
                     ]
                 )
