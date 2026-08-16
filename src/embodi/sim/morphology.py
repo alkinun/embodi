@@ -143,8 +143,8 @@ PANDA = MorphologySpec(
         "finger_joint2",
     ),
     home_native_state=PANDA_HOME_STATE,
-    base_frame="link0",
-    tool_frame="hand",
+    base_frame="baseframe",
+    tool_frame="gripperframe",
     asset_loader=ensure_panda_assets,
 )
 

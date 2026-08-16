@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from embodi.sim.benchmark import BenchmarkDefinition, ScenarioManifest
+from embodi.sim.tasks import TASKS, task_by_id
 
 
 DEFINITION_PATH = Path(__file__).parents[1] / "benchmarks" / "sim-v1" / "definition.json"
@@ -22,6 +23,20 @@ def test_committed_benchmark_definition_is_valid() -> None:
     )
     assert definition.tasks_for_split("final")[-1] == "stack_object"
     assert definition.split("final")["allows_model_selection"] is False
+
+
+def test_task_contracts_match_frozen_benchmark() -> None:
+    definition = BenchmarkDefinition.load(DEFINITION_PATH)
+    frozen = {value["id"]: value for value in definition.values["tasks"]}
+    assert set(TASKS) == set(frozen)
+    for task_id, task in TASKS.items():
+        expected = frozen[task_id]
+        assert task_by_id(task_id) is task
+        assert task.instruction == expected["instruction"]
+        assert task.pretraining == expected["pretraining"]
+        assert task.success_predicate == expected["success"]["predicate"]
+        assert task.dwell_steps == expected["success"]["dwell_steps"]
+        assert task.requires_release == expected["success"]["requires_release"]
 
 
 def test_definition_rejects_model_selection_on_final_split(tmp_path: Path) -> None:
