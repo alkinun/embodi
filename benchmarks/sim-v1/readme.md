@@ -31,3 +31,9 @@ the geometry track's validation claim.
 Before scenario manifests are frozen, every task/morphology cell must pass the
 admission gates in `definition.json`. Individual difficult evaluation scenes
 must not be filtered after the manifest is frozen.
+
+The deterministic manifests were frozen on 2026-08-16. `manifests.sha256`
+records their immutable digests. Privileged-oracle admission passed all 400
+development episodes and all 800 final episodes; the hash-bound reports are in
+`reports/`. This admission establishes scenario feasibility only and does not
+authorize final-split model selection or policy evaluation.

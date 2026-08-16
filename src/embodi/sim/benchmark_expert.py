@@ -34,6 +34,7 @@ class PrivilegedBenchmarkExpert:
         self.reference_approach = self.reference_rotation[:, 0].copy()
         self.contact_site = np.zeros(3)
         self.release_site = np.zeros(3)
+        self.grasp_offset = np.zeros(3)
 
     @property
     def terminal(self) -> bool:
@@ -208,19 +209,22 @@ class PrivilegedBenchmarkExpert:
             direction = target_position[:2] - object_position[:2]
             target_distance = np.linalg.norm(direction)
             direction /= max(target_distance, 1e-8)
-            goal = np.array(
-                [
-                    object_position[0] + direction[0] * 0.015,
-                    object_position[1] + direction[1] * 0.015,
-                    object_position[2] + 0.012,
-                ]
-            )
-            action = self._ik_action(
-                goal,
-                self.open_gripper,
-                max_speed=min(0.06, max(0.01, target_distance * 0.5)),
-                preserve_rotation=env.morphology.id != SO101.id,
-            )
+            if target_distance <= env.scenario.target_tolerance * 0.75:
+                action = env.state()
+            else:
+                goal = np.array(
+                    [
+                        object_position[0] + direction[0] * 0.015,
+                        object_position[1] + direction[1] * 0.015,
+                        object_position[2] + 0.012,
+                    ]
+                )
+                action = self._ik_action(
+                    goal,
+                    self.open_gripper,
+                    max_speed=min(0.06, max(0.01, target_distance * 0.5)),
+                    preserve_rotation=env.morphology.id != SO101.id,
+                )
             if env.success:
                 self._transition(BenchmarkPhase.DONE)
                 action = env.state()
@@ -264,13 +268,20 @@ class PrivilegedBenchmarkExpert:
                 self._transition(BenchmarkPhase.DONE)
                 action = env.state()
             elif object_position[2] > 0.07 and env.task.id != "lift_object":
+                self.grasp_offset = object_position - tool_position
                 self._transition(BenchmarkPhase.TRANSIT)
             elif self.phase_tick > 150:
                 self._transition(BenchmarkPhase.FAILED)
 
         elif self.phase == BenchmarkPhase.TRANSIT:
             height = 0.13 if env.task.id == "stack_object" else 0.10
-            goal = np.array([target_position[0], target_position[1], height])
+            goal = np.array(
+                [
+                    target_position[0] - self.grasp_offset[0],
+                    target_position[1] - self.grasp_offset[1],
+                    height,
+                ]
+            )
             action = self._ik_action(
                 goal,
                 0.0,

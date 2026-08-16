@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import isfinite
 from pathlib import Path
 import tempfile
 import xml.etree.ElementTree as ET
@@ -29,8 +30,16 @@ class BenchmarkScenario:
     target_tolerance: float = 0.055
     distractor_xy: tuple[tuple[float, float], ...] = ()
     visual_domain: str = "default"
+    table_rgba: tuple[float, float, float, float] = (0.09, 0.10, 0.12, 1.0)
+    light_rgb: tuple[float, float, float] = (0.95, 0.95, 0.95)
 
     def __post_init__(self) -> None:
+        if len(self.object_xy) != 2 or len(self.target_xy) != 2:
+            raise ValueError("object and target positions must be XY pairs")
+        if len(self.object_half_extents) != 3 or any(
+            len(position) != 2 for position in self.distractor_xy
+        ):
+            raise ValueError("object extents and distractor positions have invalid shapes")
         values = (
             *self.object_xy,
             *self.target_xy,
@@ -46,8 +55,15 @@ class BenchmarkScenario:
             raise ValueError("object half extents must be positive")
         if self.object_mass <= 0 or self.friction <= 0 or self.target_tolerance <= 0:
             raise ValueError("mass, friction, and target tolerance must be positive")
-        if self.visual_domain != "default":
-            raise ValueError("benchmark runtime currently supports only the default visual domain")
+        if not self.visual_domain:
+            raise ValueError("visual domain must be non-empty")
+        if len(self.table_rgba) != 4 or len(self.light_rgb) != 3:
+            raise ValueError("visual colors must have RGBA and RGB shapes")
+        if any(
+            not isfinite(value) or not 0 <= value <= 1
+            for value in (*self.table_rgba, *self.light_rgb)
+        ):
+            raise ValueError("visual colors must be finite and lie in [0, 1]")
 
 
 def default_scenario(morphology_id: str, task_id: str | None = None) -> BenchmarkScenario:
@@ -96,6 +112,8 @@ def _scene_xml(robot_filename: str, task: TaskSpec, scenario: BenchmarkScenario,
         'size="0.012 0.012 0.012" rgba="0.55 0.55 0.58 1"/></body>'
         for index, (x, y) in enumerate(scenario.distractor_xy)
     )
+    table_color = _floats(scenario.table_rgba)
+    light_color = _floats(scenario.light_rgb)
     return f"""<mujoco model="embodi_{morphology.id}_{task.id}">
   <include file="{robot_filename}"/>
   <visual>
@@ -103,8 +121,8 @@ def _scene_xml(robot_filename: str, task: TaskSpec, scenario: BenchmarkScenario,
     <headlight diffuse="0.7 0.7 0.7" ambient="0.35 0.35 0.35" specular="0.1 0.1 0.1"/>
   </visual>
   <worldbody>
-    <light pos="0.3 0.2 1.4" dir="0 0 -1" diffuse="0.95 0.95 0.95"/>
-    <geom name="table" type="plane" size="1 1 0.05" rgba="0.09 0.10 0.12 1" friction="1 0.01 0.001"/>
+    <light pos="0.3 0.2 1.4" dir="0 0 -1" diffuse="{light_color}"/>
+    <geom name="table" type="plane" size="1 1 0.05" rgba="{table_color}" friction="1 0.01 0.001"/>
     {camera}
     <body name="target" pos="{scenario.target_xy[0]} {scenario.target_xy[1]} 0.003">
       {_task_geometry(task, scenario)}
@@ -500,3 +518,23 @@ class BenchmarkManipulationEnv:
     def close(self) -> None:
         if self.renderer is not None:
             self.renderer.close()
+
+
+def runtime_scenario(factors: dict) -> BenchmarkScenario:
+    try:
+        workspace = factors["workspace"]
+        geometry = factors["object_geometry"]
+        return BenchmarkScenario(
+            object_xy=tuple(workspace["object_xy"]),
+            target_xy=tuple(workspace["target_xy"]),
+            object_half_extents=tuple(geometry["half_extents"]),
+            object_mass=float(factors["mass"]["kg"]),
+            friction=float(factors["friction"]["coefficient"]),
+            target_tolerance=float(factors["target_tolerance"]["meters"]),
+            distractor_xy=tuple(tuple(value) for value in factors["distractors"]["positions"]),
+            visual_domain=str(factors["visual_domain"]["id"]),
+            table_rgba=tuple(factors["visual_domain"]["table_rgba"]),
+            light_rgb=tuple(factors["visual_domain"]["light_rgb"]),
+        )
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError("scenario factors do not match the benchmark runtime schema") from error

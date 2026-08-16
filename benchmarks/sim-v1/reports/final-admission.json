@@ -1,0 +1,61 @@
+{
+  "format_version": 1,
+  "benchmark_id": "embodi-sim-v1",
+  "definition_sha256": "9b14210d0c296f53c12dd3c5efec2f022a31ceb4d9bb2a1037bf068f443fd45f",
+  "manifest_path": "benchmarks/sim-v1/manifests/final.json",
+  "manifest_sha256": "bbdeb82bc54acc7f7a5f48e1a024fa36737bcecff45b119bfb9697078a050e0c",
+  "minimum_success_rate": 0.95,
+  "limit_per_cell": null,
+  "cells": {
+    "panda/lift_object": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "panda/pick_place_bin": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "panda/push_to_zone": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "panda/stack_object": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "so101/lift_object": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "so101/pick_place_bin": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "so101/push_to_zone": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    },
+    "so101/stack_object": {
+      "attempted": 100,
+      "successes": 100,
+      "success_rate": 1.0,
+      "gate_passed": true
+    }
+  },
+  "gate_passed": true,
+  "failures": []
+}

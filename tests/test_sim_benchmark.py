@@ -4,7 +4,12 @@ from pathlib import Path
 
 import pytest
 
-from embodi.sim.benchmark import BenchmarkDefinition, ScenarioManifest
+from embodi.sim.benchmark import (
+    BenchmarkDefinition,
+    ScenarioManifest,
+    file_sha256,
+    validate_disjoint_manifests,
+)
 from embodi.sim.tasks import TASKS, task_by_id
 
 
@@ -101,3 +106,35 @@ def test_scenario_manifest_rejects_held_out_task_in_training(tmp_path: Path) -> 
     path.write_text(json.dumps(values))
     with pytest.raises(ValueError, match="not admitted"):
         ScenarioManifest.load(path, definition)
+
+
+def test_frozen_manifests_are_complete_disjoint_and_hash_bound() -> None:
+    definition = BenchmarkDefinition.load(DEFINITION_PATH)
+    checksum_path = DEFINITION_PATH.parent / "manifests.sha256"
+    checksums = {
+        relative_path: digest
+        for digest, relative_path in (
+            line.split() for line in checksum_path.read_text().splitlines()
+        )
+    }
+    manifests = []
+    for relative_path, expected_digest in checksums.items():
+        path = DEFINITION_PATH.parent / relative_path
+        assert file_sha256(path) == expected_digest
+        manifests.append(
+            ScenarioManifest.load(path, definition, require_complete_counts=True)
+        )
+    validate_disjoint_manifests(manifests)
+    assert sum(len(manifest.scenarios) for manifest in manifests) == 4800
+
+
+@pytest.mark.parametrize("split", ["development", "final"])
+def test_frozen_admission_reports_bind_passing_manifests(split: str) -> None:
+    benchmark_directory = DEFINITION_PATH.parent
+    report = json.loads((benchmark_directory / "reports" / f"{split}-admission.json").read_text())
+    assert report["manifest_sha256"] == file_sha256(
+        benchmark_directory / "manifests" / f"{split}.json"
+    )
+    assert report["gate_passed"] is True
+    assert report["failures"] == []
+    assert all(cell["gate_passed"] for cell in report["cells"].values())

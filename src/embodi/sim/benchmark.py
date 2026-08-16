@@ -186,6 +186,38 @@ class ScenarioManifest:
                         )
 
 
+def validate_disjoint_manifests(manifests: list[ScenarioManifest]) -> None:
+    scenario_ids: set[str] = set()
+    physical_cases: dict[str, str] = {}
+    for manifest in manifests:
+        for scenario in manifest.scenarios:
+            if scenario.scenario_id in scenario_ids:
+                raise ValueError(f"scenario_id occurs in multiple manifests: {scenario.scenario_id}")
+            scenario_ids.add(scenario.scenario_id)
+            physical_case = json.dumps(
+                {
+                    "morphology": scenario.morphology,
+                    "task": scenario.task,
+                    "factors": {
+                        factor_id: {
+                            key: value
+                            for key, value in factor.items()
+                            if key != "bin"
+                        }
+                        for factor_id, factor in scenario.factors.items()
+                    },
+                },
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+            if physical_case in physical_cases:
+                raise ValueError(
+                    "physical scenario is duplicated: "
+                    f"{physical_cases[physical_case]} and {scenario.scenario_id}"
+                )
+            physical_cases[physical_case] = scenario.scenario_id
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="validate an immutable Embodi simulation benchmark")
     parser.add_argument("definition", type=Path)
@@ -201,6 +233,7 @@ def main() -> None:
         )
         for path in args.manifest
     ]
+    validate_disjoint_manifests(manifests)
     print(
         json.dumps(
             {
