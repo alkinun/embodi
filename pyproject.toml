@@ -61,6 +61,9 @@ packages = ["src/embodi"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = [
+  "simulation: requires the MuJoCo simulation runtime",
+]
 
 [tool.coverage.run]
 branch = true
