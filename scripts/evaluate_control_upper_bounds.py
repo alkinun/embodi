@@ -71,7 +71,7 @@ def run_episode(seed: int, decoder_bundle=None, deterministic_decoder: bool = Fa
     errors = []
     phase_errors: dict[str, list[float]] = {}
     try:
-        for step in range(max_steps):
+        for _step in range(max_steps):
             state = env.state()
             oracle_action = expert.action()
             if decoder_bundle is None and not deterministic_decoder:
@@ -94,7 +94,7 @@ def run_episode(seed: int, decoder_bundle=None, deterministic_decoder: bool = Fa
             "success": expert.phase == Phase.DONE,
             "lifted": bool(env.lifted),
             "terminal_phase": expert.phase.value,
-            "steps": step + 1,
+            "steps": _step + 1,
             "native_rmse": float(np.mean(errors)) if errors else 0.0,
             "phase_native_rmse": {
                 phase: float(np.mean(values)) for phase, values in phase_errors.items()

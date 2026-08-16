@@ -130,7 +130,7 @@ class MorphologyActionDecoder(nn.Module):
             raise ValueError(f"expected {sum(self.group_state_dims)}-dimensional decoder state")
         group_mask = self._validate_group_mask(group_mask, batch_size, canonical_actions.device)
         native_actions = canonical_actions.new_zeros(batch_size, chunk_size, self.native_dim)
-        for index, group_type in enumerate(self.group_types):
+        for index in range(len(self.group_types)):
             decoder_key = self.group_slots[index].replace(".", "_")
             decoded = self.decoders[decoder_key](
                 canonical_actions[..., self.canonical_slices[index]], state[..., self.state_slices[index]]

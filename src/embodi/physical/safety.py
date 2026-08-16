@@ -38,11 +38,14 @@ class SO101SafetyLimits:
             raise ValueError("SO101 safety limits must be finite and positive")
 
 
+DEFAULT_SAFETY_LIMITS = SO101SafetyLimits()
+
+
 def limit_action(
     requested: np.ndarray,
     current: np.ndarray,
     session_start: np.ndarray,
-    limits: SO101SafetyLimits = SO101SafetyLimits(),
+    limits: SO101SafetyLimits = DEFAULT_SAFETY_LIMITS,
 ) -> tuple[np.ndarray, tuple[str, ...]]:
     vectors = [np.asarray(value, dtype=np.float32) for value in (requested, current, session_start)]
     if any(value.shape != (6,) or not np.isfinite(value).all() for value in vectors):
