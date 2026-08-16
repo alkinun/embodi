@@ -6,6 +6,21 @@ import torch
 from torch import Tensor
 
 
+def validate_image_rescaling(image: Any, *, processor_rescales: bool) -> None:
+    """Require exactly one image rescaling step before backbone normalization."""
+    tensor = torch.as_tensor(image)
+    if processor_rescales:
+        if tensor.dtype != torch.uint8:
+            raise ValueError("processor rescaling requires uint8 images in [0, 255]")
+        return
+    if not tensor.is_floating_point():
+        raise ValueError("disabled processor rescaling requires floating-point images in [0, 1]")
+    if not torch.isfinite(tensor).all() or tensor.numel() == 0:
+        raise ValueError("pre-scaled images must be finite and non-empty")
+    if tensor.min() < 0 or tensor.max() > 1:
+        raise ValueError("pre-scaled images must lie in [0, 1]")
+
+
 def camera_frame_to_tensor(frame: Any, *, processor_rescales: bool) -> Tensor:
     """Convert an HWC uint8 camera frame without applying rescaling twice."""
     tensor = torch.as_tensor(frame)
@@ -18,6 +33,7 @@ def camera_frame_to_tensor(frame: Any, *, processor_rescales: bool) -> Tensor:
 class EmbodiProcessor:
     def __init__(self, processor: Any, do_rescale: bool = True) -> None:
         self.processor = processor
+        self.do_rescale = do_rescale
         image_processor = getattr(processor, "image_processor", None)
         if image_processor is not None and hasattr(image_processor, "do_rescale"):
             image_processor.do_rescale = do_rescale
@@ -53,6 +69,8 @@ class EmbodiProcessor:
             raise ValueError("images, instructions, and state must have the same batch size")
         conversations = []
         for sample_images, instruction in zip(images, instructions, strict=True):
+            for image in sample_images:
+                validate_image_rescaling(image, processor_rescales=self.do_rescale)
             content = [{"type": "image", "image": image} for image in sample_images]
             content.append({"type": "text", "text": instruction})
             conversations.append([{"role": "user", "content": content}])

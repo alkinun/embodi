@@ -1,6 +1,13 @@
 {
   "experiment": "035-diversity-transfer-lightweight-screen",
+  "status": "stopped_before_preregistered_confirmation",
   "scope": "single completed seed pair at fixed step 1100",
+  "protocol_deviations": [
+    "only one of three paired training seeds completed",
+    "fixed step 1100 replaced per-run selection across seven checkpoints",
+    "the registered 30-scene screen was reported without a fresh confirmation set"
+  ],
+  "confirmation_completed": false,
   "human_seed": 81001,
   "robot_model_seed": 35001,
   "robot_loader_seed": 35101,
@@ -53,6 +60,29 @@
     "one_session_only": 1,
     "neither": 22,
     "exact_mcnemar_p": 0.21875
+  },
+  "robot_validation_regression_loss": {
+    "one_session": {
+      "0": 0.09239813517779112,
+      "500": 0.0035800214216578754,
+      "1000": 0.0018857827788451686,
+      "1500": 0.001505446376540931,
+      "2000": 0.0010542045143665745,
+      "2500": 0.0007982907714904286
+    },
+    "five_session": {
+      "0": 0.044236224982887505,
+      "500": 0.0034563658642582594,
+      "1000": 0.002144146166392602,
+      "1500": 0.0015334943018388003,
+      "2000": 0.001163951122725848,
+      "2500": 0.0009685563538369025
+    }
+  },
+  "excluded_partial_run": {
+    "path": "outputs/diversity-transfer-exp35-one-h81002-r35002-l35102",
+    "last_logged_step": 60,
+    "checkpoint_created": false
   },
   "raw_reports": {
     "near": {

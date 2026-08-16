@@ -7,10 +7,7 @@ from urllib.request import urlopen
 
 
 MENAGERIE_REVISION = "c1a4eeb85694ae1dffe33ff1797d4e528928a133"
-RAW_ROOT = (
-    "https://raw.githubusercontent.com/google-deepmind/mujoco_menagerie/"
-    f"{MENAGERIE_REVISION}/robotstudio_so101"
-)
+RAW_ROOT = "https://raw.githubusercontent.com/google-deepmind/mujoco_menagerie"
 
 
 def _download(url: str, destination: Path) -> None:
@@ -21,22 +18,49 @@ def _download(url: str, destination: Path) -> None:
     os.replace(temporary, destination)
 
 
-def ensure_so101_assets(cache_dir: Path | None = None) -> Path:
+def _mesh_files(model_xml: str) -> tuple[str, ...]:
+    return tuple(
+        sorted(set(re.findall(r'<mesh[^>]+file="([^"]+\.(?:obj|stl))"', model_xml)))
+    )
+
+
+def ensure_menagerie_assets(
+    model_directory: str,
+    model_filename: str,
+    cache_dir: Path | None = None,
+) -> Path:
+    if not model_directory or Path(model_directory).name != model_directory:
+        raise ValueError("model_directory must be one Menagerie directory name")
+    if (
+        not model_filename
+        or Path(model_filename).name != model_filename
+        or not model_filename.endswith(".xml")
+    ):
+        raise ValueError("model_filename must be one XML filename")
     root = cache_dir or (
-        Path.home() / ".cache" / "embodi" / "mujoco_menagerie" / MENAGERIE_REVISION / "robotstudio_so101"
+        Path.home() / ".cache" / "embodi" / "mujoco_menagerie" / MENAGERIE_REVISION / model_directory
     )
     assets = root / "assets"
     assets.mkdir(parents=True, exist_ok=True)
-    model_path = root / "so101.xml"
+    raw_root = f"{RAW_ROOT}/{MENAGERIE_REVISION}/{model_directory}"
+    model_path = root / model_filename
     if not model_path.exists():
-        _download(f"{RAW_ROOT}/so101.xml", model_path)
+        _download(f"{raw_root}/{model_filename}", model_path)
     model_xml = model_path.read_text()
-    mesh_files = sorted(set(re.findall(r'<mesh[^>]+file="([^"]+\.stl)"', model_xml)))
-    for filename in mesh_files:
+    for filename in _mesh_files(model_xml):
         destination = assets / filename
+        destination.parent.mkdir(parents=True, exist_ok=True)
         if not destination.exists():
-            _download(f"{RAW_ROOT}/assets/{filename}", destination)
+            _download(f"{raw_root}/assets/{filename}", destination)
     license_path = root / "LICENSE"
     if not license_path.exists():
-        _download(f"{RAW_ROOT}/LICENSE", license_path)
+        _download(f"{raw_root}/LICENSE", license_path)
     return root
+
+
+def ensure_so101_assets(cache_dir: Path | None = None) -> Path:
+    return ensure_menagerie_assets("robotstudio_so101", "so101.xml", cache_dir)
+
+
+def ensure_panda_assets(cache_dir: Path | None = None) -> Path:
+    return ensure_menagerie_assets("franka_emika_panda", "panda.xml", cache_dir)

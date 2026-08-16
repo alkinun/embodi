@@ -34,10 +34,13 @@ generalization.
 
 ## result
 
-the full training matrix was stopped for compute cost after the first paired
-robot seed completed. the completed human-seed-81001 pair used robot model seed
-35001, loader seed 35101, and fixed step 1,100. it was screened on the 30 paired
-scenes reserved by the pre-registration:
+the pre-registered confirmation was stopped for compute cost after the first
+paired robot seed completed, so this record is a stopped directional screen
+rather than a completed confirmatory experiment. the completed human-seed-81001
+pair used robot model seed 35001, loader seed 35101, and fixed step 1,100. it was
+screened on the 30 paired scenes reserved by the pre-registration. fixed step
+1,100 replaced the registered seven-checkpoint per-run selection procedure, and
+no fresh confirmation scenes were evaluated:
 
 | pretraining | near | nominal | far | total | lifts |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -49,6 +52,14 @@ successes, one one-session-only success, and 22 shared failures. the two-sided
 exact mcnemar p value was 0.21875. raw outcomes are in
 `reports/xperience-exp35-lightweight-{near,nominal,far}-h16-2model-10.json`; the
 compact report is `reports/xperience-exp35-lightweight-summary.json`.
+
+robot validation regression loss favored the five-session expert at step 0
+(`0.04424` against `0.09240`) and was similar by step 500 (`0.00346` against
+`0.00358`). after adaptation, the one-session run had lower offline loss at steps
+1,000, 2,000, and 2,500 despite weaker step-1,100 control. this reinforces that
+offline robot loss is not a closed-loop selector. a second one-session run for
+human seed 81002 was started but stopped at step 60 without a checkpoint; it is
+excluded from every result.
 
 ## finding
 

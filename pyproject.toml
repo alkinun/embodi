@@ -44,6 +44,7 @@ embodi-convert-so101 = "embodi.convert_so101:main"
 embodi-init-so101-calibration = "embodi.physical.calibration:main"
 embodi-record-so101 = "embodi.record_so101:main"
 embodi-so101-preflight = "embodi.physical.preflight:main"
+embodi-validate-benchmark = "embodi.sim.benchmark:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/embodi"]

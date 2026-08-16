@@ -406,8 +406,11 @@ def train(args: argparse.Namespace) -> None:
     config = replace(
         config,
         camera_names=tuple(args.cameras) if args.cameras else config.camera_names,
-        image_do_rescale=False if args.correct_image_rescale else config.image_do_rescale,
     )
+    if args.dataset_format == "xperience" and not config.image_do_rescale:
+        raise ValueError(
+            "the current Xperience decoder returns uint8 images and requires image_do_rescale=true"
+        )
     if args.resume and any((args.init_from, args.init_core, args.init_embodiment)):
         raise ValueError("--resume cannot be combined with initialization checkpoints")
     configure_deterministic_training(args.deterministic)
@@ -904,7 +907,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset-root", type=Path)
     parser.add_argument("--config", type=Path)
     parser.add_argument("--cameras", nargs="+", choices=("top", "wrist"))
-    parser.add_argument("--correct-image-rescale", action="store_true")
     parser.add_argument("--output-dir", default=f"outputs/{model_name}")
     parser.add_argument("--steps", type=int, default=50_000)
     parser.add_argument("--batch-size", type=int, default=1)

@@ -8,29 +8,18 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 
-from .assets import ensure_so101_assets
+from .morphology import (
+    SO101,
+    SO101_BODY_LIMITS_DEGREES,
+    SO101_GRIPPER_NATIVE_RANGE,
+    SO101_HOME_STATE,
+)
 
 
-JOINT_NAMES = (
-    "shoulder_pan",
-    "shoulder_lift",
-    "elbow_flex",
-    "wrist_flex",
-    "wrist_roll",
-    "gripper",
-)
-BODY_LIMITS_DEGREES = np.array(
-    [
-        [-110.0, 110.0],
-        [-100.0, 100.0],
-        [-96.8, 96.8],
-        [-95.0, 95.0],
-        [-157.2, 157.2],
-    ],
-    dtype=np.float32,
-)
-GRIPPER_DATASET_RANGE = np.array([0.0, 35.0], dtype=np.float32)
-HOME_STATE = np.array([0.3516, -86.8359, 75.0586, 72.0703, 82.9688, 0.3453], dtype=np.float32)
+JOINT_NAMES = SO101.native_state_names
+BODY_LIMITS_DEGREES = SO101_BODY_LIMITS_DEGREES
+GRIPPER_DATASET_RANGE = SO101_GRIPPER_NATIVE_RANGE
+HOME_STATE = SO101_HOME_STATE
 TASK = "Pick up the cube and place it in the box."
 
 
@@ -93,7 +82,7 @@ class SO101PickPlaceEnv:
         self.random = random.Random(seed)
         self.cube_x_range = tuple(cube_x_range)
         self.cube_y_range = tuple(cube_y_range)
-        root = ensure_so101_assets(asset_dir)
+        root = SO101.ensure_assets(asset_dir)
         self._write_scaled_robot_xml(root)
         self._write_table_texture(root / "table.png")
         scene_path = root / "embodi_pickplace.xml"

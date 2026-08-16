@@ -4,7 +4,12 @@ import numpy as np
 import pytest
 import torch
 
-from embodi.processing import EmbodiProcessor, camera_frame_to_tensor, split_lerobot_batch
+from embodi.processing import (
+    EmbodiProcessor,
+    camera_frame_to_tensor,
+    split_lerobot_batch,
+    validate_image_rescaling,
+)
 
 
 def test_split_lerobot_batch_selects_configured_cameras() -> None:
@@ -63,3 +68,25 @@ def test_camera_frame_rejects_non_uint8_or_non_rgb() -> None:
         camera_frame_to_tensor(np.zeros((2, 3, 3), dtype=np.float32), processor_rescales=True)
     with pytest.raises(ValueError, match="HWC uint8 RGB"):
         camera_frame_to_tensor(np.zeros((2, 3), dtype=np.uint8), processor_rescales=True)
+
+
+def test_image_rescaling_contract_accepts_exactly_one_scaling_path() -> None:
+    validate_image_rescaling(torch.full((3, 2, 2), 255, dtype=torch.uint8), processor_rescales=True)
+    validate_image_rescaling(torch.ones(3, 2, 2), processor_rescales=False)
+
+
+@pytest.mark.parametrize(
+    ("image", "processor_rescales", "message"),
+    [
+        (torch.ones(3, 2, 2), True, "requires uint8"),
+        (torch.ones(3, 2, 2, dtype=torch.uint8), False, "requires floating-point"),
+        (torch.full((3, 2, 2), 2.0), False, "must lie in"),
+    ],
+)
+def test_image_rescaling_contract_rejects_double_or_missing_scaling(
+    image: torch.Tensor,
+    processor_rescales: bool,
+    message: str,
+) -> None:
+    with pytest.raises(ValueError, match=message):
+        validate_image_rescaling(image, processor_rescales=processor_rescales)

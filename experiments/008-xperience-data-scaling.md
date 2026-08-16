@@ -28,8 +28,12 @@ does more xperience data improve human loss and so-101 transfer?
 human loss improved at each budget. control peaked at 1,000 clips. the 10,000
 clip run had only 3.2 effective passes. this screen is optimization-limited.
 
-an earlier run used `image_do_rescale=true` and scored 0/30. it is invalid. the
-config now locks `image_do_rescale=false`.
+an earlier loader supplied already scaled floating-point images while using
+`image_do_rescale=true`; that double-rescaled run scored 0/30 and is invalid.
+the current format-v3 Xperience decoder explicitly returns uint8 images, so its
+authoritative configs use `image_do_rescale=true`. simulator and LeRobot inputs
+that are already floating point use `false`. the processor now rejects either
+double rescaling or a missing rescaling step.
 
 ## finding
 

@@ -1,0 +1,195 @@
+{
+  "format_version": 1,
+  "benchmark_id": "embodi-sim-v1",
+  "status": "specification_frozen",
+  "control": {
+    "frequency_hz": 30,
+    "action_chunk_steps": 32,
+    "execution_horizon_steps": 16,
+    "maximum_episode_steps": 500,
+    "camera_names": [
+      "top"
+    ]
+  },
+  "morphologies": [
+    {
+      "id": "so101",
+      "asset": "mujoco_menagerie/robotstudio_so101",
+      "asset_revision": "c1a4eeb85694ae1dffe33ff1797d4e528928a133",
+      "native_state_dim": 6,
+      "native_action_dim": 6,
+      "canonical_parts": [
+        {
+          "name": "primary_effector",
+          "kind": "pose_scalar"
+        }
+      ]
+    },
+    {
+      "id": "panda",
+      "asset": "mujoco_menagerie/franka_emika_panda",
+      "asset_revision": "c1a4eeb85694ae1dffe33ff1797d4e528928a133",
+      "native_state_dim": 8,
+      "native_action_dim": 8,
+      "canonical_parts": [
+        {
+          "name": "primary_effector",
+          "kind": "pose_scalar"
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "push_to_zone",
+      "instruction": "Push the object into the target zone.",
+      "pretraining": true,
+      "success": {
+        "predicate": "object_center_inside_target",
+        "dwell_steps": 15,
+        "requires_release": false
+      }
+    },
+    {
+      "id": "lift_object",
+      "instruction": "Lift the object and hold it above the table.",
+      "pretraining": true,
+      "success": {
+        "predicate": "object_above_height_while_retained",
+        "dwell_steps": 15,
+        "requires_release": false
+      }
+    },
+    {
+      "id": "pick_place_bin",
+      "instruction": "Pick up the object and place it in the bin.",
+      "pretraining": true,
+      "success": {
+        "predicate": "object_contained_and_settled",
+        "dwell_steps": 15,
+        "requires_release": true
+      }
+    },
+    {
+      "id": "stack_object",
+      "instruction": "Stack the object stably on the support object.",
+      "pretraining": false,
+      "success": {
+        "predicate": "object_supported_and_settled",
+        "dwell_steps": 15,
+        "requires_release": true
+      }
+    }
+  ],
+  "factor_axes": [
+    {
+      "id": "workspace",
+      "description": "initial object and goal poses"
+    },
+    {
+      "id": "object_geometry",
+      "description": "object size and aspect ratio"
+    },
+    {
+      "id": "mass",
+      "description": "object mass"
+    },
+    {
+      "id": "friction",
+      "description": "object and support friction"
+    },
+    {
+      "id": "target_tolerance",
+      "description": "task completion tolerance"
+    },
+    {
+      "id": "distractors",
+      "description": "distractor count and placement"
+    },
+    {
+      "id": "visual_domain",
+      "description": "lighting and background configuration"
+    }
+  ],
+  "splits": [
+    {
+      "id": "train",
+      "role": "demonstrations",
+      "task_scope": "pretraining",
+      "scenarios_per_cell": 500,
+      "allows_model_selection": false
+    },
+    {
+      "id": "validation",
+      "role": "training_diagnostics",
+      "task_scope": "pretraining",
+      "scenarios_per_cell": 100,
+      "allows_model_selection": false
+    },
+    {
+      "id": "development",
+      "role": "model_selection",
+      "task_scope": "all",
+      "scenarios_per_cell": 50,
+      "allows_model_selection": true
+    },
+    {
+      "id": "final",
+      "role": "untouched_final_evaluation",
+      "task_scope": "all",
+      "scenarios_per_cell": 100,
+      "allows_model_selection": false
+    }
+  ],
+  "adaptation_budgets": [
+    10,
+    50,
+    100,
+    500
+  ],
+  "control_tracks": [
+    {
+      "id": "geometry",
+      "state_path": "forward_kinematics",
+      "action_path": "deterministic_inverse_kinematics"
+    },
+    {
+      "id": "learned_state",
+      "state_path": "learned_state_adapter",
+      "action_path": "deterministic_inverse_kinematics"
+    },
+    {
+      "id": "full_learned",
+      "state_path": "learned_state_adapter",
+      "action_path": "learned_native_decoder"
+    }
+  ],
+  "admission_gates": {
+    "minimum_privileged_expert_success_rate": 0.95,
+    "maximum_geometry_success_drop": 0.05,
+    "maximum_command_clipping_rate": 0.01,
+    "maximum_fk_ik_translation_p95_m": 0.001,
+    "maximum_fk_ik_rotation_p95_deg": 1.0,
+    "maximum_gripper_round_trip_error_native": 1.0
+  },
+  "primary_metrics": [
+    "macro_task_morphology_success",
+    "adaptation_success_by_budget",
+    "held_out_task_success"
+  ],
+  "secondary_metrics": [
+    "stage_completion",
+    "time_to_success",
+    "failure_reason",
+    "collision_rate",
+    "command_clipping_rate",
+    "intervention_rate"
+  ],
+  "statistical_unit": {
+    "paired_by": "scenario_id",
+    "clustered_by": [
+      "training_seed",
+      "scenario_id"
+    ]
+  }
+}
