@@ -123,6 +123,8 @@ class MorphologyActionDecoder(nn.Module):
             raise ValueError(f"expected canonical actions [B, T, {expected_dim}]")
         batch_size, chunk_size, _ = canonical_actions.shape
         if state.ndim == 2:
+            if state.shape[0] != batch_size:
+                raise ValueError("state must have shape [B, state_dim] or [B, T, state_dim]")
             state = state.unsqueeze(1).expand(batch_size, chunk_size, state.shape[-1])
         if state.ndim != 3 or state.shape[:2] != (batch_size, chunk_size):
             raise ValueError("state must have shape [B, state_dim] or [B, T, state_dim]")

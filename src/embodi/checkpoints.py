@@ -54,17 +54,20 @@ def interpolate_checkpoints(
     second_config = json.loads((second_directory / "config.json").read_text())
     if first_config != second_config:
         raise ValueError("checkpoint model configs do not match")
-    output_directory.mkdir(parents=True, exist_ok=True)
-    (output_directory / "config.json").write_text(json.dumps(first_config, indent=2) + "\n")
-    for filename in ("core.pt", "embodiment.pt"):
-        first = torch.load(first_directory / filename, map_location="cpu", weights_only=True)
-        second = torch.load(second_directory / filename, map_location="cpu", weights_only=True)
-        torch.save(interpolate_checkpoint_value(first, second, alpha), output_directory / filename)
     first_trainer = torch.load(first_directory / "trainer.pt", map_location="cpu", weights_only=True)
     second_trainer = torch.load(second_directory / "trainer.pt", map_location="cpu", weights_only=True)
     if first_trainer.get("stage") != second_trainer.get("stage"):
         raise ValueError("checkpoint training stages do not match")
+    interpolated = {}
+    for filename in ("core.pt", "embodiment.pt"):
+        first = torch.load(first_directory / filename, map_location="cpu", weights_only=True)
+        second = torch.load(second_directory / filename, map_location="cpu", weights_only=True)
+        interpolated[filename] = interpolate_checkpoint_value(first, second, alpha)
     step = round((1.0 - alpha) * int(first_trainer.get("step", 0)) + alpha * int(second_trainer.get("step", 0)))
+    output_directory.mkdir(parents=True, exist_ok=True)
+    (output_directory / "config.json").write_text(json.dumps(first_config, indent=2) + "\n")
+    for filename, value in interpolated.items():
+        torch.save(value, output_directory / filename)
     torch.save(
         {
             "format_version": 3,

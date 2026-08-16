@@ -11,7 +11,8 @@ def rotation_6d_to_matrix(rotation: Tensor) -> Tensor:
     second = rotation[..., 3:]
     second = second - (first * second).sum(dim=-1, keepdim=True) * first
     second = torch.nn.functional.normalize(second, dim=-1, eps=1e-6)
-    third = torch.linalg.cross(first, second, dim=-1)
+    third = torch.nn.functional.normalize(torch.linalg.cross(first, second, dim=-1), dim=-1, eps=1e-6)
+    second = torch.linalg.cross(third, first, dim=-1)
     return torch.stack((first, second, third), dim=-1)
 
 
