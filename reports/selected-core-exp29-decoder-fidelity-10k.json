@@ -1,0 +1,162 @@
+{
+  "format_version": 1,
+  "cache": "datasets/selected-core-exp27-ik-60ep.pt",
+  "cache_sha256": "5a1d02c51367f74920d9dcad50c4bbeb552aefb1d18ff1277b3d711e03f31b11",
+  "source_core_sha256": "bec0de7d3983268e7cb41404b2c2cd5b6df54786d57335656517774303db9c59",
+  "validation_start_episode": 50,
+  "samples": 230,
+  "decoders": [
+    {
+      "checkpoint": "outputs/selected-core-exp29-decoder-seed27002-10k/final",
+      "config_sha256": "a906d494a8f7955de536098cf873efcdeb6566de84f245bc248dea03104dda65",
+      "embodiment_sha256": "6f9f711ec46af1110b5ab057c0ebf305b16df9f0ac12d7f010c86143349fabbe",
+      "first_step_normalized_rmse": 0.16512617468833923,
+      "all_step_normalized_rmse": 0.19856230914592743,
+      "step_16_normalized_rmse": 0.19000552594661713,
+      "step_32_normalized_rmse": 0.2592223584651947,
+      "horizon_normalized_rmse": [
+        0.16512614488601685,
+        0.16127951443195343,
+        0.15823517739772797,
+        0.15826059877872467,
+        0.160357266664505,
+        0.16815340518951416,
+        0.16755017638206482,
+        0.16938629746437073,
+        0.169660285115242,
+        0.1713804006576538,
+        0.1823214888572693,
+        0.18006010353565216,
+        0.1883782297372818,
+        0.1847747266292572,
+        0.18687888979911804,
+        0.19000552594661713,
+        0.1969851553440094,
+        0.19736024737358093,
+        0.19921760261058807,
+        0.1995762139558792,
+        0.20590712130069733,
+        0.20578324794769287,
+        0.20882828533649445,
+        0.2081557959318161,
+        0.2164127230644226,
+        0.22038617730140686,
+        0.22832229733467102,
+        0.23578959703445435,
+        0.24202096462249756,
+        0.24869835376739502,
+        0.2517244517803192,
+        0.2592223584651947
+      ],
+      "first_step_direction_agreement": 0.9253081679344177,
+      "first_step_per_joint": {
+        "shoulder_pan": {
+          "mae_native": 0.47899892926216125,
+          "rmse_native": 0.8393514752388,
+          "normalized_rmse": 0.03181655332446098
+        },
+        "shoulder_lift": {
+          "mae_native": 1.0975382328033447,
+          "rmse_native": 1.5482414960861206,
+          "normalized_rmse": 0.05517008155584335
+        },
+        "elbow_flex": {
+          "mae_native": 1.889243245124817,
+          "rmse_native": 3.193455457687378,
+          "normalized_rmse": 0.17612268030643463
+        },
+        "wrist_flex": {
+          "mae_native": 1.2090293169021606,
+          "rmse_native": 1.7483675479888916,
+          "normalized_rmse": 0.10350988060235977
+        },
+        "wrist_roll": {
+          "mae_native": 0.2878516614437103,
+          "rmse_native": 0.4043429493904114,
+          "normalized_rmse": 0.3420218527317047
+        },
+        "gripper": {
+          "mae_native": 0.17426785826683044,
+          "rmse_native": 0.23021718859672546,
+          "normalized_rmse": 0.028834549710154533
+        }
+      },
+      "episodes": [
+        {
+          "episode": 50,
+          "teacher_success": false,
+          "samples": 32,
+          "first_step_normalized_rmse": 0.15804818272590637,
+          "all_step_normalized_rmse": 0.16738495230674744
+        },
+        {
+          "episode": 51,
+          "teacher_success": false,
+          "samples": 32,
+          "first_step_normalized_rmse": 0.250848650932312,
+          "all_step_normalized_rmse": 0.31922706961631775
+        },
+        {
+          "episode": 52,
+          "teacher_success": true,
+          "samples": 15,
+          "first_step_normalized_rmse": 0.12777943909168243,
+          "all_step_normalized_rmse": 0.1465318351984024
+        },
+        {
+          "episode": 53,
+          "teacher_success": true,
+          "samples": 13,
+          "first_step_normalized_rmse": 0.08468054980039597,
+          "all_step_normalized_rmse": 0.16229212284088135
+        },
+        {
+          "episode": 54,
+          "teacher_success": false,
+          "samples": 32,
+          "first_step_normalized_rmse": 0.19144748151302338,
+          "all_step_normalized_rmse": 0.2239760309457779
+        },
+        {
+          "episode": 55,
+          "teacher_success": false,
+          "samples": 32,
+          "first_step_normalized_rmse": 0.1389240026473999,
+          "all_step_normalized_rmse": 0.17161765694618225
+        },
+        {
+          "episode": 56,
+          "teacher_success": false,
+          "samples": 32,
+          "first_step_normalized_rmse": 0.1690736562013626,
+          "all_step_normalized_rmse": 0.1399027407169342
+        },
+        {
+          "episode": 57,
+          "teacher_success": true,
+          "samples": 12,
+          "first_step_normalized_rmse": 0.09850215166807175,
+          "all_step_normalized_rmse": 0.12701942026615143
+        },
+        {
+          "episode": 58,
+          "teacher_success": true,
+          "samples": 16,
+          "first_step_normalized_rmse": 0.09251464903354645,
+          "all_step_normalized_rmse": 0.20376858115196228
+        },
+        {
+          "episode": 59,
+          "teacher_success": true,
+          "samples": 14,
+          "first_step_normalized_rmse": 0.10746102780103683,
+          "all_step_normalized_rmse": 0.12366987019777298
+        }
+      ]
+    }
+  ],
+  "mean_first_step_normalized_rmse": 0.16512617468833923,
+  "mean_step_16_normalized_rmse": 0.19000552594661713,
+  "cross_seed_first_step_normalized_disagreement": 0.0,
+  "diagnosis": "local_approximation"
+}

@@ -33,6 +33,12 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [024](024-near-weighted-cube-coverage.md) | can near-weighted data fix approach failures without forgetting? | near improves by 6/50, but retention falls to 70.7%. |
 | [025](025-additive-near-coverage.md) | can additive near data improve control without forgetting? | near gain misses target; unexpected far gain needs confirmation. |
 | [026](026-additive-policy-confirmation.md) | does the additive policy's broad advantage replicate? | no overall; its far advantage independently replicates. |
+| [027](027-selected-core-native-decoder.md) | can the selected general core support a robust learned native decoder? | no; optimization is stable but success falls from 66/100 to about 20/100. |
+| [028](028-native-decoder-error-decomposition.md) | where does the learned native decoder lose deterministic control? | local first-action approximation error, not horizon growth or seed variance. |
+| [029](029-decoder-optimization-budget.md) | can a longer fixed decoder optimization run clear the offline fidelity gate? | no; longer training helps, but normalized and elbow-error gates still fail. |
+| [030](030-decoder-capacity.md) | can a higher-capacity decoder clear the fixed offline fidelity gate? | no; capacity helps, but exposes a loss-weighting mismatch. |
+| [031](031-control-tolerance-decoder-loss.md) | can a control-tolerance loss meet the held-out native fidelity gate? | no; elbow and direction gates narrowly fail, so closed loop remains blocked. |
+| [032](032-ik-teacher-continuity.md) | is the ik teacher translation-sensitive near held-out commands? | rarely under axis-aligned probes; rotation and reconstruction remain open. |
 
 ## current decision
 
@@ -50,3 +56,11 @@ for robot coverage, retain deterministic center-weighted seed 3993 at step 1,100
 as the general policy and additive-near step 1,000 as a far-range specialist.
 for human pretraining, add more sessions and tasks rather than more windows from
 the same five episodes.
+
+the selected general core is not approved for learned native-action execution:
+experiments 027--031 show stable optimization but severe closed-loop loss with
+local decoder approximation error; experiment 032 finds low discontinuity
+frequency under reconstructed axis-aligned translation probes but does not test
+rotation sensitivity or exact cached-state reconstruction. keep
+deterministic ik as the simulation reference and require a newly specified decoder to pass offline
+physical-unit gates before any further closed-loop or physical soak evaluation.

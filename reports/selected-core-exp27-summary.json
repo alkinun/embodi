@@ -1,0 +1,66 @@
+{
+  "experiment": 27,
+  "status": "completed",
+  "source_checkpoint": "outputs/det-peak-exp20-center-m3993-l3992/step-0001100",
+  "teacher_cache": {
+    "path": "datasets/selected-core-exp27-ik-60ep.pt",
+    "episodes": 60,
+    "teacher_successes": 36,
+    "teacher_lifts": 37,
+    "samples": 1263,
+    "training_samples": 1033,
+    "validation_samples": 230
+  },
+  "evaluation": {
+    "episodes": 100,
+    "seed": 27100,
+    "execution_horizon": 16,
+    "deterministic_ik": {
+      "successes": 66,
+      "lifts": 66,
+      "mean_steps": 308.72
+    },
+    "learned_decoders": [
+      {
+        "training_seed": 27001,
+        "validation_loss": 0.05395539104938507,
+        "successes": 18,
+        "lifts": 19,
+        "mean_steps": 458.54,
+        "baseline_only_successes": 54,
+        "decoder_only_successes": 6,
+        "paired_exact_p": 9.722961671898567e-11
+      },
+      {
+        "training_seed": 27002,
+        "validation_loss": 0.05468590557575226,
+        "successes": 21,
+        "lifts": 23,
+        "mean_steps": 444.01,
+        "baseline_only_successes": 50,
+        "decoder_only_successes": 5,
+        "paired_exact_p": 2.1358426138817777e-10
+      },
+      {
+        "training_seed": 27003,
+        "validation_loss": 0.057602640241384506,
+        "successes": 20,
+        "lifts": 23,
+        "mean_steps": 445.78,
+        "baseline_only_successes": 49,
+        "decoder_only_successes": 3,
+        "paired_exact_p": 1.042677055806962e-11
+      }
+    ],
+    "learned_mean_successes": 19.666666666666668,
+    "learned_population_std_points": 1.247219128924647,
+    "common_learned_successes": 6,
+    "any_learned_successes": 36
+  },
+  "acceptance": {
+    "mean_within_5_of_deterministic_ik": false,
+    "population_std_at_most_5": true,
+    "worst_seed_within_10_of_deterministic_ik": false,
+    "native_decoder_viable": false
+  }
+}

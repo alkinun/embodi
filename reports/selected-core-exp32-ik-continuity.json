@@ -1,0 +1,1400 @@
+{
+  "format_version": 1,
+  "cache": "datasets/selected-core-exp27-ik-60ep.pt",
+  "cache_sha256": "5a1d02c51367f74920d9dcad50c4bbeb552aefb1d18ff1277b3d711e03f31b11",
+  "validation_start_episode": 50,
+  "samples": 230,
+  "translation_perturbation_mm": 1.0,
+  "jump_threshold_degrees": 5.0,
+  "maximum_label_reconstruction_error": 1.033825397491455,
+  "reconstruction_errors_over_0_1": 65,
+  "reconstruction_errors_over_0_5": 3,
+  "median_maximum_body_change_degrees": 0.564544677734375,
+  "p95_maximum_body_change_degrees": 2.0977607727050778,
+  "maximum_body_change_degrees": 7.398746490478516,
+  "jump_samples": 4,
+  "jump_fraction": 0.017391304347826087,
+  "translation_diagnosis": "translation_locally_stable",
+  "records": [
+    {
+      "sample": 0,
+      "episode": 50,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9350051879882812
+    },
+    {
+      "sample": 1,
+      "episode": 50,
+      "reconstruction_max_error": 0.03141021728515625,
+      "maximum_body_change_degrees": 0.7960777282714844
+    },
+    {
+      "sample": 2,
+      "episode": 50,
+      "reconstruction_max_error": 0.20777130126953125,
+      "maximum_body_change_degrees": 0.5453243255615234
+    },
+    {
+      "sample": 3,
+      "episode": 50,
+      "reconstruction_max_error": 0.07135391235351562,
+      "maximum_body_change_degrees": 0.5242271423339844
+    },
+    {
+      "sample": 4,
+      "episode": 50,
+      "reconstruction_max_error": 0.036098480224609375,
+      "maximum_body_change_degrees": 0.5525550842285156
+    },
+    {
+      "sample": 5,
+      "episode": 50,
+      "reconstruction_max_error": 0.07263040542602539,
+      "maximum_body_change_degrees": 0.5517425537109375
+    },
+    {
+      "sample": 6,
+      "episode": 50,
+      "reconstruction_max_error": 0.12949985265731812,
+      "maximum_body_change_degrees": 0.5377922058105469
+    },
+    {
+      "sample": 7,
+      "episode": 50,
+      "reconstruction_max_error": 0.019495844841003418,
+      "maximum_body_change_degrees": 0.5489234924316406
+    },
+    {
+      "sample": 8,
+      "episode": 50,
+      "reconstruction_max_error": 0.03154754638671875,
+      "maximum_body_change_degrees": 0.5838832855224609
+    },
+    {
+      "sample": 9,
+      "episode": 50,
+      "reconstruction_max_error": 0.03412628173828125,
+      "maximum_body_change_degrees": 0.6168441772460938
+    },
+    {
+      "sample": 10,
+      "episode": 50,
+      "reconstruction_max_error": 0.01910400390625,
+      "maximum_body_change_degrees": 0.6158199310302734
+    },
+    {
+      "sample": 11,
+      "episode": 50,
+      "reconstruction_max_error": 0.02208709716796875,
+      "maximum_body_change_degrees": 0.6073818206787109
+    },
+    {
+      "sample": 12,
+      "episode": 50,
+      "reconstruction_max_error": 0.008050918579101562,
+      "maximum_body_change_degrees": 0.6410617828369141
+    },
+    {
+      "sample": 13,
+      "episode": 50,
+      "reconstruction_max_error": 0.1456165313720703,
+      "maximum_body_change_degrees": 0.6829757690429688
+    },
+    {
+      "sample": 14,
+      "episode": 50,
+      "reconstruction_max_error": 0.05469703674316406,
+      "maximum_body_change_degrees": 0.6716995239257812
+    },
+    {
+      "sample": 15,
+      "episode": 50,
+      "reconstruction_max_error": 0.0091094970703125,
+      "maximum_body_change_degrees": 0.728447675704956
+    },
+    {
+      "sample": 16,
+      "episode": 50,
+      "reconstruction_max_error": 0.19881534576416016,
+      "maximum_body_change_degrees": 0.921055793762207
+    },
+    {
+      "sample": 17,
+      "episode": 50,
+      "reconstruction_max_error": 0.05474853515625,
+      "maximum_body_change_degrees": 1.4843215942382812
+    },
+    {
+      "sample": 18,
+      "episode": 50,
+      "reconstruction_max_error": 0.0718841552734375,
+      "maximum_body_change_degrees": 2.94024658203125
+    },
+    {
+      "sample": 19,
+      "episode": 50,
+      "reconstruction_max_error": 0.5827484130859375,
+      "maximum_body_change_degrees": 3.444049835205078
+    },
+    {
+      "sample": 20,
+      "episode": 50,
+      "reconstruction_max_error": 0.020992279052734375,
+      "maximum_body_change_degrees": 0.4391632080078125
+    },
+    {
+      "sample": 21,
+      "episode": 50,
+      "reconstruction_max_error": 0.0086517333984375,
+      "maximum_body_change_degrees": 0.4918098449707031
+    },
+    {
+      "sample": 22,
+      "episode": 50,
+      "reconstruction_max_error": 0.0063629150390625,
+      "maximum_body_change_degrees": 0.4896965026855469
+    },
+    {
+      "sample": 23,
+      "episode": 50,
+      "reconstruction_max_error": 0.0284881591796875,
+      "maximum_body_change_degrees": 0.48905181884765625
+    },
+    {
+      "sample": 24,
+      "episode": 50,
+      "reconstruction_max_error": 0.01525115966796875,
+      "maximum_body_change_degrees": 0.4921722412109375
+    },
+    {
+      "sample": 25,
+      "episode": 50,
+      "reconstruction_max_error": 0.011444091796875,
+      "maximum_body_change_degrees": 0.4908180236816406
+    },
+    {
+      "sample": 26,
+      "episode": 50,
+      "reconstruction_max_error": 0.00124359130859375,
+      "maximum_body_change_degrees": 1.6281661987304688
+    },
+    {
+      "sample": 27,
+      "episode": 50,
+      "reconstruction_max_error": 0.02286529541015625,
+      "maximum_body_change_degrees": 2.109344482421875
+    },
+    {
+      "sample": 28,
+      "episode": 50,
+      "reconstruction_max_error": 0.03069305419921875,
+      "maximum_body_change_degrees": 1.6286468505859375
+    },
+    {
+      "sample": 29,
+      "episode": 50,
+      "reconstruction_max_error": 0.0013275146484375,
+      "maximum_body_change_degrees": 0.7517852783203125
+    },
+    {
+      "sample": 30,
+      "episode": 50,
+      "reconstruction_max_error": 0.0571136474609375,
+      "maximum_body_change_degrees": 3.8936004638671875
+    },
+    {
+      "sample": 31,
+      "episode": 50,
+      "reconstruction_max_error": 0.01026153564453125,
+      "maximum_body_change_degrees": 5.936702728271484
+    },
+    {
+      "sample": 32,
+      "episode": 51,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.8975372314453125
+    },
+    {
+      "sample": 33,
+      "episode": 51,
+      "reconstruction_max_error": 0.0540771484375,
+      "maximum_body_change_degrees": 0.7167625427246094
+    },
+    {
+      "sample": 34,
+      "episode": 51,
+      "reconstruction_max_error": 0.21345901489257812,
+      "maximum_body_change_degrees": 0.5437526702880859
+    },
+    {
+      "sample": 35,
+      "episode": 51,
+      "reconstruction_max_error": 0.07793056964874268,
+      "maximum_body_change_degrees": 0.5400352478027344
+    },
+    {
+      "sample": 36,
+      "episode": 51,
+      "reconstruction_max_error": 0.03435516357421875,
+      "maximum_body_change_degrees": 0.5809116363525391
+    },
+    {
+      "sample": 37,
+      "episode": 51,
+      "reconstruction_max_error": 0.18670272827148438,
+      "maximum_body_change_degrees": 0.6671600341796875
+    },
+    {
+      "sample": 38,
+      "episode": 51,
+      "reconstruction_max_error": 0.08870315551757812,
+      "maximum_body_change_degrees": 0.6483097076416016
+    },
+    {
+      "sample": 39,
+      "episode": 51,
+      "reconstruction_max_error": 0.15077972412109375,
+      "maximum_body_change_degrees": 0.6120338439941406
+    },
+    {
+      "sample": 40,
+      "episode": 51,
+      "reconstruction_max_error": 0.08255934715270996,
+      "maximum_body_change_degrees": 0.5743999481201172
+    },
+    {
+      "sample": 41,
+      "episode": 51,
+      "reconstruction_max_error": 0.058807373046875,
+      "maximum_body_change_degrees": 0.5449581146240234
+    },
+    {
+      "sample": 42,
+      "episode": 51,
+      "reconstruction_max_error": 0.11444568634033203,
+      "maximum_body_change_degrees": 0.5014762878417969
+    },
+    {
+      "sample": 43,
+      "episode": 51,
+      "reconstruction_max_error": 0.06451034545898438,
+      "maximum_body_change_degrees": 0.5003147125244141
+    },
+    {
+      "sample": 44,
+      "episode": 51,
+      "reconstruction_max_error": 0.18529510498046875,
+      "maximum_body_change_degrees": 0.5068569183349609
+    },
+    {
+      "sample": 45,
+      "episode": 51,
+      "reconstruction_max_error": 0.02988433837890625,
+      "maximum_body_change_degrees": 0.5122184753417969
+    },
+    {
+      "sample": 46,
+      "episode": 51,
+      "reconstruction_max_error": 0.06315231323242188,
+      "maximum_body_change_degrees": 0.5065937042236328
+    },
+    {
+      "sample": 47,
+      "episode": 51,
+      "reconstruction_max_error": 0.05488777160644531,
+      "maximum_body_change_degrees": 0.5055179595947266
+    },
+    {
+      "sample": 48,
+      "episode": 51,
+      "reconstruction_max_error": 0.034145355224609375,
+      "maximum_body_change_degrees": 0.4962959289550781
+    },
+    {
+      "sample": 49,
+      "episode": 51,
+      "reconstruction_max_error": 0.04982328414916992,
+      "maximum_body_change_degrees": 0.4980735778808594
+    },
+    {
+      "sample": 50,
+      "episode": 51,
+      "reconstruction_max_error": 0.22055435180664062,
+      "maximum_body_change_degrees": 0.5086288452148438
+    },
+    {
+      "sample": 51,
+      "episode": 51,
+      "reconstruction_max_error": 0.0135650634765625,
+      "maximum_body_change_degrees": 0.49932861328125
+    },
+    {
+      "sample": 52,
+      "episode": 51,
+      "reconstruction_max_error": 0.00909423828125,
+      "maximum_body_change_degrees": 0.50604248046875
+    },
+    {
+      "sample": 53,
+      "episode": 51,
+      "reconstruction_max_error": 0.032507896423339844,
+      "maximum_body_change_degrees": 0.5231781005859375
+    },
+    {
+      "sample": 54,
+      "episode": 51,
+      "reconstruction_max_error": 0.12929391860961914,
+      "maximum_body_change_degrees": 0.5208244323730469
+    },
+    {
+      "sample": 55,
+      "episode": 51,
+      "reconstruction_max_error": 0.00972747802734375,
+      "maximum_body_change_degrees": 0.5167961120605469
+    },
+    {
+      "sample": 56,
+      "episode": 51,
+      "reconstruction_max_error": 0.019744873046875,
+      "maximum_body_change_degrees": 0.5078163146972656
+    },
+    {
+      "sample": 57,
+      "episode": 51,
+      "reconstruction_max_error": 0.004220008850097656,
+      "maximum_body_change_degrees": 0.501129150390625
+    },
+    {
+      "sample": 58,
+      "episode": 51,
+      "reconstruction_max_error": 0.03222060203552246,
+      "maximum_body_change_degrees": 0.5015296936035156
+    },
+    {
+      "sample": 59,
+      "episode": 51,
+      "reconstruction_max_error": 0.18268775939941406,
+      "maximum_body_change_degrees": 0.5392165184020996
+    },
+    {
+      "sample": 60,
+      "episode": 51,
+      "reconstruction_max_error": 0.02939605712890625,
+      "maximum_body_change_degrees": 0.5437674522399902
+    },
+    {
+      "sample": 61,
+      "episode": 51,
+      "reconstruction_max_error": 0.02143847942352295,
+      "maximum_body_change_degrees": 0.5260558128356934
+    },
+    {
+      "sample": 62,
+      "episode": 51,
+      "reconstruction_max_error": 0.017412781715393066,
+      "maximum_body_change_degrees": 0.5178956985473633
+    },
+    {
+      "sample": 63,
+      "episode": 51,
+      "reconstruction_max_error": 0.0975189208984375,
+      "maximum_body_change_degrees": 0.4926300048828125
+    },
+    {
+      "sample": 64,
+      "episode": 52,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.945343017578125
+    },
+    {
+      "sample": 65,
+      "episode": 52,
+      "reconstruction_max_error": 0.04694366455078125,
+      "maximum_body_change_degrees": 0.7782783508300781
+    },
+    {
+      "sample": 66,
+      "episode": 52,
+      "reconstruction_max_error": 0.19945526123046875,
+      "maximum_body_change_degrees": 0.5545215606689453
+    },
+    {
+      "sample": 67,
+      "episode": 52,
+      "reconstruction_max_error": 0.3922233581542969,
+      "maximum_body_change_degrees": 0.5638809204101562
+    },
+    {
+      "sample": 68,
+      "episode": 52,
+      "reconstruction_max_error": 0.005860328674316406,
+      "maximum_body_change_degrees": 0.6087760925292969
+    },
+    {
+      "sample": 69,
+      "episode": 52,
+      "reconstruction_max_error": 0.07209348678588867,
+      "maximum_body_change_degrees": 0.5855731964111328
+    },
+    {
+      "sample": 70,
+      "episode": 52,
+      "reconstruction_max_error": 0.11600494384765625,
+      "maximum_body_change_degrees": 0.5586509704589844
+    },
+    {
+      "sample": 71,
+      "episode": 52,
+      "reconstruction_max_error": 0.1931009292602539,
+      "maximum_body_change_degrees": 0.5192031860351562
+    },
+    {
+      "sample": 72,
+      "episode": 52,
+      "reconstruction_max_error": 0.08513641357421875,
+      "maximum_body_change_degrees": 0.5009689331054688
+    },
+    {
+      "sample": 73,
+      "episode": 52,
+      "reconstruction_max_error": 0.09391021728515625,
+      "maximum_body_change_degrees": 0.5190029144287109
+    },
+    {
+      "sample": 74,
+      "episode": 52,
+      "reconstruction_max_error": 0.05356121063232422,
+      "maximum_body_change_degrees": 0.5199069976806641
+    },
+    {
+      "sample": 75,
+      "episode": 52,
+      "reconstruction_max_error": 0.2000408172607422,
+      "maximum_body_change_degrees": 0.5029830932617188
+    },
+    {
+      "sample": 76,
+      "episode": 52,
+      "reconstruction_max_error": 0.18102073669433594,
+      "maximum_body_change_degrees": 0.45847320556640625
+    },
+    {
+      "sample": 77,
+      "episode": 52,
+      "reconstruction_max_error": 0.10375213623046875,
+      "maximum_body_change_degrees": 0.46974945068359375
+    },
+    {
+      "sample": 78,
+      "episode": 52,
+      "reconstruction_max_error": 0.2679405212402344,
+      "maximum_body_change_degrees": 0.47552490234375
+    },
+    {
+      "sample": 79,
+      "episode": 53,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9368820190429688
+    },
+    {
+      "sample": 80,
+      "episode": 53,
+      "reconstruction_max_error": 0.06555557250976562,
+      "maximum_body_change_degrees": 0.7608413696289062
+    },
+    {
+      "sample": 81,
+      "episode": 53,
+      "reconstruction_max_error": 0.16860580444335938,
+      "maximum_body_change_degrees": 0.5530166625976562
+    },
+    {
+      "sample": 82,
+      "episode": 53,
+      "reconstruction_max_error": 0.4919041395187378,
+      "maximum_body_change_degrees": 0.5538215637207031
+    },
+    {
+      "sample": 83,
+      "episode": 53,
+      "reconstruction_max_error": 0.03309440612792969,
+      "maximum_body_change_degrees": 0.5957241058349609
+    },
+    {
+      "sample": 84,
+      "episode": 53,
+      "reconstruction_max_error": 0.015161514282226562,
+      "maximum_body_change_degrees": 0.6086292266845703
+    },
+    {
+      "sample": 85,
+      "episode": 53,
+      "reconstruction_max_error": 0.09839344024658203,
+      "maximum_body_change_degrees": 0.5790462493896484
+    },
+    {
+      "sample": 86,
+      "episode": 53,
+      "reconstruction_max_error": 0.1915583610534668,
+      "maximum_body_change_degrees": 0.5398826599121094
+    },
+    {
+      "sample": 87,
+      "episode": 53,
+      "reconstruction_max_error": 0.051883697509765625,
+      "maximum_body_change_degrees": 0.5051612854003906
+    },
+    {
+      "sample": 88,
+      "episode": 53,
+      "reconstruction_max_error": 0.08708953857421875,
+      "maximum_body_change_degrees": 0.5079765319824219
+    },
+    {
+      "sample": 89,
+      "episode": 53,
+      "reconstruction_max_error": 0.06432342529296875,
+      "maximum_body_change_degrees": 0.5123119354248047
+    },
+    {
+      "sample": 90,
+      "episode": 53,
+      "reconstruction_max_error": 0.053768157958984375,
+      "maximum_body_change_degrees": 0.4977531433105469
+    },
+    {
+      "sample": 91,
+      "episode": 53,
+      "reconstruction_max_error": 0.3132171630859375,
+      "maximum_body_change_degrees": 0.45074462890625
+    },
+    {
+      "sample": 92,
+      "episode": 54,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9036712646484375
+    },
+    {
+      "sample": 93,
+      "episode": 54,
+      "reconstruction_max_error": 0.034809112548828125,
+      "maximum_body_change_degrees": 0.753875732421875
+    },
+    {
+      "sample": 94,
+      "episode": 54,
+      "reconstruction_max_error": 0.052867889404296875,
+      "maximum_body_change_degrees": 0.5988197326660156
+    },
+    {
+      "sample": 95,
+      "episode": 54,
+      "reconstruction_max_error": 0.12376117706298828,
+      "maximum_body_change_degrees": 0.5025730133056641
+    },
+    {
+      "sample": 96,
+      "episode": 54,
+      "reconstruction_max_error": 0.0601649284362793,
+      "maximum_body_change_degrees": 0.515777587890625
+    },
+    {
+      "sample": 97,
+      "episode": 54,
+      "reconstruction_max_error": 0.1049356460571289,
+      "maximum_body_change_degrees": 0.5052032470703125
+    },
+    {
+      "sample": 98,
+      "episode": 54,
+      "reconstruction_max_error": 0.06051063537597656,
+      "maximum_body_change_degrees": 0.5011253356933594
+    },
+    {
+      "sample": 99,
+      "episode": 54,
+      "reconstruction_max_error": 0.02290058135986328,
+      "maximum_body_change_degrees": 0.5097198486328125
+    },
+    {
+      "sample": 100,
+      "episode": 54,
+      "reconstruction_max_error": 0.030159473419189453,
+      "maximum_body_change_degrees": 0.5238761901855469
+    },
+    {
+      "sample": 101,
+      "episode": 54,
+      "reconstruction_max_error": 0.1136159896850586,
+      "maximum_body_change_degrees": 0.512786865234375
+    },
+    {
+      "sample": 102,
+      "episode": 54,
+      "reconstruction_max_error": 0.056133270263671875,
+      "maximum_body_change_degrees": 0.5224189758300781
+    },
+    {
+      "sample": 103,
+      "episode": 54,
+      "reconstruction_max_error": 0.06444501876831055,
+      "maximum_body_change_degrees": 0.522003173828125
+    },
+    {
+      "sample": 104,
+      "episode": 54,
+      "reconstruction_max_error": 0.09906864166259766,
+      "maximum_body_change_degrees": 0.5163192749023438
+    },
+    {
+      "sample": 105,
+      "episode": 54,
+      "reconstruction_max_error": 0.02941608428955078,
+      "maximum_body_change_degrees": 0.5325393676757812
+    },
+    {
+      "sample": 106,
+      "episode": 54,
+      "reconstruction_max_error": 0.08130168914794922,
+      "maximum_body_change_degrees": 0.5487251281738281
+    },
+    {
+      "sample": 107,
+      "episode": 54,
+      "reconstruction_max_error": 0.08705282211303711,
+      "maximum_body_change_degrees": 0.5360298156738281
+    },
+    {
+      "sample": 108,
+      "episode": 54,
+      "reconstruction_max_error": 0.01631307601928711,
+      "maximum_body_change_degrees": 0.548614501953125
+    },
+    {
+      "sample": 109,
+      "episode": 54,
+      "reconstruction_max_error": 0.007124900817871094,
+      "maximum_body_change_degrees": 0.561981201171875
+    },
+    {
+      "sample": 110,
+      "episode": 54,
+      "reconstruction_max_error": 0.13087224960327148,
+      "maximum_body_change_degrees": 0.5421104431152344
+    },
+    {
+      "sample": 111,
+      "episode": 54,
+      "reconstruction_max_error": 0.01931619644165039,
+      "maximum_body_change_degrees": 0.550048828125
+    },
+    {
+      "sample": 112,
+      "episode": 54,
+      "reconstruction_max_error": 0.10385799407958984,
+      "maximum_body_change_degrees": 0.5818767547607422
+    },
+    {
+      "sample": 113,
+      "episode": 54,
+      "reconstruction_max_error": 0.027843475341796875,
+      "maximum_body_change_degrees": 0.5834884643554688
+    },
+    {
+      "sample": 114,
+      "episode": 54,
+      "reconstruction_max_error": 0.06458187103271484,
+      "maximum_body_change_degrees": 0.5697593688964844
+    },
+    {
+      "sample": 115,
+      "episode": 54,
+      "reconstruction_max_error": 0.020601272583007812,
+      "maximum_body_change_degrees": 0.5796642303466797
+    },
+    {
+      "sample": 116,
+      "episode": 54,
+      "reconstruction_max_error": 0.06949806213378906,
+      "maximum_body_change_degrees": 0.6087188720703125
+    },
+    {
+      "sample": 117,
+      "episode": 54,
+      "reconstruction_max_error": 0.09616470336914062,
+      "maximum_body_change_degrees": 0.6475925445556641
+    },
+    {
+      "sample": 118,
+      "episode": 54,
+      "reconstruction_max_error": 0.08209419250488281,
+      "maximum_body_change_degrees": 0.6236419677734375
+    },
+    {
+      "sample": 119,
+      "episode": 54,
+      "reconstruction_max_error": 0.1303730010986328,
+      "maximum_body_change_degrees": 0.6545257568359375
+    },
+    {
+      "sample": 120,
+      "episode": 54,
+      "reconstruction_max_error": 0.007999420166015625,
+      "maximum_body_change_degrees": 0.6744441986083984
+    },
+    {
+      "sample": 121,
+      "episode": 54,
+      "reconstruction_max_error": 0.021196365356445312,
+      "maximum_body_change_degrees": 0.6860342025756836
+    },
+    {
+      "sample": 122,
+      "episode": 54,
+      "reconstruction_max_error": 0.07922744750976562,
+      "maximum_body_change_degrees": 0.6640338897705078
+    },
+    {
+      "sample": 123,
+      "episode": 54,
+      "reconstruction_max_error": 0.02684783935546875,
+      "maximum_body_change_degrees": 0.7144107818603516
+    },
+    {
+      "sample": 124,
+      "episode": 55,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.92333984375
+    },
+    {
+      "sample": 125,
+      "episode": 55,
+      "reconstruction_max_error": 0.0348663330078125,
+      "maximum_body_change_degrees": 0.7874679565429688
+    },
+    {
+      "sample": 126,
+      "episode": 55,
+      "reconstruction_max_error": 0.05912017822265625,
+      "maximum_body_change_degrees": 0.5949172973632812
+    },
+    {
+      "sample": 127,
+      "episode": 55,
+      "reconstruction_max_error": 0.12967491149902344,
+      "maximum_body_change_degrees": 0.5005092620849609
+    },
+    {
+      "sample": 128,
+      "episode": 55,
+      "reconstruction_max_error": 0.08108007907867432,
+      "maximum_body_change_degrees": 0.5393791198730469
+    },
+    {
+      "sample": 129,
+      "episode": 55,
+      "reconstruction_max_error": 0.04986882209777832,
+      "maximum_body_change_degrees": 0.5512771606445312
+    },
+    {
+      "sample": 130,
+      "episode": 55,
+      "reconstruction_max_error": 0.0789947509765625,
+      "maximum_body_change_degrees": 0.5362167358398438
+    },
+    {
+      "sample": 131,
+      "episode": 55,
+      "reconstruction_max_error": 0.02394580841064453,
+      "maximum_body_change_degrees": 0.5652084350585938
+    },
+    {
+      "sample": 132,
+      "episode": 55,
+      "reconstruction_max_error": 0.0013396739959716797,
+      "maximum_body_change_degrees": 0.5855674743652344
+    },
+    {
+      "sample": 133,
+      "episode": 55,
+      "reconstruction_max_error": 0.08974838256835938,
+      "maximum_body_change_degrees": 0.5702896118164062
+    },
+    {
+      "sample": 134,
+      "episode": 55,
+      "reconstruction_max_error": 0.023153305053710938,
+      "maximum_body_change_degrees": 0.5860328674316406
+    },
+    {
+      "sample": 135,
+      "episode": 55,
+      "reconstruction_max_error": 0.007405281066894531,
+      "maximum_body_change_degrees": 0.6043128967285156
+    },
+    {
+      "sample": 136,
+      "episode": 55,
+      "reconstruction_max_error": 0.0169830322265625,
+      "maximum_body_change_degrees": 0.6315078735351562
+    },
+    {
+      "sample": 137,
+      "episode": 55,
+      "reconstruction_max_error": 0.030961990356445312,
+      "maximum_body_change_degrees": 0.6182003021240234
+    },
+    {
+      "sample": 138,
+      "episode": 55,
+      "reconstruction_max_error": 0.045004844665527344,
+      "maximum_body_change_degrees": 0.6233940124511719
+    },
+    {
+      "sample": 139,
+      "episode": 55,
+      "reconstruction_max_error": 0.010492324829101562,
+      "maximum_body_change_degrees": 0.6562910079956055
+    },
+    {
+      "sample": 140,
+      "episode": 55,
+      "reconstruction_max_error": 0.12239837646484375,
+      "maximum_body_change_degrees": 0.6508655548095703
+    },
+    {
+      "sample": 141,
+      "episode": 55,
+      "reconstruction_max_error": 0.0995635986328125,
+      "maximum_body_change_degrees": 0.7320222854614258
+    },
+    {
+      "sample": 142,
+      "episode": 55,
+      "reconstruction_max_error": 0.11282730102539062,
+      "maximum_body_change_degrees": 0.9394598007202148
+    },
+    {
+      "sample": 143,
+      "episode": 55,
+      "reconstruction_max_error": 0.06658172607421875,
+      "maximum_body_change_degrees": 1.2434215545654297
+    },
+    {
+      "sample": 144,
+      "episode": 55,
+      "reconstruction_max_error": 0.0448760986328125,
+      "maximum_body_change_degrees": 1.6196517944335938
+    },
+    {
+      "sample": 145,
+      "episode": 55,
+      "reconstruction_max_error": 0.11705589294433594,
+      "maximum_body_change_degrees": 1.2415332794189453
+    },
+    {
+      "sample": 146,
+      "episode": 55,
+      "reconstruction_max_error": 0.04437255859375,
+      "maximum_body_change_degrees": 1.3829803466796875
+    },
+    {
+      "sample": 147,
+      "episode": 55,
+      "reconstruction_max_error": 0.19171524047851562,
+      "maximum_body_change_degrees": 2.466888427734375
+    },
+    {
+      "sample": 148,
+      "episode": 55,
+      "reconstruction_max_error": 0.02613067626953125,
+      "maximum_body_change_degrees": 2.56866455078125
+    },
+    {
+      "sample": 149,
+      "episode": 55,
+      "reconstruction_max_error": 0.0142669677734375,
+      "maximum_body_change_degrees": 0.47933197021484375
+    },
+    {
+      "sample": 150,
+      "episode": 55,
+      "reconstruction_max_error": 0.003093719482421875,
+      "maximum_body_change_degrees": 0.4881324768066406
+    },
+    {
+      "sample": 151,
+      "episode": 55,
+      "reconstruction_max_error": 0.003662109375,
+      "maximum_body_change_degrees": 0.4910736083984375
+    },
+    {
+      "sample": 152,
+      "episode": 55,
+      "reconstruction_max_error": 0.5897598266601562,
+      "maximum_body_change_degrees": 1.8374252319335938
+    },
+    {
+      "sample": 153,
+      "episode": 55,
+      "reconstruction_max_error": 0.0106658935546875,
+      "maximum_body_change_degrees": 0.5108108520507812
+    },
+    {
+      "sample": 154,
+      "episode": 55,
+      "reconstruction_max_error": 0.0130615234375,
+      "maximum_body_change_degrees": 0.46880340576171875
+    },
+    {
+      "sample": 155,
+      "episode": 55,
+      "reconstruction_max_error": 0.3192329406738281,
+      "maximum_body_change_degrees": 0.49156951904296875
+    },
+    {
+      "sample": 156,
+      "episode": 56,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9350357055664062
+    },
+    {
+      "sample": 157,
+      "episode": 56,
+      "reconstruction_max_error": 0.04811859130859375,
+      "maximum_body_change_degrees": 0.8239593505859375
+    },
+    {
+      "sample": 158,
+      "episode": 56,
+      "reconstruction_max_error": 0.05247688293457031,
+      "maximum_body_change_degrees": 0.584197998046875
+    },
+    {
+      "sample": 159,
+      "episode": 56,
+      "reconstruction_max_error": 0.07822322845458984,
+      "maximum_body_change_degrees": 0.50616455078125
+    },
+    {
+      "sample": 160,
+      "episode": 56,
+      "reconstruction_max_error": 0.01658797264099121,
+      "maximum_body_change_degrees": 0.5236244201660156
+    },
+    {
+      "sample": 161,
+      "episode": 56,
+      "reconstruction_max_error": 0.15178394317626953,
+      "maximum_body_change_degrees": 0.5619525909423828
+    },
+    {
+      "sample": 162,
+      "episode": 56,
+      "reconstruction_max_error": 0.04925054311752319,
+      "maximum_body_change_degrees": 0.5142593383789062
+    },
+    {
+      "sample": 163,
+      "episode": 56,
+      "reconstruction_max_error": 0.030061960220336914,
+      "maximum_body_change_degrees": 0.529144287109375
+    },
+    {
+      "sample": 164,
+      "episode": 56,
+      "reconstruction_max_error": 0.12667274475097656,
+      "maximum_body_change_degrees": 0.5444450378417969
+    },
+    {
+      "sample": 165,
+      "episode": 56,
+      "reconstruction_max_error": 0.10426974296569824,
+      "maximum_body_change_degrees": 0.5391082763671875
+    },
+    {
+      "sample": 166,
+      "episode": 56,
+      "reconstruction_max_error": 0.018218040466308594,
+      "maximum_body_change_degrees": 0.5636215209960938
+    },
+    {
+      "sample": 167,
+      "episode": 56,
+      "reconstruction_max_error": 0.14903640747070312,
+      "maximum_body_change_degrees": 0.6225795745849609
+    },
+    {
+      "sample": 168,
+      "episode": 56,
+      "reconstruction_max_error": 0.2284536361694336,
+      "maximum_body_change_degrees": 0.6883649826049805
+    },
+    {
+      "sample": 169,
+      "episode": 56,
+      "reconstruction_max_error": 0.020128250122070312,
+      "maximum_body_change_degrees": 0.7283930778503418
+    },
+    {
+      "sample": 170,
+      "episode": 56,
+      "reconstruction_max_error": 0.05080413818359375,
+      "maximum_body_change_degrees": 0.6801090240478516
+    },
+    {
+      "sample": 171,
+      "episode": 56,
+      "reconstruction_max_error": 0.013225555419921875,
+      "maximum_body_change_degrees": 0.6937952041625977
+    },
+    {
+      "sample": 172,
+      "episode": 56,
+      "reconstruction_max_error": 0.31658172607421875,
+      "maximum_body_change_degrees": 0.8536701202392578
+    },
+    {
+      "sample": 173,
+      "episode": 56,
+      "reconstruction_max_error": 0.18013381958007812,
+      "maximum_body_change_degrees": 1.0672435760498047
+    },
+    {
+      "sample": 174,
+      "episode": 56,
+      "reconstruction_max_error": 0.07702255249023438,
+      "maximum_body_change_degrees": 1.024068832397461
+    },
+    {
+      "sample": 175,
+      "episode": 56,
+      "reconstruction_max_error": 0.06704521179199219,
+      "maximum_body_change_degrees": 1.100046157836914
+    },
+    {
+      "sample": 176,
+      "episode": 56,
+      "reconstruction_max_error": 0.0618743896484375,
+      "maximum_body_change_degrees": 2.0836029052734375
+    },
+    {
+      "sample": 177,
+      "episode": 56,
+      "reconstruction_max_error": 0.06907272338867188,
+      "maximum_body_change_degrees": 1.133871078491211
+    },
+    {
+      "sample": 178,
+      "episode": 56,
+      "reconstruction_max_error": 0.17975234985351562,
+      "maximum_body_change_degrees": 1.4569892883300781
+    },
+    {
+      "sample": 179,
+      "episode": 56,
+      "reconstruction_max_error": 0.11927032470703125,
+      "maximum_body_change_degrees": 3.689361572265625
+    },
+    {
+      "sample": 180,
+      "episode": 56,
+      "reconstruction_max_error": 0.0091552734375,
+      "maximum_body_change_degrees": 0.7149658203125
+    },
+    {
+      "sample": 181,
+      "episode": 56,
+      "reconstruction_max_error": 0.00876617431640625,
+      "maximum_body_change_degrees": 0.858184814453125
+    },
+    {
+      "sample": 182,
+      "episode": 56,
+      "reconstruction_max_error": 0.01456451416015625,
+      "maximum_body_change_degrees": 0.5815200805664062
+    },
+    {
+      "sample": 183,
+      "episode": 56,
+      "reconstruction_max_error": 0.0391693115234375,
+      "maximum_body_change_degrees": 0.583587646484375
+    },
+    {
+      "sample": 184,
+      "episode": 56,
+      "reconstruction_max_error": 0.0063934326171875,
+      "maximum_body_change_degrees": 6.794921875
+    },
+    {
+      "sample": 185,
+      "episode": 56,
+      "reconstruction_max_error": 0.0225982666015625,
+      "maximum_body_change_degrees": 5.040561676025391
+    },
+    {
+      "sample": 186,
+      "episode": 56,
+      "reconstruction_max_error": 0.023223876953125,
+      "maximum_body_change_degrees": 4.548408508300781
+    },
+    {
+      "sample": 187,
+      "episode": 56,
+      "reconstruction_max_error": 0.02205657958984375,
+      "maximum_body_change_degrees": 7.398746490478516
+    },
+    {
+      "sample": 188,
+      "episode": 57,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9207000732421875
+    },
+    {
+      "sample": 189,
+      "episode": 57,
+      "reconstruction_max_error": 0.02861785888671875,
+      "maximum_body_change_degrees": 0.7494735717773438
+    },
+    {
+      "sample": 190,
+      "episode": 57,
+      "reconstruction_max_error": 0.14858436584472656,
+      "maximum_body_change_degrees": 0.5783252716064453
+    },
+    {
+      "sample": 191,
+      "episode": 57,
+      "reconstruction_max_error": 0.10319995880126953,
+      "maximum_body_change_degrees": 0.5107765197753906
+    },
+    {
+      "sample": 192,
+      "episode": 57,
+      "reconstruction_max_error": 0.03241157531738281,
+      "maximum_body_change_degrees": 0.5381622314453125
+    },
+    {
+      "sample": 193,
+      "episode": 57,
+      "reconstruction_max_error": 0.08566474914550781,
+      "maximum_body_change_degrees": 0.5152740478515625
+    },
+    {
+      "sample": 194,
+      "episode": 57,
+      "reconstruction_max_error": 0.1008758544921875,
+      "maximum_body_change_degrees": 0.5091991424560547
+    },
+    {
+      "sample": 195,
+      "episode": 57,
+      "reconstruction_max_error": 0.20952224731445312,
+      "maximum_body_change_degrees": 0.5539264678955078
+    },
+    {
+      "sample": 196,
+      "episode": 57,
+      "reconstruction_max_error": 0.1027984619140625,
+      "maximum_body_change_degrees": 0.5734786987304688
+    },
+    {
+      "sample": 197,
+      "episode": 57,
+      "reconstruction_max_error": 0.11150741577148438,
+      "maximum_body_change_degrees": 0.5666961669921875
+    },
+    {
+      "sample": 198,
+      "episode": 57,
+      "reconstruction_max_error": 0.09503173828125,
+      "maximum_body_change_degrees": 0.49080657958984375
+    },
+    {
+      "sample": 199,
+      "episode": 57,
+      "reconstruction_max_error": 0.10457611083984375,
+      "maximum_body_change_degrees": 0.4825706481933594
+    },
+    {
+      "sample": 200,
+      "episode": 58,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9138031005859375
+    },
+    {
+      "sample": 201,
+      "episode": 58,
+      "reconstruction_max_error": 0.049938201904296875,
+      "maximum_body_change_degrees": 0.7211685180664062
+    },
+    {
+      "sample": 202,
+      "episode": 58,
+      "reconstruction_max_error": 0.24285507202148438,
+      "maximum_body_change_degrees": 0.5464534759521484
+    },
+    {
+      "sample": 203,
+      "episode": 58,
+      "reconstruction_max_error": 0.10520362854003906,
+      "maximum_body_change_degrees": 0.5280494689941406
+    },
+    {
+      "sample": 204,
+      "episode": 58,
+      "reconstruction_max_error": 0.03515625,
+      "maximum_body_change_degrees": 0.5771617889404297
+    },
+    {
+      "sample": 205,
+      "episode": 58,
+      "reconstruction_max_error": 1.033825397491455,
+      "maximum_body_change_degrees": 0.7191495895385742
+    },
+    {
+      "sample": 206,
+      "episode": 58,
+      "reconstruction_max_error": 0.09406852722167969,
+      "maximum_body_change_degrees": 0.684112548828125
+    },
+    {
+      "sample": 207,
+      "episode": 58,
+      "reconstruction_max_error": 0.11534404754638672,
+      "maximum_body_change_degrees": 0.651310920715332
+    },
+    {
+      "sample": 208,
+      "episode": 58,
+      "reconstruction_max_error": 0.03630399703979492,
+      "maximum_body_change_degrees": 0.6128425598144531
+    },
+    {
+      "sample": 209,
+      "episode": 58,
+      "reconstruction_max_error": 0.06272506713867188,
+      "maximum_body_change_degrees": 0.5756206512451172
+    },
+    {
+      "sample": 210,
+      "episode": 58,
+      "reconstruction_max_error": 0.12137222290039062,
+      "maximum_body_change_degrees": 0.5315742492675781
+    },
+    {
+      "sample": 211,
+      "episode": 58,
+      "reconstruction_max_error": 0.07292556762695312,
+      "maximum_body_change_degrees": 0.49444007873535156
+    },
+    {
+      "sample": 212,
+      "episode": 58,
+      "reconstruction_max_error": 0.0899658203125,
+      "maximum_body_change_degrees": 0.4922809600830078
+    },
+    {
+      "sample": 213,
+      "episode": 58,
+      "reconstruction_max_error": 0.07388687133789062,
+      "maximum_body_change_degrees": 0.4591789245605469
+    },
+    {
+      "sample": 214,
+      "episode": 58,
+      "reconstruction_max_error": 0.13213348388671875,
+      "maximum_body_change_degrees": 0.42668914794921875
+    },
+    {
+      "sample": 215,
+      "episode": 58,
+      "reconstruction_max_error": 0.20737457275390625,
+      "maximum_body_change_degrees": 0.45367431640625
+    },
+    {
+      "sample": 216,
+      "episode": 59,
+      "reconstruction_max_error": 7.62939453125e-06,
+      "maximum_body_change_degrees": 0.9558258056640625
+    },
+    {
+      "sample": 217,
+      "episode": 59,
+      "reconstruction_max_error": 0.04697418212890625,
+      "maximum_body_change_degrees": 0.7773094177246094
+    },
+    {
+      "sample": 218,
+      "episode": 59,
+      "reconstruction_max_error": 0.1921825408935547,
+      "maximum_body_change_degrees": 0.5532054901123047
+    },
+    {
+      "sample": 219,
+      "episode": 59,
+      "reconstruction_max_error": 0.1464255154132843,
+      "maximum_body_change_degrees": 0.5417251586914062
+    },
+    {
+      "sample": 220,
+      "episode": 59,
+      "reconstruction_max_error": 0.018789291381835938,
+      "maximum_body_change_degrees": 0.5819492340087891
+    },
+    {
+      "sample": 221,
+      "episode": 59,
+      "reconstruction_max_error": 0.03474491834640503,
+      "maximum_body_change_degrees": 0.6065692901611328
+    },
+    {
+      "sample": 222,
+      "episode": 59,
+      "reconstruction_max_error": 0.08314704895019531,
+      "maximum_body_change_degrees": 0.5824069976806641
+    },
+    {
+      "sample": 223,
+      "episode": 59,
+      "reconstruction_max_error": 0.1044158935546875,
+      "maximum_body_change_degrees": 0.5534038543701172
+    },
+    {
+      "sample": 224,
+      "episode": 59,
+      "reconstruction_max_error": 0.07352828979492188,
+      "maximum_body_change_degrees": 0.5136604309082031
+    },
+    {
+      "sample": 225,
+      "episode": 59,
+      "reconstruction_max_error": 0.08352851867675781,
+      "maximum_body_change_degrees": 0.5018463134765625
+    },
+    {
+      "sample": 226,
+      "episode": 59,
+      "reconstruction_max_error": 0.0635538101196289,
+      "maximum_body_change_degrees": 0.5092964172363281
+    },
+    {
+      "sample": 227,
+      "episode": 59,
+      "reconstruction_max_error": 0.18145751953125,
+      "maximum_body_change_degrees": 0.49556922912597656
+    },
+    {
+      "sample": 228,
+      "episode": 59,
+      "reconstruction_max_error": 0.0631103515625,
+      "maximum_body_change_degrees": 0.4589195251464844
+    },
+    {
+      "sample": 229,
+      "episode": 59,
+      "reconstruction_max_error": 0.052776336669921875,
+      "maximum_body_change_degrees": 0.4362983703613281
+    }
+  ]
+}

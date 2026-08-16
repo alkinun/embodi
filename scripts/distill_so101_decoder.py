@@ -14,6 +14,7 @@ import torch
 from embodi.checkpoints import load_inference_policy
 from embodi.processing import EmbodiProcessor
 from embodi.sim.environment import SO101PickPlaceEnv, TASK
+from embodi.token_decoder import PartTokenActionDecoder
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,6 +35,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--steps", type=int, default=2500)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--decoder-hidden-width", type=int)
+    parser.add_argument("--decoder-layers", type=int)
+    parser.add_argument("--native-loss-scales", type=float, nargs=6)
     parser.add_argument("--device", default="cuda")
     return parser.parse_args()
 
@@ -112,7 +116,13 @@ def collect(policy, processor, env: SO101PickPlaceEnv, args, device: torch.devic
     return data, outcomes
 
 
-def decoder_loss(policy, data: dict, indices: torch.Tensor, device: torch.device) -> torch.Tensor:
+def decoder_loss(
+    policy,
+    data: dict,
+    indices: torch.Tensor,
+    device: torch.device,
+    native_loss_scales: list[float] | None = None,
+) -> torch.Tensor:
     state = data["state"][indices].to(device)
     canonical = data["canonical"][indices].to(device)
     normalized = (canonical - policy.canonical_mean) / policy.canonical_action_scale
@@ -121,7 +131,19 @@ def decoder_loss(policy, data: dict, indices: torch.Tensor, device: torch.device
         "action": data["action"][indices].to(device),
         "action_group_mask": torch.ones(indices.numel(), 1, dtype=torch.bool, device=device),
     }
-    return policy._decoder_loss(normalized, batch, "mean")
+    if native_loss_scales is None:
+        return policy._decoder_loss(normalized, batch, "mean")
+    normalized_state = (state - policy.state_mean) / policy.state_std
+    decoded = policy.action_decoder(normalized, normalized_state, batch["action_group_mask"])
+    if policy.config.decoder_residual:
+        normalized_current = (state - policy.action_mean) / policy.action_std
+        decoded = decoded + normalized_current.unsqueeze(1)
+    predicted = decoded * policy.action_std + policy.action_mean
+    scales = predicted.new_tensor(native_loss_scales).view(1, 1, -1)
+    squared = ((predicted - batch["action"]) / scales).square()
+    weights = torch.ones_like(squared)
+    weights[:, 0] = policy.config.decoder_first_step_weight
+    return (squared * weights).sum() / weights.sum()
 
 
 def file_hash(path: Path) -> str:
@@ -136,6 +158,7 @@ def dataset_provenance(args: argparse.Namespace) -> dict:
     embodiment = args.embodiment_from or args.checkpoint
     return {
         "source_core_sha256": file_hash(args.checkpoint / "core.pt"),
+        "source_config_sha256": file_hash(args.checkpoint / "config.json"),
         "source_embodiment_sha256": file_hash(embodiment / "embodiment.pt"),
         "collection_seed": args.seed,
         "episodes": args.episodes,
@@ -154,6 +177,12 @@ def main() -> None:
         raise ValueError("validation episodes must leave at least one training episode")
     if not 0.0 <= args.teacher_action_probability <= 1.0:
         raise ValueError("teacher action probability must be in [0, 1]")
+    if args.decoder_hidden_width is not None and args.decoder_hidden_width <= 0:
+        raise ValueError("decoder hidden width must be positive")
+    if args.decoder_layers is not None and args.decoder_layers <= 0:
+        raise ValueError("decoder layers must be positive")
+    if args.native_loss_scales is not None and any(value <= 0 for value in args.native_loss_scales):
+        raise ValueError("native loss scales must be positive")
     os.environ.setdefault("MUJOCO_GL", "egl")
     training_seed = args.seed if args.training_seed is None else args.training_seed
     random.seed(args.seed)
@@ -165,11 +194,37 @@ def main() -> None:
         policy.load_embodiment_checkpoint(args.embodiment_from)
     if policy.config.format_version != 3:
         raise ValueError("decoder distillation requires a format-v3 checkpoint")
+    if args.decoder_hidden_width is not None or args.decoder_layers is not None:
+        policy.config.decoder_hidden_width = (
+            args.decoder_hidden_width
+            if args.decoder_hidden_width is not None
+            else policy.config.decoder_hidden_width
+        )
+        policy.config.decoder_layers = (
+            args.decoder_layers if args.decoder_layers is not None else policy.config.decoder_layers
+        )
+        policy.action_decoder = PartTokenActionDecoder(
+            policy.config.parts,
+            policy.config.action_group_part_names,
+            policy.config.action_group_state_dims,
+            policy.config.action_group_native_dims,
+            policy.config.inactive_action_modes,
+            hidden_width=policy.config.decoder_hidden_width,
+            layers=policy.config.decoder_layers,
+        ).to(device)
     provenance = dataset_provenance(args)
     if args.dataset_cache is not None and args.dataset_cache.is_file():
         cached = torch.load(args.dataset_cache, map_location="cpu", weights_only=True)
-        if cached.get("format_version") != 1 or cached.get("provenance") != provenance:
+        cached_provenance = cached.get("provenance")
+        legacy_provenance = dict(provenance)
+        legacy_provenance.pop("source_config_sha256")
+        if cached.get("format_version") != 1 or cached_provenance not in (
+            provenance,
+            legacy_provenance,
+        ):
             raise ValueError("distillation dataset cache provenance does not match this run")
+        if cached_provenance == legacy_provenance:
+            print("warning: decoder cache predates source config hashing")
         data = cached["data"]
         outcomes = cached["outcomes"]
         print(f"loaded dataset cache={args.dataset_cache} samples={len(data['episode'])}")
@@ -210,14 +265,16 @@ def main() -> None:
             torch.randint(train_indices.numel(), (args.batch_size,), generator=generator)
         ]
         optimizer.zero_grad(set_to_none=True)
-        loss = decoder_loss(policy, data, selected, device)
+        loss = decoder_loss(policy, data, selected, device, args.native_loss_scales)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(policy.action_decoder.parameters(), 10.0)
         optimizer.step()
         if step == 1 or step % 250 == 0 or step == args.steps:
             policy.eval()
             with torch.no_grad():
-                validation_loss = decoder_loss(policy, data, validation_indices, device).item()
+                validation_loss = decoder_loss(
+                    policy, data, validation_indices, device, args.native_loss_scales
+                ).item()
             policy.train()
             entry = {"step": step, "train_loss": loss.item(), "validation_loss": validation_loss}
             metrics.append(entry)
@@ -235,11 +292,17 @@ def main() -> None:
         "seed": args.seed,
         "training_seed": training_seed,
         "dataset_cache": str(args.dataset_cache) if args.dataset_cache else None,
+        "dataset_cache_sha256": file_hash(args.dataset_cache)
+        if args.dataset_cache and args.dataset_cache.is_file()
+        else None,
         "episodes": args.episodes,
         "validation_episodes": args.validation_episodes,
         "execution_horizon": args.execution_horizon,
         "rollout_policy": args.rollout_policy,
         "teacher_action_probability": args.teacher_action_probability,
+        "decoder_hidden_width": policy.config.decoder_hidden_width,
+        "decoder_layers": policy.config.decoder_layers,
+        "native_loss_scales": args.native_loss_scales,
         "samples": len(data["episode"]),
         "training_samples": train_indices.numel(),
         "validation_samples": validation_indices.numel(),
@@ -248,7 +311,13 @@ def main() -> None:
         "outcomes": outcomes,
         "metrics": metrics,
         "source_core_sha256": source_core_hash,
+        "source_config_sha256": file_hash(args.checkpoint / "config.json"),
+        "source_embodiment_sha256": file_hash(
+            (args.embodiment_from or args.checkpoint) / "embodiment.pt"
+        ),
         "output_core_sha256": output_core_hash,
+        "output_config_sha256": file_hash(final_dir / "config.json"),
+        "output_embodiment_sha256": file_hash(final_dir / "embodiment.pt"),
     }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     (args.output_dir / "distillation_report.json").write_text(json.dumps(report, indent=2) + "\n")
