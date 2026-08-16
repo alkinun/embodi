@@ -39,6 +39,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [030](030-decoder-capacity.md) | can a higher-capacity decoder clear the fixed offline fidelity gate? | no; capacity helps, but exposes a loss-weighting mismatch. |
 | [031](031-control-tolerance-decoder-loss.md) | can a control-tolerance loss meet the held-out native fidelity gate? | no; elbow and direction gates narrowly fail, so closed loop remains blocked. |
 | [032](032-ik-teacher-continuity.md) | is the ik teacher translation-sensitive near held-out commands? | rarely under axis-aligned probes; rotation and reconstruction remain open. |
+| [033](033-calibration-error-robustness.md) | what joint-offset accuracy does geometry-first control require? | sampled fixed offsets retain aggregate success through 5 degrees; physical gates remain required. |
 
 ## current decision
 
@@ -64,3 +65,7 @@ frequency under reconstructed axis-aligned translation probes but does not test
 rotation sensitivity or exact cached-state reconstruction. keep
 deterministic ik as the simulation reference and require a newly specified decoder to pass offline
 physical-unit gates before any further closed-loop or physical soak evaluation.
+the geometry-first path retains aggregate simulation success under the sampled
+fixed joint-zero offsets through 5 degrees, but experiment 033 is not a
+worst-case or physical safety guarantee. require measured calibration and the
+existing hardware acceptance gates before autonomous motion.
