@@ -151,33 +151,37 @@ def generate_dataset(
         use_videos=True,
         image_writer_threads=4,
     )
-    schema_path = root / "meta" / "embodi.json"
-    schema_path.write_text(
-        json.dumps(
-            {
-                "format_version": 3,
-                "parts": [
-                    {
-                        "name": "primary_effector",
-                        "kind": "pose_scalar",
-                        "channel_mask": [True] * 10,
-                    }
-                ],
-            },
-            indent=2,
-        )
-        + "\n"
-    )
-    env = SO101PickPlaceEnv(
-        seed=seed,
-        cube_x_range=cube_x_schedule[0],
-        cube_y_range=cube_y_range,
-    )
+    env = None
+    progress = None
+    episode_buffered = False
+    primary_failed = False
     successes = 0
     attempts = 0
     accepted_initial_cube_xy = []
-    progress = tqdm(total=episodes, desc="synthetic demonstrations", unit="episode")
     try:
+        schema_path = root / "meta" / "embodi.json"
+        schema_path.write_text(
+            json.dumps(
+                {
+                    "format_version": 3,
+                    "parts": [
+                        {
+                            "name": "primary_effector",
+                            "kind": "pose_scalar",
+                            "channel_mask": [True] * 10,
+                        }
+                    ],
+                },
+                indent=2,
+            )
+            + "\n"
+        )
+        env = SO101PickPlaceEnv(
+            seed=seed,
+            cube_x_range=cube_x_schedule[0],
+            cube_y_range=cube_y_range,
+        )
+        progress = tqdm(total=episodes, desc="synthetic demonstrations", unit="episode")
         while successes < episodes and attempts < max_attempts:
             attempts += 1
             env.cube_x_range = cube_x_schedule[successes]
@@ -196,6 +200,7 @@ def generate_dataset(
                 else:
                     top, wrist = env.render_cameras()
                     camera_frames = {"top": top, "wrist": wrist}
+                episode_buffered = True
                 dataset.add_frame(
                     {
                         **{
@@ -216,18 +221,44 @@ def generate_dataset(
                     break
             if expert.phase == Phase.DONE:
                 dataset.save_episode(parallel_encoding=False)
+                episode_buffered = False
                 accepted_initial_cube_xy.append(initial_cube_xy)
                 successes += 1
                 progress.update()
             else:
                 dataset.clear_episode_buffer()
+                episode_buffered = False
             progress.set_postfix(attempts=attempts, success_rate=f"{successes / attempts:.1%}")
         if successes < episodes:
             raise RuntimeError(f"generated {successes}/{episodes} episodes after {attempts} attempts")
+    except BaseException:
+        primary_failed = True
+        if episode_buffered:
+            try:
+                dataset.clear_episode_buffer()
+            except BaseException:
+                pass
+        raise
     finally:
-        progress.close()
-        env.close()
-        dataset.finalize()
+        cleanup_error = None
+        if progress is not None:
+            try:
+                progress.close()
+            except BaseException as error:
+                cleanup_error = error
+        if env is not None:
+            try:
+                env.close()
+            except BaseException as error:
+                if cleanup_error is None:
+                    cleanup_error = error
+        try:
+            dataset.finalize()
+        except BaseException as error:
+            if cleanup_error is None:
+                cleanup_error = error
+        if cleanup_error is not None and not primary_failed:
+            raise cleanup_error
     generation_report = {
         "seed": seed,
         "episodes": episodes,

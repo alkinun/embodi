@@ -29,8 +29,10 @@ def create_app(runtime: SimulationRuntime) -> FastAPI:
     @asynccontextmanager
     async def lifespan(_: FastAPI):
         runtime.start()
-        yield
-        runtime.stop()
+        try:
+            yield
+        finally:
+            runtime.stop()
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None)
 

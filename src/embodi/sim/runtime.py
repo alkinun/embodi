@@ -123,9 +123,6 @@ class SimulationRuntime:
         deadline = time.monotonic() + timeout
         self.sim_thread = threading.Thread(target=self._simulation_loop, name="embodi-sim", daemon=True)
         self.sim_thread.start()
-        if self.load_policy:
-            self.policy_thread = threading.Thread(target=self._policy_loop, name="embodi-policy", daemon=True)
-            self.policy_thread.start()
         if not self.ready_event.wait(max(0.0, deadline - time.monotonic())):
             self.stop()
             raise TimeoutError("simulation did not become ready")
@@ -133,12 +130,14 @@ class SimulationRuntime:
             self.stop()
             raise RuntimeError("simulation startup failed") from self.error
         if self.load_policy:
+            self.policy_thread = threading.Thread(target=self._policy_loop, name="embodi-policy", daemon=True)
+            self.policy_thread.start()
             if not self.policy_ready_event.wait(max(0.0, deadline - time.monotonic())):
                 self.stop()
                 raise TimeoutError("policy did not become ready")
             if self.error is not None:
                 self.stop()
-                raise RuntimeError("policy startup failed") from self.error
+                raise RuntimeError(str(self.error)) from self.error
 
     def stop(self) -> None:
         self.stop_event.set()
