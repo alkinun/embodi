@@ -27,10 +27,18 @@ class Observation:
     wrist: np.ndarray
 
 
+@dataclass(frozen=True)
+class _ResetRequest:
+    acknowledgement: threading.Event
+    cancelled: threading.Event
+
+
 class ChunkExecutor:
     def __init__(self, horizon: int, prefetch_steps: int = 2) -> None:
         if horizon <= 0:
             raise ValueError("execution horizon must be positive")
+        if prefetch_steps < 0:
+            raise ValueError("prefetch steps cannot be negative")
         self.horizon = horizon
         self.prefetch_steps = min(prefetch_steps, max(horizon - 1, 0))
         self.active: deque[np.ndarray] = deque()
@@ -46,6 +54,8 @@ class ChunkExecutor:
         self.request_pending = True
 
     def accept(self, chunk: np.ndarray) -> None:
+        if chunk.ndim != 2 or len(chunk) == 0 or not np.isfinite(chunk).all():
+            raise ValueError("action chunks must be finite, non-empty two-dimensional arrays")
         candidate = deque(chunk[: self.horizon])
         self.request_pending = False
         if self.active:
@@ -79,6 +89,14 @@ class SimulationRuntime:
         load_policy: bool = True,
         execution_horizon: int = 32,
     ) -> None:
+        if not np.isfinite(frequency) or frequency <= 0:
+            raise ValueError("simulation frequency must be finite and positive")
+        if not np.isfinite(max_episode_seconds) or max_episode_seconds <= 0:
+            raise ValueError("maximum episode duration must be finite and positive")
+        if not 1 <= jpeg_quality <= 95:
+            raise ValueError("JPEG quality must be between 1 and 95")
+        if execution_horizon <= 0:
+            raise ValueError("execution horizon must be positive")
         self.checkpoint = checkpoint
         self.device = torch.device(device if device != "cuda" or torch.cuda.is_available() else "cpu")
         self.frequency = frequency
@@ -89,7 +107,8 @@ class SimulationRuntime:
         self.execution_horizon = execution_horizon
         self.stop_event = threading.Event()
         self.ready_event = threading.Event()
-        self.reset_requests: Queue[threading.Event] = Queue(maxsize=4)
+        self.policy_ready_event = threading.Event()
+        self.reset_requests: Queue[_ResetRequest] = Queue(maxsize=4)
         self.observations: Queue[Observation] = Queue(maxsize=1)
         self.action_chunks: Queue[tuple[int, np.ndarray, float]] = Queue(maxsize=1)
         self.lock = threading.Lock()
@@ -101,15 +120,25 @@ class SimulationRuntime:
         self.policy_thread: threading.Thread | None = None
 
     def start(self, timeout: float = 180.0) -> None:
+        deadline = time.monotonic() + timeout
         self.sim_thread = threading.Thread(target=self._simulation_loop, name="embodi-sim", daemon=True)
         self.sim_thread.start()
         if self.load_policy:
             self.policy_thread = threading.Thread(target=self._policy_loop, name="embodi-policy", daemon=True)
             self.policy_thread.start()
-        if not self.ready_event.wait(timeout):
+        if not self.ready_event.wait(max(0.0, deadline - time.monotonic())):
+            self.stop()
             raise TimeoutError("simulation did not become ready")
         if self.error is not None:
+            self.stop()
             raise RuntimeError("simulation startup failed") from self.error
+        if self.load_policy:
+            if not self.policy_ready_event.wait(max(0.0, deadline - time.monotonic())):
+                self.stop()
+                raise TimeoutError("policy did not become ready")
+            if self.error is not None:
+                self.stop()
+                raise RuntimeError("policy startup failed") from self.error
 
     def stop(self) -> None:
         self.stop_event.set()
@@ -118,12 +147,13 @@ class SimulationRuntime:
                 thread.join(timeout=10)
 
     def request_reset(self, timeout: float = 5.0) -> dict[str, Any]:
-        acknowledgement = threading.Event()
+        request = _ResetRequest(threading.Event(), threading.Event())
         try:
-            self.reset_requests.put_nowait(acknowledgement)
+            self.reset_requests.put_nowait(request)
         except Full as error:
             raise RuntimeError("reset queue is full") from error
-        if not acknowledgement.wait(timeout):
+        if not request.acknowledgement.wait(timeout):
+            request.cancelled.set()
             raise TimeoutError("simulation reset timed out")
         return self.status()
 
@@ -189,9 +219,11 @@ class SimulationRuntime:
                 reset = False
                 while True:
                     try:
-                        acknowledgement = self.reset_requests.get_nowait()
+                        request = self.reset_requests.get_nowait()
                     except Empty:
                         break
+                    if request.cancelled.is_set():
+                        continue
                     env.reset()
                     generation += 1
                     executor.clear()
@@ -202,11 +234,12 @@ class SimulationRuntime:
                     if self.load_policy:
                         self._replace(self.observations, Observation(generation, env.state(), env.canonical_state(), top, wrist))
                         executor.mark_requested()
-                    acknowledgement.set()
+                    request.acknowledgement.set()
                     reset = True
                 try:
-                    result_generation, chunk, inference_ms = self.action_chunks.get_nowait()
+                    result_generation, chunk, result_inference_ms = self.action_chunks.get_nowait()
                     if result_generation == generation:
+                        inference_ms = result_inference_ms
                         executor.accept(chunk)
                 except Empty:
                     pass
@@ -231,10 +264,17 @@ class SimulationRuntime:
                 self.stop_event.wait(max(0.0, next_tick - time.monotonic()))
         except BaseException as error:
             self.error = error
+            self.stop_event.set()
             self.ready_event.set()
         finally:
             if env is not None:
-                env.close()
+                try:
+                    env.close()
+                except BaseException as error:
+                    if self.error is None:
+                        self.error = error
+                    self.stop_event.set()
+                    self.ready_event.set()
 
     def _policy_loop(self) -> None:
         try:
@@ -244,6 +284,7 @@ class SimulationRuntime:
                 revision=policy.config.backbone_revision,
                 do_rescale=policy.config.image_do_rescale,
             )
+            self.policy_ready_event.set()
             while not self.stop_event.is_set():
                 try:
                     observation = self.observations.get(timeout=0.2)
@@ -287,3 +328,4 @@ class SimulationRuntime:
         except BaseException as error:
             self.error = error
             self.stop_event.set()
+            self.policy_ready_event.set()
