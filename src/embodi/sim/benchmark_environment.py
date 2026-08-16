@@ -167,6 +167,17 @@ def _prepare_panda_xml(root: Path) -> str:
     return destination.name
 
 
+def prepare_benchmark_robot_asset(
+    morphology: MorphologySpec,
+    asset_dir: Path | None = None,
+) -> tuple[Path, str]:
+    root = morphology.ensure_assets(asset_dir)
+    if morphology.id == SO101.id:
+        SO101PickPlaceEnv._write_scaled_robot_xml(root)
+        return root, "so101_visual_1_2x.xml"
+    return root, _prepare_panda_xml(root)
+
+
 class BenchmarkManipulationEnv:
     def __init__(
         self,
@@ -187,12 +198,7 @@ class BenchmarkManipulationEnv:
         self.scenario = scenario or default_scenario(morphology, task)
         self.width = width
         self.height = height
-        root = self.morphology.ensure_assets(asset_dir)
-        if self.morphology.id == SO101.id:
-            SO101PickPlaceEnv._write_scaled_robot_xml(root)
-            robot_filename = "so101_visual_1_2x.xml"
-        else:
-            robot_filename = _prepare_panda_xml(root)
+        root, robot_filename = prepare_benchmark_robot_asset(self.morphology, asset_dir)
         scene_xml = _scene_xml(robot_filename, self.task, self.scenario, self.morphology)
         with tempfile.NamedTemporaryFile(
             mode="w",

@@ -108,7 +108,96 @@ def load_json_object(path: Path) -> dict:
     return value
 
 
-def validate_lerobot_training_dataset(metadata, config: EmbodiConfig, stage: str) -> dict:
+def validate_benchmark_dataset_lineage(metadata, expected_split: str) -> dict | None:
+    if expected_split not in {"train", "validation"}:
+        raise ValueError("benchmark dataset role must be train or validation")
+    root = Path(metadata.root)
+    benchmark_metadata_path = root / "meta" / "benchmark.json"
+    if not benchmark_metadata_path.is_file():
+        schema_path = root / "meta" / "embodi.json"
+        if schema_path.is_file() and load_json_object(schema_path).get("producer") == "embodi.sim.benchmark_data":
+            raise FileNotFoundError("benchmark dataset is missing meta/benchmark.json lineage")
+        outer_path = root.parent / "benchmark-dataset.json"
+        if outer_path.is_file() and any(
+            output.get("relative_root") == root.name
+            for output in load_json_object(outer_path).get("outputs", [])
+        ):
+            raise FileNotFoundError("benchmark dataset is missing meta/benchmark.json lineage")
+        return None
+    benchmark_metadata = load_json_object(benchmark_metadata_path)
+    if benchmark_metadata.get("split") != expected_split:
+        if expected_split == "train":
+            raise ValueError("benchmark validation demonstrations cannot be used as training data")
+        raise ValueError("benchmark dataset split does not match its requested role")
+    manifest_path = root.parent / "benchmark-dataset.json"
+    if not manifest_path.is_file():
+        raise FileNotFoundError("benchmark training dataset is missing its root generation manifest")
+    manifest = load_json_object(manifest_path)
+    outputs = [
+        output
+        for output in manifest.get("outputs", [])
+        if output.get("relative_root") == root.name
+    ]
+    contract = manifest.get("contract", {})
+    contract_outputs = [
+        output
+        for output in contract.get("outputs", [])
+        if output.get("relative_root") == root.name
+    ]
+    if len(outputs) != 1 or len(contract_outputs) != 1:
+        raise ValueError("benchmark training dataset morphology mapping is ambiguous")
+    output = outputs[0]
+    contract_output = contract_outputs[0]
+    episode_scenarios = benchmark_metadata.get("episode_scenarios", [])
+    progress = manifest.get("progress", {}).get(output.get("morphology"))
+    if (
+        manifest.get("format_version") != 1
+        or manifest.get("generator") != "embodi-sim-benchmark-dataset-v1"
+        or manifest.get("complete") is not True
+        or any(manifest.get("pending", {}).values())
+        or contract.get("split") != expected_split
+        or benchmark_metadata.get("benchmark_id") != contract.get("benchmark_id")
+        or benchmark_metadata.get("definition_sha256") != contract.get("definition_sha256")
+        or benchmark_metadata.get("scenario_manifest_sha256")
+        != contract.get("scenario_manifest_sha256")
+        or output.get("repo_id") != metadata.repo_id
+        or output.get("repo_id") != contract_output.get("repo_id")
+        or output.get("morphology") != benchmark_metadata.get("morphology")
+        or output.get("scenario_ids") != contract_output.get("scenario_ids")
+        or output.get("episodes") != metadata.total_episodes
+        or output.get("frames") != metadata.total_frames
+        or progress
+        != {
+            key: output.get(key)
+            for key in ("episodes", "frames", "commands", "clipped_commands")
+        }
+        or [item.get("episode_index") for item in episode_scenarios]
+        != list(range(metadata.total_episodes))
+        or [item.get("scenario_id") for item in episode_scenarios]
+        != output.get("scenario_ids")
+        or output.get("files") != dataset_inventory(root, excluded_paths=set())
+    ):
+        raise ValueError("benchmark training dataset integrity validation failed")
+    return {
+        "manifest_sha256": hashlib.sha256(manifest_path.read_bytes()).hexdigest(),
+        "definition_sha256": contract["definition_sha256"],
+        "scenario_manifest_sha256": contract["scenario_manifest_sha256"],
+        "split": expected_split,
+        "morphology": output["morphology"],
+    }
+
+
+def validate_benchmark_training_dataset(metadata) -> dict | None:
+    return validate_benchmark_dataset_lineage(metadata, "train")
+
+
+def validate_lerobot_training_dataset(
+    metadata,
+    config: EmbodiConfig,
+    stage: str,
+    *,
+    benchmark_split: str = "train",
+) -> dict:
     if not isinstance(metadata.fps, (int, float)) or not math.isfinite(metadata.fps) or metadata.fps <= 0:
         raise ValueError("dataset FPS must be finite and positive")
     if metadata.total_episodes <= 0 or metadata.total_frames <= 0:
@@ -214,6 +303,7 @@ def validate_lerobot_training_dataset(metadata, config: EmbodiConfig, stage: str
             != dataset_inventory(Path(metadata.root), excluded_paths={"meta/conversion.json"})
         ):
             raise ValueError("physical SO101 conversion integrity validation failed")
+    validate_benchmark_dataset_lineage(metadata, benchmark_split)
     return schema
 
 
@@ -411,6 +501,10 @@ def train(args: argparse.Namespace) -> None:
         raise ValueError(
             "the current Xperience decoder returns uint8 images and requires image_do_rescale=true"
         )
+    if (args.validation_dataset is None) != (args.validation_dataset_root is None):
+        raise ValueError("--validation-dataset and --validation-dataset-root must be provided together")
+    if args.dataset_format == "xperience" and args.validation_dataset is not None:
+        raise ValueError("explicit LeRobot validation datasets cannot be used with Xperience")
     if args.resume and any((args.init_from, args.init_core, args.init_embodiment)):
         raise ValueError("--resume cannot be combined with initialization checkpoints")
     configure_deterministic_training(args.deterministic)
@@ -649,9 +743,10 @@ def train(args: argparse.Namespace) -> None:
         metadata = LeRobotDatasetMetadata(args.dataset, root=args.dataset_root)
         features = metadata.features
         schema = validate_lerobot_training_dataset(metadata, config, args.stage)
+        benchmark_lineage = validate_benchmark_training_dataset(metadata)
         metadata_root = Path(metadata.root) / "meta"
         provenance_files = {}
-        for name in ("info.json", "stats.json", "embodi.json", "conversion.json"):
+        for name in ("info.json", "stats.json", "embodi.json", "benchmark.json", "conversion.json"):
             path = metadata_root / name
             if path.is_file():
                 provenance_files[name] = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -667,19 +762,91 @@ def train(args: argparse.Namespace) -> None:
             "schema": schema,
             "metadata_sha256": provenance_files,
         }
+        if benchmark_lineage is not None:
+            data_report["benchmark"] = benchmark_lineage
         offsets = [step / metadata.fps for step in range(config.chunk_size)]
         delta_timestamps = {"canonical_action": offsets, "canonical_state": offsets}
         if "action" in features:
             delta_timestamps["action"] = offsets
-        train_episodes, validation_episodes = split_episode_indices(
-            metadata.total_episodes, args.validation_episodes
-        )
-        train_dataset = LeRobotDataset(
-            args.dataset, root=args.dataset_root, episodes=train_episodes, delta_timestamps=delta_timestamps
-        )
-        validation_dataset = LeRobotDataset(
-            args.dataset, root=args.dataset_root, episodes=validation_episodes, delta_timestamps=delta_timestamps
-        )
+        if args.validation_dataset is not None:
+            if args.validation_dataset_root is not None and not (
+                args.validation_dataset_root / "meta" / "info.json"
+            ).is_file():
+                raise FileNotFoundError(
+                    f"no local validation dataset found at {args.validation_dataset_root}"
+                )
+            validation_metadata = LeRobotDatasetMetadata(
+                args.validation_dataset,
+                root=args.validation_dataset_root,
+            )
+            validation_schema = validate_lerobot_training_dataset(
+                validation_metadata,
+                config,
+                args.stage,
+                benchmark_split="validation",
+            )
+            validation_lineage = validate_benchmark_dataset_lineage(
+                validation_metadata,
+                "validation",
+            )
+            if validation_lineage is None:
+                raise ValueError("explicit validation dataset must have verified benchmark lineage")
+            if benchmark_lineage is None:
+                raise ValueError("explicit benchmark validation requires benchmark training data")
+            if (
+                validation_lineage["morphology"] != benchmark_lineage["morphology"]
+                or validation_metadata.fps != metadata.fps
+                or validation_schema != schema
+            ):
+                raise ValueError("benchmark train and validation dataset contracts do not match")
+            train_episodes = list(range(metadata.total_episodes))
+            validation_episodes = list(range(validation_metadata.total_episodes))
+            train_dataset = LeRobotDataset(
+                args.dataset,
+                root=args.dataset_root,
+                episodes=train_episodes,
+                delta_timestamps=delta_timestamps,
+            )
+            validation_dataset = LeRobotDataset(
+                args.validation_dataset,
+                root=args.validation_dataset_root,
+                episodes=validation_episodes,
+                delta_timestamps=delta_timestamps,
+            )
+            data_report["validation_dataset"] = {
+                "repo_id": args.validation_dataset,
+                "root": str(validation_metadata.root),
+                "episodes": validation_metadata.total_episodes,
+                "frames": validation_metadata.total_frames,
+                "benchmark": validation_lineage,
+                "metadata_sha256": {
+                    name: hashlib.sha256(
+                        (Path(validation_metadata.root) / "meta" / name).read_bytes()
+                    ).hexdigest()
+                    for name in ("info.json", "stats.json", "embodi.json", "benchmark.json")
+                },
+            }
+        else:
+            if benchmark_lineage is not None:
+                raise ValueError(
+                    "benchmark training requires the matching frozen validation dataset"
+                )
+            train_episodes, validation_episodes = split_episode_indices(
+                metadata.total_episodes,
+                args.validation_episodes,
+            )
+            train_dataset = LeRobotDataset(
+                args.dataset,
+                root=args.dataset_root,
+                episodes=train_episodes,
+                delta_timestamps=delta_timestamps,
+            )
+            validation_dataset = LeRobotDataset(
+                args.dataset,
+                root=args.dataset_root,
+                episodes=validation_episodes,
+                delta_timestamps=delta_timestamps,
+            )
         policy.set_normalization_stats(metadata.stats)
         train_units = len(train_episodes)
         validation_units = len(validation_episodes)
@@ -905,6 +1072,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset", default="embodi/sim-so101-pickplace")
     parser.add_argument("--dataset-format", choices=("lerobot", "xperience"), default="lerobot")
     parser.add_argument("--dataset-root", type=Path)
+    parser.add_argument("--validation-dataset")
+    parser.add_argument("--validation-dataset-root", type=Path)
     parser.add_argument("--config", type=Path)
     parser.add_argument("--cameras", nargs="+", choices=("top", "wrist"))
     parser.add_argument("--output-dir", default=f"outputs/{model_name}")

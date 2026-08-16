@@ -220,3 +220,42 @@ uv run embodi-preview \
 
 generated datasets use lerobot v3. `meta/embodi.json` stores part descriptors.
 the descriptors must match the model config.
+
+Frozen multi-task benchmark demonstrations are generated into separate native
+datasets for each morphology:
+
+```bash
+uv run --extra train --extra sim embodi-generate-benchmark \
+  benchmarks/sim-v1/definition.json \
+  benchmarks/sim-v1/manifests/train.json \
+  --root datasets/embodi-sim-v1-train \
+  --repo-prefix embodi/sim-v1-train
+
+uv run --extra train --extra sim embodi-generate-benchmark \
+  benchmarks/sim-v1/definition.json \
+  benchmarks/sim-v1/manifests/validation.json \
+  --root datasets/embodi-sim-v1-validation \
+  --repo-prefix embodi/sim-v1-validation
+```
+
+Use `--resume` only for an incomplete root created by the exact same command.
+Generation consumes frozen scenarios in order and aborts rather than replacing
+an oracle failure. `benchmark-dataset.json` binds source hashes, episode/scenario
+mapping, clipping diagnostics, assets, and every generated payload file.
+
+Train one embodiment at a time and provide its matching frozen validation root:
+
+```bash
+uv run embodi-train \
+  --dataset embodi/sim-v1-train-so101 \
+  --dataset-root datasets/embodi-sim-v1-train/so101 \
+  --validation-dataset embodi/sim-v1-validation-so101 \
+  --validation-dataset-root datasets/embodi-sim-v1-validation/so101 \
+  --config configs/so101-exp0-top.json \
+  --stage core \
+  --output-dir outputs/sim-v1-so101-core
+```
+
+Benchmark lineage validation rejects modified payloads, missing scenario mappings,
+validation data used as training data, and benchmark training without the frozen
+validation dataset.

@@ -15,6 +15,7 @@ from embodi.train import (
     resolve_training_seeds,
     should_save_checkpoint,
     split_episode_indices,
+    validate_benchmark_training_dataset,
     validate_lerobot_training_dataset,
     write_checkpoint_data_manifest,
     write_or_validate_data_manifest,
@@ -265,6 +266,32 @@ def test_lerobot_training_admission_validates_schema_cameras_and_stats(tmp_path)
     metadata.stats["action"]["std"][0] = float("nan")
     with pytest.raises(ValueError, match="finite and nonnegative"):
         validate_lerobot_training_dataset(metadata, config, "refine")
+
+
+def test_benchmark_validation_dataset_cannot_be_used_for_training(tmp_path) -> None:
+    (tmp_path / "meta").mkdir()
+    (tmp_path / "meta" / "benchmark.json").write_text(
+        json.dumps({"format_version": 1, "split": "validation"})
+    )
+    metadata = SimpleNamespace(root=tmp_path)
+    with pytest.raises(ValueError, match="validation demonstrations"):
+        validate_benchmark_training_dataset(metadata)
+
+
+def test_benchmark_schema_cannot_bypass_lineage_by_deleting_marker(tmp_path) -> None:
+    (tmp_path / "meta").mkdir()
+    (tmp_path / "meta" / "embodi.json").write_text(
+        json.dumps(
+            {
+                "format_version": 3,
+                "producer": "embodi.sim.benchmark_data",
+                "parts": [],
+            }
+        )
+    )
+    metadata = SimpleNamespace(root=tmp_path)
+    with pytest.raises(FileNotFoundError, match="meta/benchmark.json"):
+        validate_benchmark_training_dataset(metadata)
 
 
 def test_resume_preserves_and_validates_dataset_lineage(tmp_path) -> None:
