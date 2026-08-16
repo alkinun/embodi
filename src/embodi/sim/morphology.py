@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Callable
 
 import numpy as np
+from numpy.typing import NDArray
 
 from .assets import MENAGERIE_REVISION, ensure_panda_assets, ensure_so101_assets
 
@@ -37,7 +38,7 @@ class MorphologySpec:
     native_action_names: tuple[str, ...]
     arm_joint_names: tuple[str, ...]
     sim_joint_names: tuple[str, ...]
-    home_native_state: np.ndarray
+    home_native_state: NDArray[np.float32]
     base_frame: str
     tool_frame: str
     asset_loader: Callable[[Path | None], Path]

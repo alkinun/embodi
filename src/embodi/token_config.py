@@ -187,13 +187,13 @@ class EmbodiConfig:
     def part_count(self) -> int:
         return len(self.parts)
 
-    def core_signature(self) -> dict:
+    def core_signature(self) -> dict[str, object]:
         names = (
             "format_version", "backbone_name", "backbone_revision", "chunk_size", "expert_width",
             "expert_layers", "expert_heads", "expert_ff_multiplier", "dropout", "lora_rank",
             "lora_alpha", "lora_dropout", "freeze_vision_encoder",
         )
-        signature = {name: getattr(self, name) for name in names}
+        signature: dict[str, object] = {name: getattr(self, name) for name in names}
         signature.update(
             canonical_block_width=CANONICAL_BLOCK_WIDTH,
             part_kind_version=PART_KIND_VERSION,
@@ -201,7 +201,7 @@ class EmbodiConfig:
         )
         return signature
 
-    def embodiment_signature(self) -> dict:
+    def embodiment_signature(self) -> dict[str, object]:
         return {
             "format_version": self.format_version,
             "parts": [asdict(part) for part in self.parts],

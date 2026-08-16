@@ -4,15 +4,18 @@ from dataclasses import dataclass
 from typing import Mapping
 
 import numpy as np
+from numpy.typing import NDArray
 
 from .so101 import SO101_POSITION_NAMES
 
 
-def observation_vector(observation: Mapping[str, object]) -> np.ndarray:
+def observation_vector(observation: Mapping[str, object]) -> NDArray[np.float32]:
     missing = [name for name in SO101_POSITION_NAMES if name not in observation]
     if missing:
         raise ValueError(f"SO101 observation is missing positions: {missing}")
-    values = np.asarray([observation[name] for name in SO101_POSITION_NAMES], dtype=np.float32)
+    values: NDArray[np.float32] = np.asarray(
+        [observation[name] for name in SO101_POSITION_NAMES], dtype=np.float32
+    )
     if values.shape != (6,) or not np.isfinite(values).all():
         raise ValueError("SO101 observation positions must be finite scalars")
     if not 0.0 <= values[5] <= 100.0:
@@ -42,12 +45,14 @@ DEFAULT_SAFETY_LIMITS = SO101SafetyLimits()
 
 
 def limit_action(
-    requested: np.ndarray,
-    current: np.ndarray,
-    session_start: np.ndarray,
+    requested: NDArray[np.float32],
+    current: NDArray[np.float32],
+    session_start: NDArray[np.float32],
     limits: SO101SafetyLimits = DEFAULT_SAFETY_LIMITS,
-) -> tuple[np.ndarray, tuple[str, ...]]:
-    vectors = [np.asarray(value, dtype=np.float32) for value in (requested, current, session_start)]
+) -> tuple[NDArray[np.float32], tuple[str, ...]]:
+    vectors: list[NDArray[np.float32]] = [
+        np.asarray(value, dtype=np.float32) for value in (requested, current, session_start)
+    ]
     if any(value.shape != (6,) or not np.isfinite(value).all() for value in vectors):
         raise ValueError("requested, current, and session_start must be finite six-dimensional vectors")
     requested, current, session_start = vectors
