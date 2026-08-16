@@ -28,6 +28,6 @@ jobs:
         run: sudo apt-get update && sudo apt-get install --yes libegl1 libgl1-mesa-dri
       - run: uv sync --frozen --extra train --extra sim --extra test --extra hardware
       - run: uv run embodi-so101-preflight --canonical-calibration configs/so101-physical-calibration.example.json
-      - run: uv run pytest
+      - run: uv run pytest --cov
       - run: uv run embodi-train --smoke-test
       - run: uv run embodi-sim --smoke-test
