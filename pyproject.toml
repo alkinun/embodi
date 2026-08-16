@@ -30,6 +30,7 @@ hardware = [
 test = [
   "hypothesis>=6,<7",
   "mypy>=1.19,<1.20",
+  "pip-audit>=2.9,<3",
   "pytest>=8",
   "pytest-cov>=7,<8",
   "pytest-timeout>=2.4,<3",
