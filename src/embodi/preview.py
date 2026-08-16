@@ -29,6 +29,8 @@ def create_preview(
     episode_metadata = dataset.meta.episodes[episode]
     start = int(episode_metadata["dataset_from_index"])
     stop = int(episode_metadata["dataset_to_index"])
+    if stop <= start:
+        raise ValueError("episode contains no frames")
     indices = np.linspace(start, stop - 1, min(frame_count, stop - start), dtype=int)
     camera_keys = sorted(key for key in dataset.features if key.startswith("observation.images."))
     if not camera_keys:

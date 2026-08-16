@@ -394,6 +394,72 @@ def test_preflight_observes_with_torque_off_and_always_disconnects(tmp_path, mon
     assert raw_report["model_ranges"] is None
 
 
+@pytest.mark.parametrize(
+    ("failure", "error_type", "message"),
+    [
+        ("read", RuntimeError, "position read failed"),
+        ("calibration", ValueError, "does not match the LeRobot calibration file"),
+    ],
+)
+def test_preflight_failure_disconnects_torque_off(
+    tmp_path, monkeypatch, failure, error_type, message
+) -> None:
+    calibration_path = tmp_path / "lerobot-calibration.json"
+    calibration_path.write_text("{}\n")
+    calls = []
+
+    class Bus:
+        is_connected = False
+        is_calibrated = True
+
+        def connect(self):
+            calls.append("connect")
+            self.is_connected = True
+            if failure == "calibration":
+                calibration_path.write_text('{"changed": true}\n')
+
+        def disable_torque(self, **_kwargs):
+            calls.append("disable")
+
+        def sync_read(self, name, **_kwargs):
+            calls.append(name)
+            if name == "Present_Position":
+                raise RuntimeError("position read failed")
+            return {joint: 0 for joint in SO101_JOINT_NAMES}
+
+        def disconnect(self, **_kwargs):
+            calls.append("disconnect")
+            self.is_connected = False
+
+    class Robot:
+        def __init__(self, config):
+            self.config = config
+            self.bus = Bus()
+            self.calibration = {"present": True}
+            self.calibration_fpath = calibration_path
+
+    class Config:
+        num_read_retries = 2
+
+        def __init__(self, **_kwargs):
+            pass
+
+    import lerobot.robots.so_follower as follower_module
+
+    monkeypatch.setattr(follower_module, "SO101Follower", Robot)
+    monkeypatch.setattr(follower_module, "SO101FollowerConfig", Config)
+    calibration = SO101CanonicalCalibration(
+        source_calibration_sha256=hashlib.sha256(calibration_path.read_bytes()).hexdigest(),
+        physical_validation_complete=True,
+    )
+
+    with pytest.raises(error_type, match=message):
+        observe_hardware("port", "robot", 1, calibration)
+
+    assert calls[-3:] == ["disable", "Torque_Enable", "disconnect"]
+    assert "Present_Position" in calls if failure == "read" else "Present_Position" not in calls
+
+
 def test_recorder_main_stores_sent_action_and_restores_patches(tmp_path, monkeypatch) -> None:
     import embodi.record_so101 as recording
     from lerobot.scripts import lerobot_record
@@ -464,6 +530,92 @@ def test_recorder_main_stores_sent_action_and_restores_patches(tmp_path, monkeyp
     assert manifest["files"] == dataset_inventory(dataset_root)
 
 
+def test_recorder_failure_restores_patches_and_cleans_up_robot(tmp_path, monkeypatch) -> None:
+    import embodi.record_so101 as recording
+    from lerobot.datasets.lerobot_dataset import LeRobotDataset
+    from lerobot.scripts import lerobot_record
+    import lerobot.robots.so_follower.so_follower as follower_module
+
+    calibration_path = tmp_path / "lerobot-calibration.json"
+    calibration_path.write_text("{}\n")
+    calls = []
+
+    class Camera:
+        is_connected = True
+
+        def disconnect(self):
+            calls.append("camera")
+            self.is_connected = False
+
+    class Bus:
+        is_connected = True
+
+        def disable_torque(self, **_kwargs):
+            calls.append("disable")
+
+        def sync_read(self, *_args, **_kwargs):
+            calls.append("torque")
+            return {name: 0 for name in SO101_JOINT_NAMES}
+
+        def disconnect(self, **_kwargs):
+            calls.append("bus")
+            self.is_connected = False
+
+    class FakeSOFollower:
+        def __init__(self):
+            self.config = SimpleNamespace(
+                max_relative_target=5.0,
+                disable_torque_on_disconnect=True,
+            )
+            self.calibration = {"present": True}
+            self.calibration_fpath = calibration_path
+            self.cameras = {"top": Camera()}
+            self.bus = Bus()
+
+        def send_action(self, _action):
+            calls.append("send")
+            return {name: 5.0 for name in SO101_POSITION_NAMES}
+
+        def calibrate(self):
+            raise AssertionError("calibration must not run")
+
+    robot = FakeSOFollower()
+    requested = {name: 10.0 for name in SO101_POSITION_NAMES}
+
+    def fake_make_robot(_config):
+        return robot
+
+    def fake_record():
+        lerobot_record.make_robot_from_config(None).send_action(requested)
+        raise RuntimeError("recording failed")
+
+    original_send = FakeSOFollower.send_action
+    original_calibrate = FakeSOFollower.calibrate
+    original_resume = LeRobotDataset.__dict__["resume"]
+    monkeypatch.setattr(follower_module, "SOFollower", FakeSOFollower)
+    monkeypatch.setattr(lerobot_record, "make_robot_from_config", fake_make_robot)
+    monkeypatch.setattr(lerobot_record, "register_third_party_plugins", lambda: None)
+    monkeypatch.setattr(lerobot_record, "record", fake_record)
+    monkeypatch.setattr(
+        recording.sys,
+        "argv",
+        [
+            "embodi-record-so101",
+            "--robot.type=so101_follower",
+            "--dataset.push_to_hub=false",
+        ],
+    )
+
+    with pytest.raises(RuntimeError, match="recording failed"):
+        recording.main()
+
+    assert FakeSOFollower.send_action is original_send
+    assert FakeSOFollower.calibrate is original_calibrate
+    assert LeRobotDataset.__dict__["resume"] is original_resume
+    assert lerobot_record.make_robot_from_config is fake_make_robot
+    assert calls == ["send", "disable", "torque", "bus", "camera"]
+
+
 def test_conversion_rejects_nested_roots_and_no_clobber_publish(tmp_path) -> None:
     source = tmp_path / "source"
     source.mkdir()
@@ -485,6 +637,30 @@ def test_conversion_rejects_nested_roots_and_no_clobber_publish(tmp_path) -> Non
         rename_noreplace(temporary, destination)
     assert temporary.is_dir()
     assert (destination / "keep").read_text() == "existing"
+
+
+def test_conversion_lock_rejection_is_non_destructive(tmp_path) -> None:
+    source = tmp_path / "source"
+    output = tmp_path / "output"
+    lock = tmp_path / ".output.lock"
+    source.mkdir()
+    output.mkdir()
+    (output / "keep").write_text("existing")
+    lock.write_text("held")
+
+    with pytest.raises(FileExistsError, match="another conversion holds the output lock"):
+        convert_dataset(
+            source,
+            "embodi/source",
+            output,
+            "embodi/output",
+            tmp_path / "canonical.json",
+            tmp_path / "lerobot.json",
+        )
+
+    assert lock.read_text() == "held"
+    assert (output / "keep").read_text() == "existing"
+    assert not list(tmp_path.glob(".output.*.tmp"))
 
 
 def test_physical_lerobot_dataset_conversion(tmp_path) -> None:
