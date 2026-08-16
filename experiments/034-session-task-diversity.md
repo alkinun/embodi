@@ -39,12 +39,54 @@ no SO-101 transfer unless the human-only primary gate passes.
 
 ## result
 
-pre-registered; execution pending.
+the frozen splits had identical 50/25/25 motion composition and identical
+validation records. the one-session split contained one task, 6 prompts, 241.5
+union labeled seconds, and 185 non-overlapping windows. the five-session split
+contained five tasks, 47 prompts, 579.8 union labeled seconds, and 430
+non-overlapping windows.
+
+held-out flow loss at the three fixed checkpoints was:
+
+| condition | seed | step 500 | step 750 | step 1,000 |
+| --- | ---: | ---: | ---: | ---: |
+| one session | 81001 | 0.4682 | 0.4336 | 0.4401 |
+| five sessions | 81001 | 0.3870 | 0.3661 | 0.3579 |
+| one session | 81002 | 0.4619 | 0.4502 | 0.4522 |
+| five sessions | 81002 | 0.3897 | 0.3436 | 0.3438 |
+| one session | 81003 | 0.4811 | 0.4814 | 0.4779 |
+| five sessions | 81003 | 0.3811 | 0.3658 | 0.3531 |
+
+mean final loss fell from 0.4567 to 0.3516, a 23.0% reduction. paired final
+reductions were 18.7%, 24.0%, and 26.1%, so all three seeds improved. mean final
+loss on held-out sessions `7f655.../ep5` and `d659.../ep2` fell from 0.5314 to
+0.3997 and from 0.3858 to 0.3060 respectively. mean final training-evaluation
+loss was 0.0881 for one session and 0.0973 for five sessions.
+
+post-training evaluation exposed that historical frozen-backbone checkpoints
+stored the expert but omitted randomly initialized frozen local state/part
+projections. the fixed evaluator reconstructs those runs from their recorded
+model seeds and exactly matches training-time final metrics; future checkpoints
+now persist the local projections directly. full metrics, hashes, and per-session
+results are in `reports/xperience-exp34-summary.json` and the associated
+`reports/xperience-exp34-*-seed*.json` files.
 
 ## finding
 
-pending.
+the primary gate passes: breadth improves all three paired seeds and lowers mean
+final held-out loss by substantially more than 5%. the higher five-session
+training loss with lower held-out loss is consistent with reduced single-session
+overfitting. this experiment identifies the combined value of session, task,
+prompt, and independent temporal coverage; it does not isolate which component
+causes the gain.
 
 ## decision
 
-pending.
+- prioritize new sessions, tasks, scenes, participants, and objects over denser
+  windows from existing episodes.
+- use pooled global motion balancing and immutable task/session-disjoint splits
+  for future human pretraining.
+- permit a separately pre-registered SO-101 transfer comparison because the
+  human-only gate passed, but do not treat one-task robot transfer as unseen-task
+  generalization evidence.
+- build a broader task-disjoint human validation set and locked multi-task
+  simulation benchmark before making model-size or generalist claims.

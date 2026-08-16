@@ -103,6 +103,17 @@ class EmbodiPolicy(nn.Module):
         self._core_trainable = {
             name for name, parameter in self.core.named_parameters() if parameter.requires_grad
         }
+        frozen_adapter_prefixes = (
+            "backbone.state_projection.",
+            "backbone.state_kind_embedding.",
+            "backbone.state_name_projection.",
+            "backbone.state_channel_projection.",
+        )
+        self._core_checkpoint_keys = self._core_trainable | {
+            name
+            for name in self.core.state_dict()
+            if name.startswith(frozen_adapter_prefixes)
+        }
         self.stage: TrainingStage = "refine"
         self.reset()
 
@@ -500,12 +511,15 @@ class EmbodiPolicy(nn.Module):
         directory.mkdir(parents=True, exist_ok=True)
         self.config.save(directory / "config.json")
         core_state = {
-            name: value for name, value in self.core.state_dict().items() if name in self._core_trainable
+            name: value
+            for name, value in self.core.state_dict().items()
+            if name in self._core_checkpoint_keys
         }
         torch.save(
             {
                 "format_version": 3,
                 "signature": self.config.core_signature(),
+                "stores_frozen_adapter": True,
                 "core": core_state,
             },
             directory / "core.pt",
@@ -543,9 +557,12 @@ class EmbodiPolicy(nn.Module):
             for name, value in payload["core"].items()
             if name.split(".", 1)[0] in components
         }
-        expected = {
-            name for name in self._core_trainable if name.split(".", 1)[0] in components
-        }
+        expected_keys = (
+            self._core_checkpoint_keys
+            if payload.get("stores_frozen_adapter") is True
+            else self._core_trainable
+        )
+        expected = {name for name in expected_keys if name.split(".", 1)[0] in components}
         missing = expected - selected.keys()
         if missing:
             raise RuntimeError(f"token core checkpoint is missing trainable keys: {sorted(missing)}")

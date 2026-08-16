@@ -1,0 +1,21 @@
+{
+  "format_version": 1,
+  "checkpoint": "outputs/xperience-exp34-five-session-seed81003/final",
+  "config_sha256": "9014117c0daa50f8c47f114e5cb7e0361a9625e56e197fdc9a6289772407e1eb",
+  "core_sha256": "66e2679ffa1a0a0647592fb72765f5dc9e534b50c88ec678261b61dd01a1bcec",
+  "data_manifest_sha256": "895c52e8c21230670a5a0088454e7a7ee98b88c97a8f1c03b61fdc4032ff651c",
+  "model_seed": 81003,
+  "validation_seed": 81000,
+  "validation_clips": 1000,
+  "aggregate": {
+    "flow_loss": 0.3531367372684181
+  },
+  "by_episode": {
+    "7f655b32-37dd-4bda-b6dd-52b2dd96ac0e/ep5": {
+      "flow_loss": 0.4052429809952174
+    },
+    "d6599141-ea9f-4f2e-9aa6-7c7fac26ac81/ep2": {
+      "flow_loss": 0.3036713557967782
+    }
+  }
+}

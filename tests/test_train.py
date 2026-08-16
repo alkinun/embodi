@@ -143,6 +143,35 @@ class FakeProcessor:
         }
 
 
+class _FrozenAdapterBackbone(_SmokeBackbone):
+    def __init__(self, state_dim: int) -> None:
+        super().__init__(state_dim)
+        self.state_projection = torch.nn.Linear(state_dim, self.hidden_size)
+
+
+def test_checkpoint_persists_frozen_local_backbone_adapter(tmp_path) -> None:
+    config = EmbodiConfig(
+        chunk_size=8,
+        n_action_steps=4,
+        expert_width=32,
+        expert_layers=2,
+        expert_heads=4,
+        freeze_backbone=True,
+    )
+    policy = EmbodiPolicy(config, backbone=_FrozenAdapterBackbone(10))
+    policy.configure_stage("core")
+    policy.save_checkpoint(tmp_path)
+    payload = torch.load(tmp_path / "core.pt", map_location="cpu", weights_only=True)
+    assert payload["stores_frozen_adapter"] is True
+    assert "backbone.state_projection.weight" in payload["core"]
+    restored = EmbodiPolicy(config, backbone=_FrozenAdapterBackbone(10))
+    restored.load_core_checkpoint(tmp_path)
+    torch.testing.assert_close(
+        restored.backbone.state_projection.weight,
+        policy.backbone.state_projection.weight,
+    )
+
+
 def test_prepare_batch_reanchors_part_tokens_and_transports_descriptors() -> None:
     config = EmbodiConfig(chunk_size=8, n_action_steps=4, expert_width=32, expert_layers=2, expert_heads=4)
     actions = torch.zeros(2, 8, 1, 10)

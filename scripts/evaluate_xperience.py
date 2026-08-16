@@ -5,13 +5,14 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import random
 
 import torch
 from torch.utils.data import DataLoader
 
 from embodi.checkpoints import load_inference_policy
 from embodi.processing import EmbodiProcessor
-from embodi.train import evaluate, xperience_manifest_samples
+from embodi.train import prepare_model_batch, xperience_manifest_samples
 from embodi.xperience import CachedXperienceEpisode, MultiEpisodeCachedXperienceDataset
 
 
@@ -23,11 +24,52 @@ def file_hash(path: Path) -> str:
     return digest.hexdigest()
 
 
+@torch.no_grad()
 def evaluate_records(policy, processor, episodes, path_indices, records, args, device):
     samples = xperience_manifest_samples(records, path_indices)
     dataset = MultiEpisodeCachedXperienceDataset(episodes, samples)
     loader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=args.workers)
-    return evaluate(policy, loader, processor, device, len(loader), args.validation_seed)
+    generator = torch.Generator(device=device).manual_seed(args.validation_seed)
+    aggregate_totals = {}
+    episode_totals = {}
+    episode_counts = {}
+    for record, raw_batch in zip(records, loader, strict=True):
+        model_batch = prepare_model_batch(
+            raw_batch,
+            processor,
+            device,
+            policy.config.camera_names,
+            policy.config,
+        )
+        canonical_actions = policy._canonical_action_targets(model_batch)
+        noise = torch.randn(
+            canonical_actions.shape,
+            device=device,
+            dtype=canonical_actions.dtype,
+            generator=generator,
+        )
+        time = torch.rand(
+            canonical_actions.shape[0],
+            device=device,
+            dtype=torch.float32,
+            generator=generator,
+        )
+        _, metrics = policy(model_batch, noise=noise, time=time)
+        episode_path = record["episode_path"]
+        totals = episode_totals.setdefault(episode_path, {})
+        episode_counts[episode_path] = episode_counts.get(episode_path, 0) + 1
+        for name, value in metrics.items():
+            aggregate_totals[name] = aggregate_totals.get(name, 0.0) + value
+            totals[name] = totals.get(name, 0.0) + value
+    count = len(records)
+    aggregate = {name: value / count for name, value in aggregate_totals.items()}
+    by_episode = {
+        episode_path: {
+            name: value / episode_counts[episode_path] for name, value in totals.items()
+        }
+        for episode_path, totals in sorted(episode_totals.items())
+    }
+    return aggregate, by_episode
 
 
 def main() -> None:
@@ -66,6 +108,15 @@ def main() -> None:
     if represented_paths - validation_paths:
         raise ValueError("validation records violate the episode partition")
 
+    run_manifest_path = args.checkpoint.parent / "run_manifest.json"
+    if not run_manifest_path.is_file():
+        raise FileNotFoundError("checkpoint parent is missing run_manifest.json")
+    run_manifest = json.loads(run_manifest_path.read_text())
+    model_seed = int(run_manifest["resolved_seeds"]["model"])
+    random.seed(model_seed)
+    torch.manual_seed(model_seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(model_seed)
     device = torch.device(args.device if args.device != "cuda" or torch.cuda.is_available() else "cpu")
     policy = load_inference_policy(args.checkpoint, device)
     policy.configure_stage("core")
@@ -74,21 +125,16 @@ def main() -> None:
         revision=policy.config.backbone_revision,
         do_rescale=policy.config.image_do_rescale,
     )
-    aggregate = evaluate_records(
+    aggregate, by_episode = evaluate_records(
         policy, processor, episodes, path_indices, validation, args, device
     )
-    by_episode = {}
-    for episode_path in sorted(represented_paths):
-        records = [record for record in validation if record["episode_path"] == episode_path]
-        by_episode[episode_path] = evaluate_records(
-            policy, processor, episodes, path_indices, records, args, device
-        )
     report = {
         "format_version": 1,
         "checkpoint": str(args.checkpoint),
         "config_sha256": file_hash(args.checkpoint / "config.json"),
         "core_sha256": file_hash(args.checkpoint / "core.pt"),
         "data_manifest_sha256": file_hash(manifest_path),
+        "model_seed": model_seed,
         "validation_seed": args.validation_seed,
         "validation_clips": len(validation),
         "aggregate": aggregate,

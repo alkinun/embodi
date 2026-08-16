@@ -40,7 +40,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [031](031-control-tolerance-decoder-loss.md) | can a control-tolerance loss meet the held-out native fidelity gate? | no; elbow and direction gates narrowly fail, so closed loop remains blocked. |
 | [032](032-ik-teacher-continuity.md) | is the ik teacher translation-sensitive near held-out commands? | rarely under axis-aligned probes; rotation and reconstruction remain open. |
 | [033](033-calibration-error-robustness.md) | what joint-offset accuracy does geometry-first control require? | sampled fixed offsets retain aggregate success through 5 degrees; physical gates remain required. |
-| [034](034-session-task-diversity.md) | does session/task breadth help at fixed human pretraining volume? | pre-registered; execution pending. |
+| [034](034-session-task-diversity.md) | does session/task breadth help at fixed human pretraining volume? | yes; five sessions reduce three-seed held-out loss by 23.0%. |
 
 ## current decision
 
@@ -57,7 +57,9 @@ one decoder for each robot
 for robot coverage, retain deterministic center-weighted seed 3993 at step 1,100
 as the general policy and additive-near step 1,000 as a far-range specialist.
 for human pretraining, add more sessions and tasks rather than more windows from
-the same five episodes.
+the same episodes. experiment 034 confirms this direction across three paired
+seeds, while leaving semantic diversity and independent temporal coverage
+confounded.
 
 the selected general core is not approved for learned native-action execution:
 experiments 027--031 show stable optimization but severe closed-loop loss with
