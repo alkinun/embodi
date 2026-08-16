@@ -7,11 +7,15 @@ on:
 jobs:
   pytest:
     runs-on: ubuntu-latest
+    env:
+      MUJOCO_GL: egl
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
+      - name: Install headless rendering libraries
+        run: sudo apt-get update && sudo apt-get install --yes libegl1 libgl1-mesa-dri
       - run: uv sync --frozen --extra train --extra sim --extra test --extra hardware
       - run: uv run embodi-so101-preflight --canonical-calibration configs/so101-physical-calibration.example.json
       - run: uv run pytest
