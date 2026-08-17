@@ -51,11 +51,18 @@ closed-loop control for the joint canonical core or matched specialists?
   the schedule, lock identity, runtime signature, and nonoverlapping UTC run
   intervals in each report.
 - before either arm acts, hash the exact initial top image, canonical state,
-  and instruction. require exact initial-input hash agreement within each pair.
+  and instruction. require exact canonical-state and instruction hash agreement.
+  allow renderer variation only when the uint8 image maximum absolute difference
+  is at most 1 and the fraction of differing image channel values is at most
+  `1e-4`; retain exact component hashes and report exact image-hash agreement
+  descriptively. report image maximum difference, differing count and fraction,
+  exact state and instruction checks, and overall initial-input equivalence.
   compare the first unprojected policy chunks and require maximum absolute
-  difference at most `1e-5`; report their exact hashes and difference. any
-  mismatch invalidates treatment delivery and is an infrastructure error, not
-  a task failure. do not require later trajectories or outcomes to reproduce.
+  difference at most `1e-5`; report their exact hashes and difference. this
+  direct policy-output guard remains an infrastructure invariant. a state,
+  instruction, image-tolerance, or chunk mismatch invalidates treatment delivery
+  and is an infrastructure error, not a task failure. do not require later
+  trajectories or outcomes to reproduce.
 - baseline executes the policy command after the existing deterministic
   20-iteration IK decode. projection preserves normalized gripper intent and
   tests translation/rotation scales on the fixed descending grid
@@ -101,6 +108,29 @@ closed-loop control for the joint canonical core or matched specialists?
   geometry delivery gate passes. report both condition hypotheses without a
   multiplicity-adjusted inferential claim. five points is the existing benchmark
   materiality margin, not a model-admission or advancement gate.
+
+## pre-completion protocol correction
+
+- merged evaluator commit `d54589e` at evaluator SHA-256
+  `908bee414c8e4a70906dcff9f676e83a62a4643d2cbee0eecbb56c46b9c37757`
+  completed the first `joint/seed36001/so101` shard, then failed closed in the
+  `joint/seed36001/panda` shard at
+  `development-panda-push_to_zone-0010` because the exact initial-input hashes
+  differed. the preserved completed SO-101 report SHA-256 is
+  `9a3c50ee7cd624b1a4fd2c8b662c8c108a79bd5c884d4827c697d0b4f1010ff8`;
+  the preserved partial Panda report SHA-256 is
+  `128f04699e1aad2169a1383f44f64a97807f0ac44c6d4baaa0d67553d2b19850`.
+  no full aggregate existed and no condition hypothesis was evaluated.
+- a direct five-pair reproduction produced one sporadic mismatch. canonical
+  state and instruction hashes matched exactly, while 3 of 921,600 uint8 image
+  channel values differed by exactly 1. exact renderer-byte equality is therefore
+  not a valid infrastructure invariant. the bounded image criterion above is a
+  pre-completion operational correction; the first unprojected chunk tolerance
+  remains unchanged as the direct policy-output invariant.
+- the attempt reports from evaluator `d54589e` are superseded and must not be
+  resumed or aggregated. discard any staged reports under the old protocol
+  contract and rerun all 12 registered shards from the beginning. no compatibility
+  path or report migration is permitted.
 
 ## result
 
