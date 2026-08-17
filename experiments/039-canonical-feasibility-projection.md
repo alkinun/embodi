@@ -57,9 +57,17 @@ closed-loop control for the joint canonical core or matched specialists?
   `1e-4`; retain exact component hashes and report exact image-hash agreement
   descriptively. report image maximum difference, differing count and fraction,
   exact state and instruction checks, and overall initial-input equivalence.
-  compare the first unprojected policy chunks and require maximum absolute
-  difference at most `1e-5`; report their exact hashes and difference. this
-  direct policy-output guard remains an infrastructure invariant. a state,
+  use the actual snapshot from the first arm in the registered counterbalanced
+  arm order as one shared pair anchor for both initial policy inferences. reset
+  policy state and predict separately for each arm from that identical snapshot,
+  in arm order. report the source arm, exact anchor hashes, and require those
+  hashes to equal the source arm's actual snapshot. compare the two first
+  unprojected policy chunks and require maximum absolute difference at most
+  `1e-5`; report their exact hashes and difference. this direct same-input GPU
+  repeatability guard remains an infrastructure invariant and is not loosened.
+  shared first inference isolates the intervention by giving both arms identical
+  initial policy intent while counterbalancing the renderer-source arm. later
+  replans use each live arm observation after trajectories diverge. a state,
   instruction, image-tolerance, or chunk mismatch invalidates treatment delivery
   and is an infrastructure error, not a task failure. do not require later
   trajectories or outcomes to reproduce.
@@ -109,7 +117,7 @@ closed-loop control for the joint canonical core or matched specialists?
   multiplicity-adjusted inferential claim. five points is the existing benchmark
   materiality margin, not a model-admission or advancement gate.
 
-## pre-completion protocol correction
+## pre-completion protocol corrections
 
 - merged evaluator commit `d54589e` at evaluator SHA-256
   `908bee414c8e4a70906dcff9f676e83a62a4643d2cbee0eecbb56c46b9c37757`
@@ -131,6 +139,27 @@ closed-loop control for the joint canonical core or matched specialists?
   resumed or aggregated. discard any staged reports under the old protocol
   contract and rerun all 12 registered shards from the beginning. no compatibility
   path or report migration is permitted.
+- the all-shard restart under merged evaluator commit `0e76ce6`, evaluator
+  SHA-256 `da4ad4f525eca3a3188e126f85f76e5121e9894833c1369defb7d7263991160a`,
+  completed `joint/seed36001/so101` and then failed closed in
+  `joint/seed36001/panda` at `development-panda-push_to_zone-0008` on the
+  unchanged first-chunk `1e-5` gate. the completed SO-101 report SHA-256 is
+  `dbed3df5e6ef1b803ec83656af5c07f46f85505695e283470e6b051199343543`;
+  the partial Panda report SHA-256 is
+  `1598f5ecd83e706a230cec4359b9653dbfba32ed229c125b74649284cfa762e8`.
+  no aggregate existed.
+- characterization on that exact Panda scenario and model found bitwise-equal
+  first chunks whenever the fresh images matched bytewise. when 3 white pixel
+  channels differed as 254 versus 255, all 320 chunk outputs differed, with
+  maximum absolute difference `0.00101360865` and mean absolute difference
+  `0.0005492731`. twenty repeated GPU predictions from one identical frozen
+  snapshot were bitwise equal. this identifies renderer input variation, not GPU
+  repeatability, as the source of the failed action comparison; the first-chunk
+  tolerance therefore remains unchanged.
+- the `0e76ce6` reports are also superseded and must not be resumed or aggregated.
+  the shared counterbalanced pair-anchor rule above changes the frozen report
+  contract, so discard all staged reports and restart all 12 registered shards
+  from the beginning without migration or compatibility handling.
 
 ## result
 

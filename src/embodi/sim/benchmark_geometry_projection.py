@@ -116,6 +116,13 @@ PROJECTION_PROTOCOL = {
         "image_max_differing_channel_value_fraction": INITIAL_IMAGE_MAX_DIFFERING_FRACTION,
         "exact_image_sha256_is_descriptive": True,
     },
+    "initial_policy_input": {
+        "source_arm": "first arm in registered counterbalanced arm order",
+        "shared_snapshot_for_both_arm_predictions": True,
+        "separate_policy_reset_and_prediction_per_arm": True,
+        "prediction_order": "registered counterbalanced arm order",
+        "later_replans_use_live_arm_observations": True,
+    },
     "first_chunk_max_abs_tolerance": FIRST_CHUNK_MAX_ABS,
     "pairing": "fresh adjacent counterbalanced baseline/projection episodes",
 }
@@ -863,14 +870,17 @@ def run_projection_pair(
 ) -> dict[str, Any]:
     snapshots = {}
     chunks = {}
-    for arm in ARMS:
-        policy.reset()
+    for arm in order:
         snapshots[arm] = capture_policy_input(environments[arm])
-        chunks[arm] = predict_from_input(snapshots[arm], policy, processor, device)
     input_comparison = compare_initial_inputs(snapshots["baseline"], snapshots["projection"])
-    chunk_difference = float(np.max(np.abs(chunks["baseline"] - chunks["projection"])))
     if not input_comparison["initial_input_equivalent"]:
         raise TreatmentDeliveryError("paired initial policy inputs are not equivalent")
+    source_arm = order[0]
+    anchor = snapshots[source_arm]
+    for arm in order:
+        policy.reset()
+        chunks[arm] = predict_from_input(anchor, policy, processor, device)
+    chunk_difference = float(np.max(np.abs(chunks["baseline"] - chunks["projection"])))
     if not np.isfinite(chunk_difference) or chunk_difference > FIRST_CHUNK_MAX_ABS:
         raise TreatmentDeliveryError("paired first policy chunks exceed the registered tolerance")
     outcomes = {}
@@ -887,6 +897,8 @@ def run_projection_pair(
     return {
         "arm_order": list(order),
         "initial_inputs": {arm: snapshots[arm].hashes for arm in ARMS},
+        "initial_policy_input_source_arm": source_arm,
+        "initial_policy_input_anchor_hashes": anchor.hashes,
         **input_comparison,
         "first_chunks": {arm: _array_sha256(chunks[arm]) for arm in ARMS},
         "first_chunk_max_abs_difference": chunk_difference,
@@ -1071,6 +1083,7 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
     identity = report.get("identity", {})
     for ordinal, outcome in enumerate(report.get("outcomes", [])):
         task = outcome.get("task")
+        reported_order = outcome.get("arm_order")
         initial_inputs = outcome.get("initial_inputs", {})
         first_chunks = outcome.get("first_chunks", {})
         valid_initial_hashes = isinstance(initial_inputs, dict) and set(initial_inputs) == set(
@@ -1107,6 +1120,48 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
                 ).hexdigest():
                     valid_initial_hashes = False
                     break
+        source_arm = outcome.get("initial_policy_input_source_arm")
+        anchor_hashes = outcome.get("initial_policy_input_anchor_hashes")
+        source_order_valid = (
+            isinstance(reported_order, list)
+            and len(reported_order) == len(ARMS)
+            and source_arm == reported_order[0]
+        )
+        valid_anchor_hashes = (
+            source_arm in ARMS
+            and isinstance(anchor_hashes, dict)
+            and set(anchor_hashes)
+            == {
+                "top_image_sha256",
+                "canonical_state_sha256",
+                "instruction_sha256",
+                "combined_sha256",
+            }
+            and all(
+                isinstance(digest, str)
+                and len(digest) == 64
+                and set(digest) <= set("0123456789abcdef")
+                for digest in anchor_hashes.values()
+            )
+        )
+        if valid_anchor_hashes:
+            anchor_components = {
+                name: anchor_hashes[name]
+                for name in (
+                    "top_image_sha256",
+                    "canonical_state_sha256",
+                    "instruction_sha256",
+                )
+            }
+            valid_anchor_hashes = (
+                anchor_hashes["combined_sha256"]
+                == hashlib.sha256(
+                    json.dumps(
+                        anchor_components, sort_keys=True, separators=(",", ":")
+                    ).encode()
+                ).hexdigest()
+                and anchor_hashes == initial_inputs.get(source_arm)
+            )
         valid_chunk_hashes = isinstance(first_chunks, dict) and set(first_chunks) == set(ARMS) and all(
             isinstance(digest, str)
             and len(digest) == 64
@@ -1157,7 +1212,7 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
             not isinstance(outcome.get("scenario_id"), str)
             or task not in TASKS
             or outcome.get("morphology") != identity.get("morphology")
-            or outcome.get("arm_order")
+            or reported_order
             != list(
                 pair_arm_order(
                     ordinal,
@@ -1167,6 +1222,8 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
                 )
             )
             or not valid_initial_hashes
+            or not source_order_valid
+            or not valid_anchor_hashes
             or not valid_input_comparison
             or not valid_chunk_hashes
             or not isinstance(chunk_difference, (int, float))
