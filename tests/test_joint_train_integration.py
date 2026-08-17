@@ -5,6 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 import torch
+from torch import nn
 from torch.utils.data import SequentialSampler, Subset
 
 from embodi import EmbodiConfig
@@ -14,6 +15,7 @@ from embodi.joint_train import (
     TASKS,
     evaluate_cells,
     load_benchmark_metadata,
+    make_policies,
     make_train_loaders,
     make_validation_loaders,
     prepare_validation_manifest,
@@ -385,3 +387,38 @@ def test_runtime_provenance_records_clean_and_dirty_worktrees(
     assert dirty["git_dirty"] is True
     with pytest.raises(RuntimeError, match="clean git worktree"):
         runtime_provenance(require_clean=True)
+
+
+def test_make_policies_shares_core_and_freezes_embodiment_modules(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class FakePolicy:
+        instances: list["FakePolicy"] = []
+
+        def __init__(self, config: EmbodiConfig, core=None) -> None:
+            self.config = config
+            self.core = core if core is not None else object()
+            self.state_adapter = nn.Linear(1, 1)
+            self.action_decoder = nn.Linear(1, 1)
+            self.stage = None
+            self.instances.append(self)
+
+        def to(self, device):
+            del device
+            return self
+
+        def configure_stage(self, stage: str) -> None:
+            self.stage = stage
+
+    monkeypatch.setattr(joint_train, "EmbodiPolicy", FakePolicy)
+
+    policies = make_policies(_configs(), torch.device("cpu"))
+
+    assert policies["so101"].core is policies["panda"].core
+    assert all(policy.stage == "core" for policy in policies.values())
+    assert all(
+        not parameter.requires_grad
+        for policy in policies.values()
+        for module in (policy.state_adapter, policy.action_decoder)
+        for parameter in module.parameters()
+    )
