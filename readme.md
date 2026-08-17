@@ -1,4 +1,4 @@
-# embodi
+<img width="4544" height="2048" alt="embodi_banner" src="https://github.com/user-attachments/assets/4e08e340-9917-4882-9ae6-2440adbf29c4" />
 
 embodi is a vision-language-action model for cross-embodiment motion learning.
 
