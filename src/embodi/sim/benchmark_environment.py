@@ -457,7 +457,7 @@ class BenchmarkManipulationEnv:
             native[5] = np.clip(canonical[9], 0.0, 1.0) * np.ptp(SO101_GRIPPER_NATIVE_RANGE)
         else:
             native[7] = np.clip(canonical[9], 0.0, 1.0) * 0.08
-        return native.astype(np.float32)
+        return self.qpos_to_native(self.native_to_qpos(native))
 
     def apply_action(self, native: np.ndarray) -> None:
         self.data.ctrl[:] = self.native_to_control(native)
