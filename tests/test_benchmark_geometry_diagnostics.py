@@ -314,6 +314,31 @@ def test_h16_reproduction_mismatch_rejected() -> None:
         validate_h16_reproduction([outcome], {"scenario": source})
 
 
+def test_h16_trajectory_length_difference_is_descriptive() -> None:
+    source = {
+        "success": True,
+        "steps": 481,
+        "chunks": 31,
+        "final_stage": "success",
+        "failure_reason": None,
+        "commands": 481,
+        "clipped_commands": 0,
+    }
+    outcome = {
+        **source,
+        "scenario_id": "scenario",
+        "execution_horizon": 16,
+        "steps": 467,
+        "chunks": 30,
+        "commands": 467,
+        "exp37_expected_success": True,
+        "exp37_success_reproduced": True,
+        "exp37_expected_trajectory": source,
+        "exp37_trajectory_reproduced": False,
+    }
+    validate_h16_reproduction([outcome], {"scenario": source})
+
+
 def test_shard_aggregate_retains_chunk_consistency_by_lead() -> None:
     outcome = run_diagnostic_episode(
         FakeEpisodeEnv(terminal_step=5),

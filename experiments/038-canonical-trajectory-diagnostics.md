@@ -30,12 +30,21 @@ or policy-visited state shift explain the Experiment 037 closed-loop failure?
 - retain the Experiment 037 top 640x480, supplied FK canonical state,
   `state=None`, regression, 32-command, 30 Hz, and maximum-500-step path. decode
   all 32 commands against the unchanged observation anchor before stepping.
-  each H16 result must exactly reproduce success, steps, chunks, final stage,
-  failure reason, command count, and clipped-command count for the same scenario
+  each H16 result must exactly reproduce success or failure for the same scenario
   and checkpoint in
   `benchmark-exp37-{source_condition}-seed{seed}-{morphology}-geometry.json`,
   where the source is `joint` or the execution morphology for matched. shard and
-  aggregate processing fail closed on any mismatch.
+  aggregate processing fail closed on any outcome mismatch: persist a mismatch
+  into the outcome hash chain before aborting and never retry it. record steps,
+  chunks, final stage, failure reason, command count, and clipped-command count
+  as a descriptive trajectory-reproduction signature, not an integrity gate.
+- this outcome-only gate is a pre-completion protocol correction. no registered
+  shard completed under the superseded full-signature gate: probes reached the
+  same successful outcome with 481 steps/31 chunks and 467 steps/30 chunks, while
+  an isolated retry exactly matched 481/31. full trajectory length is therefore
+  not stable enough to serve as a fail-closed replay invariant. run registered
+  shards sequentially to avoid concurrent-CUDA trajectory variation, retain the
+  signature match rate, and make no claim from signature mismatch alone.
 - for every policy-generated command, decode at the unchanged anchor and
   re-encode with `canonical_arm_action`. accumulate translation norm, rotation
   geodesic, gripper error, and native clipping by lead. compare p95 and maxima
