@@ -9,6 +9,7 @@ from embodi.sim.benchmark import Scenario
 from embodi.sim.benchmark_data import (
     _contract,
     _features_equal,
+    generate_benchmark_dataset,
     _load_or_create_generation_manifest,
     _reconcile_progress,
     benchmark_features,
@@ -195,4 +196,135 @@ def test_reconcile_progress_rejects_inconsistent_resume_state(
             scenarios,
             progress,
             pending,
+        )
+
+
+def test_generate_benchmark_dataset_runs_each_selected_scenario_and_finalizes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    scenario = Scenario(
+        scenario_id="train-so101-push_to_zone-0000",
+        split="train",
+        morphology="so101",
+        task="push_to_zone",
+        seed=1,
+        factors={},
+    )
+    definition = SimpleNamespace(
+        morphology_ids=("so101",),
+        values={"benchmark_id": "embodi-sim-v1"},
+        sha256="definition-sha",
+    )
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text("manifest")
+    manifest = SimpleNamespace(path=manifest_path, scenarios=(scenario,))
+    contract = {
+        "control": {
+            "frequency_hz": 30.0,
+            "maximum_episode_steps": 500,
+        },
+        "outputs": [
+            {
+                "morphology": "so101",
+                "repo_id": "embodi/train-so101",
+                "relative_root": "so101",
+                "scenario_ids": [scenario.scenario_id],
+            }
+        ]
+    }
+    monkeypatch.setattr(benchmark_data.BenchmarkDefinition, "load", lambda path: definition)
+    monkeypatch.setattr(benchmark_data.ScenarioManifest, "load", lambda *args, **kwargs: manifest)
+    monkeypatch.setattr(benchmark_data, "_contract", lambda *args, **kwargs: contract)
+    monkeypatch.setattr(
+        benchmark_data,
+        "morphology_by_id",
+        lambda morphology_id: SimpleNamespace(id=morphology_id),
+    )
+    calls: dict[str, list] = {"rollout": [], "metadata": [], "validation": []}
+
+    class FakeDataset:
+        num_episodes = 0
+        num_frames = 0
+
+        def save_episode(self, **kwargs) -> None:
+            calls.setdefault("saved", []).append(kwargs)
+
+        def finalize(self) -> None:
+            calls.setdefault("finalized", []).append(True)
+
+    dataset = FakeDataset()
+
+    def fake_open_dataset(root, *args, **kwargs):
+        root.mkdir(parents=True, exist_ok=True)
+        return dataset
+
+    monkeypatch.setattr(benchmark_data, "_open_dataset", fake_open_dataset)
+    monkeypatch.setattr(
+        benchmark_data,
+        "rollout_scenario",
+        lambda selected_scenario, **kwargs: (
+            calls["rollout"].append(selected_scenario.scenario_id)
+            or {"frames": 2, "commands": 2, "clipped_commands": 0}
+        ),
+    )
+    monkeypatch.setattr(
+        benchmark_data,
+        "_write_dataset_metadata",
+        lambda root, definition_value, manifest_value, morphology, scenarios: calls["metadata"].append(
+            (root, morphology.id, [value.scenario_id for value in scenarios])
+        ),
+    )
+    monkeypatch.setattr(
+        benchmark_data,
+        "_validate_lerobot_metadata",
+        lambda root, repo_id, morphology, scenarios, **kwargs: calls["validation"].append(
+            (root, repo_id, morphology.id, len(scenarios), kwargs["frames"])
+        ),
+    )
+    monkeypatch.setattr(
+        benchmark_data,
+        "_finalize_generation_manifest",
+        lambda root, value, definition_value: {"complete": True, "root": root},
+    )
+
+    root = tmp_path / "generated"
+    result = generate_benchmark_dataset(
+        tmp_path / "definition.json",
+        tmp_path / "manifest.json",
+        root,
+        "embodi/train",
+        width=64,
+        height=48,
+        limit_per_cell=1,
+        image_writer_threads=0,
+    )
+
+    assert result["complete"] is True
+    assert calls["rollout"] == [scenario.scenario_id]
+    assert calls["metadata"] == [(root / "so101", "so101", [scenario.scenario_id])]
+    assert calls["validation"] == [(root / "so101", "embodi/train-so101", "so101", 1, 2)]
+    assert calls["saved"] == [{"parallel_encoding": False}]
+    assert calls["finalized"] == [True]
+
+
+@pytest.mark.parametrize(
+    ("width", "height", "image_writer_threads"),
+    [(0, 48, 0), (64, 0, 0), (64, 48, -1)],
+)
+def test_generate_benchmark_dataset_rejects_invalid_writer_contract(
+    tmp_path: Path,
+    width: int,
+    height: int,
+    image_writer_threads: int,
+) -> None:
+    with pytest.raises(ValueError, match="dimensions|writer threads"):
+        generate_benchmark_dataset(
+            tmp_path / "definition.json",
+            tmp_path / "manifest.json",
+            tmp_path / "generated",
+            "embodi/train",
+            width=width,
+            height=height,
+            image_writer_threads=image_writer_threads,
         )
