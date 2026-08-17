@@ -64,6 +64,11 @@ def test_deterministic_ik_reconstructs_small_canonical_target(morphology: str) -
         canonical = env.canonical_arm_action(target)
         decoded = env.native_action_from_canonical(canonical)
         reconstructed = env.canonical_arm_action(decoded)
+        np.testing.assert_allclose(
+            env.qpos_to_native(env.native_to_qpos(decoded)),
+            decoded,
+            atol=1e-5,
+        )
         np.testing.assert_allclose(reconstructed[0, :3], canonical[0, :3], atol=2e-3)
         np.testing.assert_allclose(reconstructed[0, 9], canonical[0, 9], atol=1e-5)
     finally:
