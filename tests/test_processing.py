@@ -1,4 +1,5 @@
-from types import SimpleNamespace
+import sys
+from types import ModuleType, SimpleNamespace
 
 import numpy as np
 import pytest
@@ -34,6 +35,101 @@ def test_processor_can_disable_float_image_rescaling() -> None:
     processor = SimpleNamespace(image_processor=SimpleNamespace(do_rescale=True))
     EmbodiProcessor(processor, do_rescale=False)
     assert processor.image_processor.do_rescale is False
+
+
+def test_processor_builds_conversations_and_transports_supervision() -> None:
+    class FakeProcessor:
+        def __init__(self) -> None:
+            self.calls = []
+
+        def apply_chat_template(self, conversations, **kwargs):
+            self.calls.append((conversations, kwargs))
+            return {"input_ids": torch.tensor([[1, 2], [3, 4]])}
+
+    raw_processor = FakeProcessor()
+    processor = EmbodiProcessor(raw_processor, do_rescale=False)
+    images = [
+        [torch.zeros(3, 2, 2)],
+        [torch.ones(3, 2, 2)],
+    ]
+    state = torch.zeros(2, 6)
+    actions = torch.zeros(2, 4, 6)
+    canonical_actions = torch.zeros(2, 4, 1, 10)
+    canonical_state = torch.zeros(2, 1, 10)
+    part_mask = torch.ones(2, 1, dtype=torch.bool)
+    part_kind = torch.zeros(2, 1, dtype=torch.long)
+    name_features = torch.zeros(2, 1, 32)
+    channel_mask = torch.ones(2, 1, 10, dtype=torch.bool)
+    group_mask = torch.ones(2, 3, dtype=torch.bool)
+    action_is_pad = torch.zeros(2, 4, dtype=torch.bool)
+
+    batch = processor(
+        images,
+        ["pick", "place"],
+        state,
+        actions=actions,
+        canonical_actions=canonical_actions,
+        canonical_state=canonical_state,
+        canonical_part_mask=part_mask,
+        canonical_part_kind=part_kind,
+        canonical_part_name_features=name_features,
+        canonical_channel_mask=channel_mask,
+        action_group_mask=group_mask,
+        action_is_pad=action_is_pad,
+    )
+
+    conversations, kwargs = raw_processor.calls[0]
+    assert conversations[0][0]["content"] == [
+        {"type": "image", "image": images[0][0]},
+        {"type": "text", "text": "pick"},
+    ]
+    assert conversations[1][0]["content"][-1] == {"type": "text", "text": "place"}
+    assert kwargs == {
+        "tokenize": True,
+        "add_generation_prompt": True,
+        "return_dict": True,
+        "return_tensors": "pt",
+        "padding": True,
+    }
+    assert batch["observation.state"] is state
+    assert batch["action"] is actions
+    assert batch["canonical_action"] is canonical_actions
+    assert batch["canonical_state"] is canonical_state
+    assert batch["canonical_part_mask"] is part_mask
+    assert batch["canonical_part_kind"] is part_kind
+    assert batch["canonical_part_name_features"] is name_features
+    assert batch["canonical_channel_mask"] is channel_mask
+    assert batch["action_group_mask"] is group_mask
+    assert batch["action_is_pad"] is action_is_pad
+
+
+def test_processor_rejects_mismatched_batch_sizes() -> None:
+    processor = EmbodiProcessor(SimpleNamespace(), do_rescale=False)
+
+    with pytest.raises(ValueError, match="same batch size"):
+        processor([[torch.zeros(3, 2, 2)]], ["one", "two"], None)
+
+    with pytest.raises(ValueError, match="same batch size"):
+        processor([[torch.zeros(3, 2, 2)]], ["one"], torch.zeros(2, 6))
+
+
+def test_processor_from_pretrained_forwards_model_and_revision(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[tuple[str, str | None]] = []
+
+    class FakeAutoProcessor:
+        @staticmethod
+        def from_pretrained(model_name: str, revision: str | None = None):
+            calls.append((model_name, revision))
+            return SimpleNamespace()
+
+    transformers = ModuleType("transformers")
+    transformers.AutoProcessor = FakeAutoProcessor
+    monkeypatch.setitem(sys.modules, "transformers", transformers)
+
+    processor = EmbodiProcessor.from_pretrained("fake-model", revision="fake-revision", do_rescale=False)
+
+    assert calls == [("fake-model", "fake-revision")]
+    assert processor.do_rescale is False
 
 
 def test_split_batch_does_not_require_native_state_for_core_pretraining() -> None:
