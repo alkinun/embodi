@@ -7,7 +7,7 @@ import pytest
 import torch
 
 from embodi import EmbodiConfig
-from embodi.sim.benchmark import Scenario
+from embodi.sim.benchmark import BenchmarkDefinition, Scenario, ScenarioManifest, file_sha256
 from embodi.sim.benchmark_geometry_evaluation import (
     CONDITIONS,
     CONFIG_SHA256,
@@ -30,6 +30,7 @@ from embodi.sim.benchmark_geometry_evaluation import (
     predict_geometry_chunk,
     resolve_checkpoint,
     run_geometry_policy_episode,
+    registered_shard_filename,
     summarize_geometry_admission,
 )
 from embodi.sim.tasks import TaskStatus
@@ -662,3 +663,42 @@ def test_aggregation_rejects_all_failure_noninferiority() -> None:
     assert summary["gates"]["matched_overall_assay_sensitive"] is False
     assert summary["gates"]["joint_overall_absolute"] is False
     assert summary["gates"]["passed"] is False
+
+
+def test_registered_exp37_reports_recompute_failed_gate() -> None:
+    definition = BenchmarkDefinition.load(ROOT / "benchmarks" / "sim-v1" / "definition.json")
+    manifest = ScenarioManifest.load(
+        ROOT / "benchmarks" / "sim-v1" / "manifests" / "development.json",
+        definition,
+        require_complete_counts=True,
+    )
+    admission_path = ROOT / "reports" / "benchmark-exp37-geometry-admission.json"
+    reports = [
+        json.loads(
+            (
+                ROOT
+                / "reports"
+                / registered_shard_filename(condition, seed, morphology)
+            ).read_text()
+        )
+        for condition in CONDITIONS
+        for seed in SEEDS
+        for morphology in MORPHOLOGIES
+    ]
+    exp36_summary = json.loads((ROOT / "reports" / "benchmark-exp36-summary.json").read_text())
+    recomputed = aggregate_registered_shards(
+        reports,
+        manifest,
+        admission_sha256=file_sha256(admission_path),
+        admission_git_commit="bdd34fc51822c3353485d1d2e2547bfc5cca2c5e",
+        exp36_summary=exp36_summary,
+    )
+    recorded = json.loads((ROOT / "reports" / "benchmark-exp37-summary.json").read_text())
+    assert recomputed == recorded
+    assert recorded["status"] == "completed_gate_failed"
+    assert recorded["three_seed_comparisons"]["overall"]["joint_mean"] == 0.06
+    assert recorded["three_seed_comparisons"]["overall"]["matched_specialist_mean"] == pytest.approx(
+        0.13083333333333333
+    )
+    assert recorded["gates"]["overall_seed_passes"] == 1
+    assert recorded["gates"]["passed"] is False

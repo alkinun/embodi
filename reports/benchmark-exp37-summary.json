@@ -1,0 +1,1052 @@
+{
+  "format_version": 1,
+  "experiment": 37,
+  "registered": true,
+  "status": "completed_gate_failed",
+  "scope": "shared-capacity closed-loop geometry control; not a learned wrapper/decoder or representation-invariance test",
+  "contract": {
+    "definition_sha256": "9b14210d0c296f53c12dd3c5efec2f022a31ceb4d9bb2a1037bf068f443fd45f",
+    "manifest_sha256": "4fec8d65180e94fabd851ecf3468a2f05f5a970ea57c6b301ada859ad8b88576",
+    "admission_report_sha256": "882c7fd895544d779d0072873c5c11163f1afdf31eb910bdf6b9c259ec84c420",
+    "admission_evaluator_git_commit": "bdd34fc51822c3353485d1d2e2547bfc5cca2c5e",
+    "exp36_summary_sha256": "76d7a3b0dc8954fc1fdbf8def99c840881ee3d9b523bf9f3386be5b82be0308f",
+    "evaluator_sha256": "3e8754887ba54034e2e3e2fb7db0eadc95302a33ca59d2fde3cf37133f3f2253",
+    "evaluator_git_commit": "bdd34fc51822c3353485d1d2e2547bfc5cca2c5e",
+    "split": "development",
+    "shards": 18,
+    "scenarios_per_shard": 200
+  },
+  "sources": [
+    {
+      "condition": "joint",
+      "model_seed": 36001,
+      "morphology": "panda",
+      "core_sha256": "9295d297893b1292971bc55876cc360cb71c12ff508719333655a004057d8bab"
+    },
+    {
+      "condition": "joint",
+      "model_seed": 36001,
+      "morphology": "so101",
+      "core_sha256": "9295d297893b1292971bc55876cc360cb71c12ff508719333655a004057d8bab"
+    },
+    {
+      "condition": "joint",
+      "model_seed": 36002,
+      "morphology": "panda",
+      "core_sha256": "dba1726bb74a2087dec88a7a7dc921c863347eb5142c1c18907e7b943bdf77f7"
+    },
+    {
+      "condition": "joint",
+      "model_seed": 36002,
+      "morphology": "so101",
+      "core_sha256": "dba1726bb74a2087dec88a7a7dc921c863347eb5142c1c18907e7b943bdf77f7"
+    },
+    {
+      "condition": "joint",
+      "model_seed": 36003,
+      "morphology": "panda",
+      "core_sha256": "9ebb1ed146e73d38f06462df575206807543ddd32e9b58c8ab1de6a217dcab19"
+    },
+    {
+      "condition": "joint",
+      "model_seed": 36003,
+      "morphology": "so101",
+      "core_sha256": "9ebb1ed146e73d38f06462df575206807543ddd32e9b58c8ab1de6a217dcab19"
+    },
+    {
+      "condition": "panda",
+      "model_seed": 36001,
+      "morphology": "panda",
+      "core_sha256": "6ddbd701a8e5bbdcbeca2b9698c9f6280ead578f21b995c6628e72a9d23698fc"
+    },
+    {
+      "condition": "panda",
+      "model_seed": 36001,
+      "morphology": "so101",
+      "core_sha256": "6ddbd701a8e5bbdcbeca2b9698c9f6280ead578f21b995c6628e72a9d23698fc"
+    },
+    {
+      "condition": "panda",
+      "model_seed": 36002,
+      "morphology": "panda",
+      "core_sha256": "5bdb4c2c1cfa6d883d871f901d6adb064e644bad38193bac73e947fbc038290b"
+    },
+    {
+      "condition": "panda",
+      "model_seed": 36002,
+      "morphology": "so101",
+      "core_sha256": "5bdb4c2c1cfa6d883d871f901d6adb064e644bad38193bac73e947fbc038290b"
+    },
+    {
+      "condition": "panda",
+      "model_seed": 36003,
+      "morphology": "panda",
+      "core_sha256": "484032353279f2f9e2f14cf15a3680f5c76bafdc4bc55173a77accc23f50f7a1"
+    },
+    {
+      "condition": "panda",
+      "model_seed": 36003,
+      "morphology": "so101",
+      "core_sha256": "484032353279f2f9e2f14cf15a3680f5c76bafdc4bc55173a77accc23f50f7a1"
+    },
+    {
+      "condition": "so101",
+      "model_seed": 36001,
+      "morphology": "panda",
+      "core_sha256": "c46a5e4378e1aa29f652b6c273501a1b36fe6a319fa9436d2e58412fe41e1b07"
+    },
+    {
+      "condition": "so101",
+      "model_seed": 36001,
+      "morphology": "so101",
+      "core_sha256": "c46a5e4378e1aa29f652b6c273501a1b36fe6a319fa9436d2e58412fe41e1b07"
+    },
+    {
+      "condition": "so101",
+      "model_seed": 36002,
+      "morphology": "panda",
+      "core_sha256": "2b5c79168af60963665387a6c49ed0f620d07b7644c95084c04207684f1afed4"
+    },
+    {
+      "condition": "so101",
+      "model_seed": 36002,
+      "morphology": "so101",
+      "core_sha256": "2b5c79168af60963665387a6c49ed0f620d07b7644c95084c04207684f1afed4"
+    },
+    {
+      "condition": "so101",
+      "model_seed": 36003,
+      "morphology": "panda",
+      "core_sha256": "7863a6fa4b977067843ba349fa152cec043d658f80953cafea829a30fdfd5a59"
+    },
+    {
+      "condition": "so101",
+      "model_seed": 36003,
+      "morphology": "so101",
+      "core_sha256": "7863a6fa4b977067843ba349fa152cec043d658f80953cafea829a30fdfd5a59"
+    }
+  ],
+  "cell_success_rates": {
+    "joint/seed36001/panda/lift_object": 0.04,
+    "joint/seed36001/panda/pick_place_bin": 0.0,
+    "joint/seed36001/panda/push_to_zone": 0.06,
+    "joint/seed36001/panda/stack_object": 0.0,
+    "joint/seed36001/so101/lift_object": 0.04,
+    "joint/seed36001/so101/pick_place_bin": 0.0,
+    "joint/seed36001/so101/push_to_zone": 0.46,
+    "joint/seed36001/so101/stack_object": 0.0,
+    "joint/seed36002/panda/lift_object": 0.0,
+    "joint/seed36002/panda/pick_place_bin": 0.0,
+    "joint/seed36002/panda/push_to_zone": 0.16,
+    "joint/seed36002/panda/stack_object": 0.0,
+    "joint/seed36002/so101/lift_object": 0.06,
+    "joint/seed36002/so101/pick_place_bin": 0.0,
+    "joint/seed36002/so101/push_to_zone": 0.38,
+    "joint/seed36002/so101/stack_object": 0.0,
+    "joint/seed36003/panda/lift_object": 0.0,
+    "joint/seed36003/panda/pick_place_bin": 0.0,
+    "joint/seed36003/panda/push_to_zone": 0.08,
+    "joint/seed36003/panda/stack_object": 0.0,
+    "joint/seed36003/so101/lift_object": 0.0,
+    "joint/seed36003/so101/pick_place_bin": 0.0,
+    "joint/seed36003/so101/push_to_zone": 0.16,
+    "joint/seed36003/so101/stack_object": 0.0,
+    "panda/seed36001/panda/lift_object": 0.02,
+    "panda/seed36001/panda/pick_place_bin": 0.0,
+    "panda/seed36001/panda/push_to_zone": 0.26,
+    "panda/seed36001/panda/stack_object": 0.0,
+    "panda/seed36001/so101/lift_object": 0.0,
+    "panda/seed36001/so101/pick_place_bin": 0.0,
+    "panda/seed36001/so101/push_to_zone": 0.1,
+    "panda/seed36001/so101/stack_object": 0.0,
+    "panda/seed36002/panda/lift_object": 0.06,
+    "panda/seed36002/panda/pick_place_bin": 0.0,
+    "panda/seed36002/panda/push_to_zone": 0.54,
+    "panda/seed36002/panda/stack_object": 0.0,
+    "panda/seed36002/so101/lift_object": 0.0,
+    "panda/seed36002/so101/pick_place_bin": 0.0,
+    "panda/seed36002/so101/push_to_zone": 0.1,
+    "panda/seed36002/so101/stack_object": 0.0,
+    "panda/seed36003/panda/lift_object": 0.04,
+    "panda/seed36003/panda/pick_place_bin": 0.0,
+    "panda/seed36003/panda/push_to_zone": 0.42,
+    "panda/seed36003/panda/stack_object": 0.02,
+    "panda/seed36003/so101/lift_object": 0.0,
+    "panda/seed36003/so101/pick_place_bin": 0.0,
+    "panda/seed36003/so101/push_to_zone": 0.1,
+    "panda/seed36003/so101/stack_object": 0.0,
+    "so101/seed36001/panda/lift_object": 0.0,
+    "so101/seed36001/panda/pick_place_bin": 0.0,
+    "so101/seed36001/panda/push_to_zone": 0.0,
+    "so101/seed36001/panda/stack_object": 0.0,
+    "so101/seed36001/so101/lift_object": 0.02,
+    "so101/seed36001/so101/pick_place_bin": 0.02,
+    "so101/seed36001/so101/push_to_zone": 0.66,
+    "so101/seed36001/so101/stack_object": 0.0,
+    "so101/seed36002/panda/lift_object": 0.0,
+    "so101/seed36002/panda/pick_place_bin": 0.0,
+    "so101/seed36002/panda/push_to_zone": 0.0,
+    "so101/seed36002/panda/stack_object": 0.0,
+    "so101/seed36002/so101/lift_object": 0.08,
+    "so101/seed36002/so101/pick_place_bin": 0.04,
+    "so101/seed36002/so101/push_to_zone": 0.46,
+    "so101/seed36002/so101/stack_object": 0.0,
+    "so101/seed36003/panda/lift_object": 0.0,
+    "so101/seed36003/panda/pick_place_bin": 0.0,
+    "so101/seed36003/panda/push_to_zone": 0.0,
+    "so101/seed36003/panda/stack_object": 0.0,
+    "so101/seed36003/so101/lift_object": 0.06,
+    "so101/seed36003/so101/pick_place_bin": 0.0,
+    "so101/seed36003/so101/push_to_zone": 0.44,
+    "so101/seed36003/so101/stack_object": 0.0
+  },
+  "shard_summaries": {
+    "joint/seed36001/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 3,
+          "success_rate": 0.06
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 2,
+          "success_rate": 0.04
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.025,
+      "lifts": 5,
+      "mean_steps": 496.29,
+      "failure_reasons": {
+        "maximum_episode_steps": 195,
+        "success": 5
+      },
+      "final_stages": {
+        "push": 26,
+        "approach": 135,
+        "success": 5,
+        "lift": 33,
+        "stack": 1
+      },
+      "commands": 99258,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "joint/seed36001/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 23,
+          "success_rate": 0.46
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 2,
+          "success_rate": 0.04
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.125,
+      "lifts": 2,
+      "mean_steps": 474.79,
+      "failure_reasons": {
+        "success": 25,
+        "maximum_episode_steps": 175
+      },
+      "final_stages": {
+        "success": 25,
+        "push": 21,
+        "approach": 147,
+        "lift": 7
+      },
+      "commands": 94958,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "joint/seed36002/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 8,
+          "success_rate": 0.16
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.04,
+      "lifts": 0,
+      "mean_steps": 489.15,
+      "failure_reasons": {
+        "maximum_episode_steps": 192,
+        "success": 8
+      },
+      "final_stages": {
+        "approach": 153,
+        "push": 29,
+        "success": 8,
+        "lift": 10
+      },
+      "commands": 97830,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "joint/seed36002/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 19,
+          "success_rate": 0.38
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 3,
+          "success_rate": 0.06
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.11,
+      "lifts": 3,
+      "mean_steps": 464.84,
+      "failure_reasons": {
+        "success": 22,
+        "maximum_episode_steps": 178
+      },
+      "final_stages": {
+        "success": 22,
+        "approach": 168,
+        "lift": 10
+      },
+      "commands": 92968,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "joint/seed36003/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 4,
+          "success_rate": 0.08
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.02,
+      "lifts": 0,
+      "mean_steps": 493.15,
+      "failure_reasons": {
+        "maximum_episode_steps": 196,
+        "success": 4
+      },
+      "final_stages": {
+        "push": 25,
+        "approach": 165,
+        "success": 4,
+        "lift": 6
+      },
+      "commands": 98630,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "joint/seed36003/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 8,
+          "success_rate": 0.16
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.04,
+      "lifts": 1,
+      "mean_steps": 484.785,
+      "failure_reasons": {
+        "success": 8,
+        "maximum_episode_steps": 192
+      },
+      "final_stages": {
+        "success": 8,
+        "approach": 174,
+        "push": 6,
+        "lift": 12
+      },
+      "commands": 96957,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "panda/seed36001/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 13,
+          "success_rate": 0.26
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 1,
+          "success_rate": 0.02
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.07,
+      "lifts": 4,
+      "mean_steps": 482.4,
+      "failure_reasons": {
+        "maximum_episode_steps": 186,
+        "success": 14
+      },
+      "final_stages": {
+        "approach": 156,
+        "push": 16,
+        "success": 14,
+        "lift": 12,
+        "release": 1,
+        "stack": 1
+      },
+      "commands": 96480,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "panda/seed36001/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 5,
+          "success_rate": 0.1
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.025,
+      "lifts": 0,
+      "mean_steps": 487.875,
+      "failure_reasons": {
+        "success": 5,
+        "maximum_episode_steps": 195
+      },
+      "final_stages": {
+        "success": 5,
+        "approach": 195
+      },
+      "commands": 97575,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "panda/seed36002/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 27,
+          "success_rate": 0.54
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 3,
+          "success_rate": 0.06
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.15000000000000002,
+      "lifts": 5,
+      "mean_steps": 457.085,
+      "failure_reasons": {
+        "maximum_episode_steps": 170,
+        "success": 30
+      },
+      "final_stages": {
+        "push": 8,
+        "success": 30,
+        "approach": 150,
+        "lift": 11,
+        "stack": 1
+      },
+      "commands": 91417,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "panda/seed36002/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 5,
+          "success_rate": 0.1
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.025,
+      "lifts": 0,
+      "mean_steps": 487.875,
+      "failure_reasons": {
+        "success": 5,
+        "maximum_episode_steps": 195
+      },
+      "final_stages": {
+        "success": 5,
+        "approach": 195
+      },
+      "commands": 97575,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "panda/seed36003/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 21,
+          "success_rate": 0.42
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 2,
+          "success_rate": 0.04
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 1,
+          "success_rate": 0.02
+        }
+      },
+      "four_task_macro_success": 0.12,
+      "lifts": 5,
+      "mean_steps": 463.575,
+      "failure_reasons": {
+        "maximum_episode_steps": 176,
+        "success": 24
+      },
+      "final_stages": {
+        "push": 11,
+        "success": 24,
+        "approach": 155,
+        "lift": 8,
+        "stack": 2
+      },
+      "commands": 92715,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "panda/seed36003/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 5,
+          "success_rate": 0.1
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.025,
+      "lifts": 0,
+      "mean_steps": 487.875,
+      "failure_reasons": {
+        "success": 5,
+        "maximum_episode_steps": 195
+      },
+      "final_stages": {
+        "success": 5,
+        "approach": 195
+      },
+      "commands": 97575,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "so101/seed36001/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.0,
+      "lifts": 0,
+      "mean_steps": 500.0,
+      "failure_reasons": {
+        "maximum_episode_steps": 200
+      },
+      "final_stages": {
+        "approach": 200
+      },
+      "commands": 100000,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "so101/seed36001/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 33,
+          "success_rate": 0.66
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 1,
+          "success_rate": 0.02
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 1,
+          "success_rate": 0.02
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.17500000000000002,
+      "lifts": 6,
+      "mean_steps": 464.45,
+      "failure_reasons": {
+        "success": 35,
+        "maximum_episode_steps": 165
+      },
+      "final_stages": {
+        "success": 35,
+        "approach": 115,
+        "push": 16,
+        "lift": 31,
+        "release": 3
+      },
+      "commands": 92890,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "so101/seed36002/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.0,
+      "lifts": 0,
+      "mean_steps": 500.0,
+      "failure_reasons": {
+        "maximum_episode_steps": 200
+      },
+      "final_stages": {
+        "approach": 198,
+        "lift": 2
+      },
+      "commands": 100000,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "so101/seed36002/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 23,
+          "success_rate": 0.46
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 4,
+          "success_rate": 0.08
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 2,
+          "success_rate": 0.04
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.14500000000000002,
+      "lifts": 7,
+      "mean_steps": 476.55,
+      "failure_reasons": {
+        "success": 29,
+        "maximum_episode_steps": 171
+      },
+      "final_stages": {
+        "success": 29,
+        "push": 23,
+        "approach": 108,
+        "lift": 40
+      },
+      "commands": 95310,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    },
+    "so101/seed36003/panda": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.0,
+      "lifts": 0,
+      "mean_steps": 500.0,
+      "failure_reasons": {
+        "maximum_episode_steps": 200
+      },
+      "final_stages": {
+        "approach": 198,
+        "push": 2
+      },
+      "commands": 100000,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 0.0
+    },
+    "so101/seed36003/so101": {
+      "cells": {
+        "push_to_zone": {
+          "attempted": 50,
+          "successes": 22,
+          "success_rate": 0.44
+        },
+        "lift_object": {
+          "attempted": 50,
+          "successes": 3,
+          "success_rate": 0.06
+        },
+        "pick_place_bin": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        },
+        "stack_object": {
+          "attempted": 50,
+          "successes": 0,
+          "success_rate": 0.0
+        }
+      },
+      "four_task_macro_success": 0.125,
+      "lifts": 5,
+      "mean_steps": 465.64,
+      "failure_reasons": {
+        "success": 25,
+        "maximum_episode_steps": 175
+      },
+      "final_stages": {
+        "success": 25,
+        "push": 28,
+        "approach": 99,
+        "lift": 48
+      },
+      "commands": 93128,
+      "clipped_commands": 0,
+      "command_clipping_rate": 0.0,
+      "maximum_clipping_error_native": 1.52587890625e-05
+    }
+  },
+  "seed_comparisons": {
+    "36001": {
+      "matched_specialist": 0.12250000000000001,
+      "joint": 0.075,
+      "opposite_specialist": 0.0125,
+      "joint_minus_matched_percentage_points": -4.750000000000002,
+      "overall_noninferiority_passed": true,
+      "morphology_macros": {
+        "so101": {
+          "matched_specialist": 0.17500000000000002,
+          "joint": 0.125,
+          "opposite_specialist": 0.025
+        },
+        "panda": {
+          "matched_specialist": 0.07,
+          "joint": 0.025,
+          "opposite_specialist": 0.0
+        }
+      }
+    },
+    "36002": {
+      "matched_specialist": 0.14750000000000002,
+      "joint": 0.075,
+      "opposite_specialist": 0.0125,
+      "joint_minus_matched_percentage_points": -7.250000000000003,
+      "overall_noninferiority_passed": false,
+      "morphology_macros": {
+        "so101": {
+          "matched_specialist": 0.14500000000000002,
+          "joint": 0.11,
+          "opposite_specialist": 0.025
+        },
+        "panda": {
+          "matched_specialist": 0.15000000000000002,
+          "joint": 0.04,
+          "opposite_specialist": 0.0
+        }
+      }
+    },
+    "36003": {
+      "matched_specialist": 0.1225,
+      "joint": 0.03,
+      "opposite_specialist": 0.0125,
+      "joint_minus_matched_percentage_points": -9.25,
+      "overall_noninferiority_passed": false,
+      "morphology_macros": {
+        "so101": {
+          "matched_specialist": 0.125,
+          "joint": 0.04,
+          "opposite_specialist": 0.025
+        },
+        "panda": {
+          "matched_specialist": 0.12,
+          "joint": 0.02,
+          "opposite_specialist": 0.0
+        }
+      }
+    }
+  },
+  "three_seed_comparisons": {
+    "overall": {
+      "matched_specialist_mean": 0.13083333333333333,
+      "joint_mean": 0.06,
+      "opposite_specialist_mean": 0.012500000000000002,
+      "joint_minus_matched_percentage_points": -7.083333333333333,
+      "noninferiority_passed": false
+    },
+    "held_out_stack": {
+      "matched_specialist_mean": 0.0033333333333333335,
+      "joint_mean": 0.0,
+      "opposite_specialist_mean": 0.0,
+      "joint_minus_matched_percentage_points": -0.33333333333333337,
+      "noninferiority_passed": true
+    },
+    "pretraining_tasks": {
+      "matched_specialist_mean": 0.17333333333333334,
+      "joint_mean": 0.08,
+      "opposite_specialist_mean": 0.016666666666666666,
+      "joint_minus_matched_percentage_points": -9.333333333333334,
+      "noninferiority_passed": false
+    },
+    "so101": {
+      "matched_specialist_mean": 0.14833333333333334,
+      "joint_mean": 0.09166666666666667,
+      "opposite_specialist_mean": 0.025000000000000005,
+      "joint_minus_matched_percentage_points": -5.666666666666667,
+      "noninferiority_passed": false
+    },
+    "panda": {
+      "matched_specialist_mean": 0.11333333333333334,
+      "joint_mean": 0.028333333333333335,
+      "opposite_specialist_mean": 0.0,
+      "joint_minus_matched_percentage_points": -8.5,
+      "noninferiority_passed": false
+    }
+  },
+  "gates": {
+    "noninferiority_margin_percentage_points": 5.0,
+    "minimum_matched_overall_success": 0.1,
+    "minimum_joint_overall_success": 0.1,
+    "minimum_joint_pretraining_task_success": 0.1,
+    "minimum_joint_held_out_stack_success": 0.05,
+    "minimum_joint_morphology_success": 0.05,
+    "matched_overall_assay_sensitive": true,
+    "joint_overall_absolute": false,
+    "joint_pretraining_tasks_absolute": false,
+    "joint_held_out_stack_absolute": false,
+    "joint_so101_absolute": true,
+    "joint_panda_absolute": false,
+    "overall_eight_cell_three_seed_mean": false,
+    "held_out_stack_three_seed_mean": true,
+    "so101_four_task_three_seed_mean": false,
+    "panda_four_task_three_seed_mean": false,
+    "overall_seed_passes": 1,
+    "minimum_overall_seed_passes": 2,
+    "maximum_policy_command_clipping_rate": 0.01,
+    "policy_command_clipping": true,
+    "passed": false
+  },
+  "opposite_specialists_are_descriptive_only": true
+}
