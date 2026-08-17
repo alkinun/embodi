@@ -194,6 +194,7 @@ def _train_args(tmp_path: Path, **updates: object) -> SimpleNamespace:
         "config": None,
         "cameras": None,
         "dataset_format": "lerobot",
+        "dataset_root": None,
         "validation_dataset": None,
         "validation_dataset_root": None,
         "resume": False,
@@ -206,9 +207,32 @@ def _train_args(tmp_path: Path, **updates: object) -> SimpleNamespace:
         "loader_seed": None,
         "validation_seed": 1,
         "output_dir": tmp_path / "output",
+        "stage": "refine",
     }
     values.update(updates)
     return SimpleNamespace(**values)
+
+
+def _stub_training_construction(monkeypatch: pytest.MonkeyPatch) -> None:
+    class StubPolicy:
+        def __init__(self, config: EmbodiConfig) -> None:
+            self.config = config
+
+        def to(self, device):
+            del device
+            return self
+
+        def configure_stage(self, stage: str) -> None:
+            del stage
+
+    class StubProcessor:
+        @classmethod
+        def from_pretrained(cls, model_name: str, revision: str | None, do_rescale: bool):
+            del model_name, revision, do_rescale
+            return cls()
+
+    monkeypatch.setattr(train_module, "EmbodiPolicy", StubPolicy)
+    monkeypatch.setattr(train_module, "EmbodiProcessor", StubProcessor)
 
 
 @pytest.mark.parametrize(
@@ -277,4 +301,80 @@ def test_train_rejects_resume_with_initialization_checkpoint(tmp_path: Path) -> 
     args = _train_args(tmp_path, resume=True, init_core=Path("core"))
 
     with pytest.raises(ValueError, match="cannot be combined"):
+        train(args)
+
+
+def test_train_rejects_xperience_non_core_stage(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _stub_training_construction(monkeypatch)
+    args = _train_args(tmp_path, dataset_format="xperience", stage="decoder")
+
+    with pytest.raises(ValueError, match="supports --stage core only"):
+        train(args)
+
+
+def test_train_rejects_xperience_nonstandard_horizon(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _stub_training_construction(monkeypatch)
+    config_path = tmp_path / "config.json"
+    EmbodiConfig(chunk_size=8, n_action_steps=8).save(config_path)
+    args = _train_args(tmp_path, config=config_path, dataset_format="xperience", stage="core")
+
+    with pytest.raises(ValueError, match="requires a 32-step horizon"):
+        train(args)
+
+
+def test_train_rejects_xperience_wrong_camera(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _stub_training_construction(monkeypatch)
+    config_path = tmp_path / "config.json"
+    EmbodiConfig(camera_names=("wrist",)).save(config_path)
+    args = _train_args(tmp_path, config=config_path, dataset_format="xperience", stage="core")
+
+    with pytest.raises(ValueError, match=r"requires camera_names=\[stereo_left\]"):
+        train(args)
+
+
+def test_train_rejects_xperience_without_dataset_root(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _stub_training_construction(monkeypatch)
+    config_path = tmp_path / "config.json"
+    EmbodiConfig(camera_names=("stereo_left",)).save(config_path)
+    args = _train_args(
+        tmp_path,
+        config=config_path,
+        dataset_format="xperience",
+        stage="core",
+    )
+
+    with pytest.raises(ValueError, match="requires --dataset-root"):
+        train(args)
+
+
+def test_train_rejects_xperience_cache_without_manifest(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _stub_training_construction(monkeypatch)
+    dataset_root = tmp_path / "xperience"
+    dataset_root.mkdir()
+    config_path = tmp_path / "config.json"
+    EmbodiConfig(camera_names=("stereo_left",)).save(config_path)
+    args = _train_args(
+        tmp_path,
+        config=config_path,
+        dataset_format="xperience",
+        dataset_root=dataset_root,
+        stage="core",
+    )
+
+    with pytest.raises(FileNotFoundError, match="xperience_manifest.json"):
         train(args)
