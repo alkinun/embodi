@@ -23,6 +23,8 @@ from embodi.sim.benchmark_geometry_evaluation import (
     _outcome_chain,
     _validate_outcomes,
     aggregate_registered_shards,
+    evaluate_geometry_admission,
+    evaluate_policy_shard,
     geometry_policy_batch,
     load_development_contract,
     predict_geometry_chunk,
@@ -57,7 +59,11 @@ class FakeProcessor:
 
 
 class FakePolicy:
-    config = SimpleNamespace(image_do_rescale=False)
+    config = SimpleNamespace(
+        image_do_rescale=False,
+        backbone_name="fake",
+        backbone_revision="fake-revision",
+    )
 
     def __init__(self) -> None:
         self.predict_calls = 0
@@ -237,6 +243,165 @@ def test_geometry_admission_enforces_physical_unit_gates() -> None:
     aggregate = summarize_geometry_admission([outcome], definition, frozen)
     assert aggregate["checks"]["fk_ik_translation_p95"] is False
     assert aggregate["passed"] is False
+
+
+def test_admission_orchestrator_persists_and_resumes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import embodi.sim.benchmark_geometry_evaluation as evaluation
+
+    manifest_path = tmp_path / "development.json"
+    manifest_path.write_text("{}")
+    scenario = Scenario(
+        scenario_id="development-so101-lift_object-0000",
+        split="development",
+        morphology="so101",
+        task="lift_object",
+        seed=1,
+        factors={},
+    )
+    manifest = SimpleNamespace(path=manifest_path, scenarios=(scenario,))
+    definition = SimpleNamespace(
+        sha256="definition",
+        values={
+            "admission_gates": {
+                "maximum_geometry_success_drop": 0.05,
+                "maximum_command_clipping_rate": 0.01,
+                "maximum_fk_ik_translation_p95_m": 0.001,
+                "maximum_fk_ik_rotation_p95_deg": 1.0,
+                "maximum_gripper_round_trip_error_native": 1.0,
+            }
+        },
+    )
+    frozen = {"cells": {"so101/lift_object": {"success_rate": 1.0}}}
+    outcome = {
+        "success": True,
+        "steps": 1,
+        "final_stage": "success",
+        "lifted": True,
+        "translation_errors_m": [0.0],
+        "rotation_errors_deg": [0.0],
+        "gripper_errors_native": [0.0],
+        "clipped_commands": 0,
+        "commands": 1,
+        "maximum_clipping_error_native": 0.0,
+        "diagnostic_extrema": {},
+    }
+    closed = []
+    monkeypatch.setattr(
+        evaluation,
+        "runtime_provenance",
+        lambda **_kwargs: {"git_dirty": True, "git_commit": "smoke"},
+    )
+    monkeypatch.setattr(evaluation, "runtime_scenario", lambda factors: factors)
+    monkeypatch.setattr(
+        evaluation,
+        "run_geometry_admission_episode",
+        lambda env, **_kwargs: dict(outcome),
+    )
+    output = tmp_path / "admission.json"
+    report = evaluate_geometry_admission(
+        definition,
+        manifest,
+        frozen,
+        output,
+        registered=False,
+        env_factory=lambda *_args, **_kwargs: SimpleNamespace(close=lambda: closed.append(True)),
+    )
+    assert report["complete"] is True
+    assert report["aggregate"]["passed"] is True
+    assert report["outcome_chain_sha256"] == _outcome_chain(report["outcomes"])
+    assert closed == [True]
+    resumed = evaluate_geometry_admission(
+        definition,
+        manifest,
+        frozen,
+        output,
+        registered=False,
+        env_factory=lambda *_args, **_kwargs: pytest.fail("complete report must not rerun"),
+    )
+    assert resumed == report
+
+
+def test_policy_shard_orchestrator_persists_and_resumes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import embodi.sim.benchmark_geometry_evaluation as evaluation
+
+    manifest_path = tmp_path / "development.json"
+    manifest_path.write_text("{}")
+    scenario = Scenario(
+        scenario_id="development-so101-push_to_zone-0000",
+        split="development",
+        morphology="so101",
+        task="push_to_zone",
+        seed=1,
+        factors={},
+    )
+    manifest = SimpleNamespace(path=manifest_path, scenarios=(scenario,))
+    definition = SimpleNamespace(sha256="definition")
+    admission_path = tmp_path / "admission.json"
+    admission_path.write_text("{}")
+    admission = {
+        "aggregate": {"passed": True},
+        "provenance": {"git_commit": "smoke"},
+    }
+    identity = {"condition": "joint", "model_seed": 36001, "morphology": "so101"}
+    monkeypatch.setattr(
+        evaluation,
+        "runtime_provenance",
+        lambda **_kwargs: {"git_dirty": True, "git_commit": "smoke"},
+    )
+    monkeypatch.setattr(evaluation, "runtime_scenario", lambda factors: factors)
+    monkeypatch.setattr(evaluation, "validate_passing_admission", lambda *_args, **_kwargs: admission)
+    monkeypatch.setattr(
+        evaluation,
+        "resolve_checkpoint",
+        lambda *_args, **_kwargs: (tmp_path / "checkpoint", identity),
+    )
+    closed = []
+
+    def env_factory(*_args, **_kwargs):
+        env = EpisodeEnv(terminal_step=1)
+        env.close = lambda: closed.append(True)
+        return env
+
+    output = tmp_path / "shard.json"
+    report = evaluate_policy_shard(
+        definition,
+        manifest,
+        admission_path,
+        tmp_path / "summary.json",
+        output,
+        condition="joint",
+        seed=36001,
+        morphology="so101",
+        device="cpu",
+        registered=False,
+        env_factory=env_factory,
+        policy_loader=lambda *_args: FakePolicy(),
+        processor_factory=lambda *_args, **_kwargs: FakeProcessor(),
+    )
+    assert report["complete"] is True
+    assert report["aggregate"]["four_task_macro_success"] == pytest.approx(0.25)
+    assert closed == [True]
+    resumed = evaluate_policy_shard(
+        definition,
+        manifest,
+        admission_path,
+        tmp_path / "summary.json",
+        output,
+        condition="joint",
+        seed=36001,
+        morphology="so101",
+        device="cpu",
+        registered=False,
+        env_factory=lambda *_args, **_kwargs: pytest.fail("complete report must not rerun"),
+        policy_loader=lambda *_args: pytest.fail("complete report must not reload"),
+    )
+    assert resumed == report
 
 
 def test_clipping_ignores_float32_round_trip_floor() -> None:
