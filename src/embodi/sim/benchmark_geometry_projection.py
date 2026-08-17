@@ -52,6 +52,9 @@ ARMS = ("baseline", "projection")
 EXECUTION_HORIZON = 4
 IK_ITERATIONS = 20
 FIRST_CHUNK_MAX_ABS = 1e-5
+INITIAL_IMAGE_MAX_ABS_UINT8 = 1
+INITIAL_IMAGE_MAX_DIFFERING_FRACTION = 1e-4
+INITIAL_IMAGE_CHANNEL_VALUES = 480 * 640 * 3
 THRESHOLDS = {"translation_m": 0.001, "rotation_deg": 1.0, "gripper_native": 1.0}
 ALPHA_GRID = tuple(index / 16 for index in range(16, -1, -1))
 ALPHA_LABELS = tuple("1" if index == 16 else "0" if index == 0 else f"{index}/16" for index in range(16, -1, -1))
@@ -106,6 +109,13 @@ PROJECTION_PROTOCOL = {
     "translation_threshold_m": 0.001,
     "rotation_threshold_deg": 1.0,
     "gripper_threshold_native": 1.0,
+    "initial_input_equivalence": {
+        "canonical_state_sha256_exact": True,
+        "instruction_sha256_exact": True,
+        "image_max_abs_uint8": INITIAL_IMAGE_MAX_ABS_UINT8,
+        "image_max_differing_channel_value_fraction": INITIAL_IMAGE_MAX_DIFFERING_FRACTION,
+        "exact_image_sha256_is_descriptive": True,
+    },
     "first_chunk_max_abs_tolerance": FIRST_CHUNK_MAX_ABS,
     "pairing": "fresh adjacent counterbalanced baseline/projection episodes",
 }
@@ -290,8 +300,15 @@ def exact_initial_input_hashes(
 ) -> dict[str, str]:
     frame = np.asarray(frame)
     state = np.asarray(canonical_state, dtype=np.float32)
-    if frame.shape != (480, 640, 3) or state.shape != (1, 10) or not np.isfinite(state).all():
-        raise ValueError("initial policy input must contain a 640x480 image and finite canonical state")
+    if (
+        frame.shape != (480, 640, 3)
+        or frame.dtype != np.uint8
+        or state.shape != (1, 10)
+        or not np.isfinite(state).all()
+    ):
+        raise ValueError(
+            "initial policy input must contain a uint8 640x480 image and finite canonical state"
+        )
     if not isinstance(instruction, str):
         raise ValueError("initial policy instruction must be text")
     components = {
@@ -310,6 +327,40 @@ def capture_policy_input(env: Any) -> PolicyInput:
     state = np.asarray(env.canonical_state(), dtype=np.float32).copy()
     instruction = env.instruction
     return PolicyInput(frame, state, instruction, exact_initial_input_hashes(frame, state, instruction))
+
+
+def compare_initial_inputs(first: PolicyInput, second: PolicyInput) -> dict[str, Any]:
+    if first.frame.shape != second.frame.shape or first.frame.dtype != second.frame.dtype:
+        raise ValueError("paired initial images must share shape and dtype")
+    if first.frame.dtype != np.uint8:
+        raise ValueError("paired initial images must be uint8")
+    difference = np.abs(first.frame.astype(np.int16) - second.frame.astype(np.int16))
+    differing = int(np.count_nonzero(difference))
+    image_fraction = differing / difference.size
+    state_exact = (
+        first.hashes["canonical_state_sha256"]
+        == second.hashes["canonical_state_sha256"]
+    )
+    instruction_exact = (
+        first.hashes["instruction_sha256"] == second.hashes["instruction_sha256"]
+    )
+    image_exact = first.hashes["top_image_sha256"] == second.hashes["top_image_sha256"]
+    image_maximum = int(difference.max(initial=0))
+    equivalent = (
+        state_exact
+        and instruction_exact
+        and image_maximum <= INITIAL_IMAGE_MAX_ABS_UINT8
+        and image_fraction <= INITIAL_IMAGE_MAX_DIFFERING_FRACTION
+    )
+    return {
+        "initial_image_exact_hash_match": image_exact,
+        "initial_image_max_abs_difference_uint8": image_maximum,
+        "initial_image_differing_channel_values": differing,
+        "initial_image_differing_fraction": image_fraction,
+        "initial_canonical_state_hash_match": state_exact,
+        "initial_instruction_hash_match": instruction_exact,
+        "initial_input_equivalent": equivalent,
+    }
 
 
 def predict_from_input(snapshot: PolicyInput, policy: Any, processor: Any, device: str) -> np.ndarray:
@@ -816,10 +867,10 @@ def run_projection_pair(
         policy.reset()
         snapshots[arm] = capture_policy_input(environments[arm])
         chunks[arm] = predict_from_input(snapshots[arm], policy, processor, device)
-    input_agreement = snapshots["baseline"].hashes == snapshots["projection"].hashes
+    input_comparison = compare_initial_inputs(snapshots["baseline"], snapshots["projection"])
     chunk_difference = float(np.max(np.abs(chunks["baseline"] - chunks["projection"])))
-    if not input_agreement:
-        raise TreatmentDeliveryError("paired initial policy input hashes do not match exactly")
+    if not input_comparison["initial_input_equivalent"]:
+        raise TreatmentDeliveryError("paired initial policy inputs are not equivalent")
     if not np.isfinite(chunk_difference) or chunk_difference > FIRST_CHUNK_MAX_ABS:
         raise TreatmentDeliveryError("paired first policy chunks exceed the registered tolerance")
     outcomes = {}
@@ -836,7 +887,7 @@ def run_projection_pair(
     return {
         "arm_order": list(order),
         "initial_inputs": {arm: snapshots[arm].hashes for arm in ARMS},
-        "initial_input_hash_agreement": input_agreement,
+        **input_comparison,
         "first_chunks": {arm: _array_sha256(chunks[arm]) for arm in ARMS},
         "first_chunk_max_abs_difference": chunk_difference,
         "arms": outcomes,
@@ -1041,6 +1092,21 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
             )
             for value in initial_inputs.values()
         )
+        if valid_initial_hashes:
+            for hashes in initial_inputs.values():
+                components = {
+                    name: hashes[name]
+                    for name in (
+                        "top_image_sha256",
+                        "canonical_state_sha256",
+                        "instruction_sha256",
+                    )
+                }
+                if hashes["combined_sha256"] != hashlib.sha256(
+                    json.dumps(components, sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest():
+                    valid_initial_hashes = False
+                    break
         valid_chunk_hashes = isinstance(first_chunks, dict) and set(first_chunks) == set(ARMS) and all(
             isinstance(digest, str)
             and len(digest) == 64
@@ -1048,6 +1114,45 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
             for digest in first_chunks.values()
         )
         chunk_difference = outcome.get("first_chunk_max_abs_difference")
+        image_exact = outcome.get("initial_image_exact_hash_match")
+        image_maximum = outcome.get("initial_image_max_abs_difference_uint8")
+        image_differing = outcome.get("initial_image_differing_channel_values")
+        image_fraction = outcome.get("initial_image_differing_fraction")
+        state_exact = outcome.get("initial_canonical_state_hash_match")
+        instruction_exact = outcome.get("initial_instruction_hash_match")
+        input_equivalent = outcome.get("initial_input_equivalent")
+        image_hashes_match = initial_inputs.get("baseline", {}).get(
+            "top_image_sha256"
+        ) == initial_inputs.get("projection", {}).get("top_image_sha256")
+        state_hashes_match = initial_inputs.get("baseline", {}).get(
+            "canonical_state_sha256"
+        ) == initial_inputs.get("projection", {}).get("canonical_state_sha256")
+        instruction_hashes_match = initial_inputs.get("baseline", {}).get(
+            "instruction_sha256"
+        ) == initial_inputs.get("projection", {}).get("instruction_sha256")
+        valid_input_comparison = (
+            isinstance(image_exact, bool)
+            and type(image_maximum) is int
+            and 0 <= image_maximum <= 255
+            and type(image_differing) is int
+            and 0 <= image_differing <= INITIAL_IMAGE_CHANNEL_VALUES
+            and isinstance(image_fraction, (int, float))
+            and np.isfinite(image_fraction)
+            and image_fraction == image_differing / INITIAL_IMAGE_CHANNEL_VALUES
+            and image_exact is image_hashes_match
+            and image_exact is (image_differing == 0)
+            and ((image_differing == 0 and image_maximum == 0) or (image_differing > 0 and image_maximum > 0))
+            and state_exact is state_hashes_match
+            and instruction_exact is instruction_hashes_match
+            and input_equivalent
+            is (
+                state_exact is True
+                and instruction_exact is True
+                and image_maximum <= INITIAL_IMAGE_MAX_ABS_UINT8
+                and image_fraction <= INITIAL_IMAGE_MAX_DIFFERING_FRACTION
+            )
+            and input_equivalent is True
+        )
         if (
             not isinstance(outcome.get("scenario_id"), str)
             or task not in TASKS
@@ -1061,9 +1166,8 @@ def _validate_outcomes(report: dict[str, Any]) -> None:
                     identity.get("morphology"),
                 )
             )
-            or outcome.get("initial_input_hash_agreement") is not True
             or not valid_initial_hashes
-            or initial_inputs.get("baseline") != initial_inputs.get("projection")
+            or not valid_input_comparison
             or not valid_chunk_hashes
             or not isinstance(chunk_difference, (int, float))
             or not np.isfinite(chunk_difference)

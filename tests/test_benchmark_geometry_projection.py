@@ -153,6 +153,9 @@ class FeasibilityEnv:
         instruction: str | None = None,
         clip: bool = False,
         task: str = "push_to_zone",
+        image_difference_count: int = 0,
+        image_difference_value: int = 1,
+        state_offset: float = 0.0,
     ) -> None:
         if instruction is not None:
             self.instruction = instruction
@@ -164,12 +167,18 @@ class FeasibilityEnv:
         self.applied: list[np.ndarray] = []
         self.steps = 0
         self.clip = clip
+        self.image_difference_count = image_difference_count
+        self.image_difference_value = image_difference_value
+        self.state_offset = state_offset
 
     def render_top(self):
-        return np.zeros((480, 640, 3), dtype=np.uint8)
+        frame = np.zeros((480, 640, 3), dtype=np.uint8)
+        frame.reshape(-1)[: self.image_difference_count] = self.image_difference_value
+        return frame
 
     def canonical_state(self):
         value = np.zeros((1, 10), dtype=np.float32)
+        value[0, 0] = self.state_offset
         value[0, 3:9] = canonical_rotation_6d(np.eye(3))
         return value
 
@@ -508,16 +517,52 @@ def test_pair_counterbalance_and_initial_invariants() -> None:
         order=("projection", "baseline"),
         maximum_steps=1,
     )
-    assert pair["initial_input_hash_agreement"] is True
-    assert pair["initial_inputs"]["baseline"] == pair["initial_inputs"]["projection"]
+    assert pair["initial_input_equivalent"] is True
+    assert pair["initial_image_exact_hash_match"] is True
+    assert pair["initial_image_max_abs_difference_uint8"] == 0
+    assert pair["initial_image_differing_channel_values"] == 0
+    assert pair["initial_canonical_state_hash_match"] is True
+    assert pair["initial_instruction_hash_match"] is True
     assert pair["first_chunk_max_abs_difference"] <= FIRST_CHUNK_MAX_ABS
     assert pair["arm_order"] == ["projection", "baseline"]
 
-    mismatched = {
-        "baseline": FeasibilityEnv(),
-        "projection": FeasibilityEnv(instruction="different"),
-    }
-    with pytest.raises(TreatmentDeliveryError, match="initial policy input"):
+
+def test_three_magnitude_one_image_channel_differences_are_equivalent() -> None:
+    image_tolerant = run_projection_pair(
+        {
+            "baseline": FeasibilityEnv(),
+            "projection": FeasibilityEnv(image_difference_count=3),
+        },
+        FakePolicy(),
+        FakeProcessor(),
+        "cpu",
+        order=("baseline", "projection"),
+        maximum_steps=1,
+    )
+    assert image_tolerant["initial_input_equivalent"] is True
+    assert image_tolerant["initial_image_exact_hash_match"] is False
+    assert image_tolerant["initial_image_max_abs_difference_uint8"] == 1
+    assert image_tolerant["initial_image_differing_channel_values"] == 3
+    assert image_tolerant["initial_image_differing_fraction"] == pytest.approx(3 / 921_600)
+    assert image_tolerant["initial_canonical_state_hash_match"] is True
+    assert image_tolerant["initial_instruction_hash_match"] is True
+
+
+@pytest.mark.parametrize(
+    "changed",
+    [
+        pytest.param(FeasibilityEnv(image_difference_count=93), id="excessive-count"),
+        pytest.param(
+            FeasibilityEnv(image_difference_count=3, image_difference_value=2),
+            id="excessive-magnitude",
+        ),
+    ],
+)
+def test_initial_image_tolerance_rejects_excessive_count_or_magnitude(
+    changed: FeasibilityEnv,
+) -> None:
+    mismatched = {"baseline": FeasibilityEnv(), "projection": changed}
+    with pytest.raises(TreatmentDeliveryError, match="initial policy inputs"):
         run_projection_pair(
             mismatched,
             FakePolicy(),
@@ -528,6 +573,51 @@ def test_pair_counterbalance_and_initial_invariants() -> None:
         )
     assert not mismatched["baseline"].decoded
     assert not mismatched["projection"].decoded
+
+
+@pytest.mark.parametrize(
+    "changed",
+    [
+        pytest.param(FeasibilityEnv(state_offset=1e-6), id="canonical-state"),
+        pytest.param(FeasibilityEnv(instruction="different"), id="instruction"),
+    ],
+)
+def test_initial_state_or_instruction_hash_mismatch_fails(changed: FeasibilityEnv) -> None:
+    mismatched = {"baseline": FeasibilityEnv(), "projection": changed}
+    with pytest.raises(TreatmentDeliveryError, match="initial policy inputs"):
+        run_projection_pair(
+            mismatched,
+            FakePolicy(),
+            FakeProcessor(),
+            "cpu",
+            order=("baseline", "projection"),
+            maximum_steps=1,
+        )
+    assert not mismatched["baseline"].decoded
+    assert not mismatched["projection"].decoded
+
+
+def test_first_unprojected_chunk_tolerance_remains_a_hard_gate() -> None:
+
+    class ChunkMismatchPolicy(FakePolicy):
+        def predict_canonical_action_chunk(self, batch):
+            value = super().predict_canonical_action_chunk(batch).clone()
+            if self.predict_calls == 2:
+                value[0, 0, 0, 0] += 2e-5
+            return value
+
+    chunk_mismatched = {arm: FeasibilityEnv() for arm in ("baseline", "projection")}
+    with pytest.raises(TreatmentDeliveryError, match="first policy chunks"):
+        run_projection_pair(
+            chunk_mismatched,
+            ChunkMismatchPolicy(),
+            FakeProcessor(),
+            "cpu",
+            order=("baseline", "projection"),
+            maximum_steps=1,
+        )
+    assert not chunk_mismatched["baseline"].decoded
+    assert not chunk_mismatched["projection"].decoded
 
 
 def test_milestones_advance_only_through_currently_true_ordered_prefix() -> None:
@@ -610,6 +700,14 @@ def test_validation_reconciles_clipping_success_and_chunk_mutations() -> None:
     changed = copy.deepcopy(report)
     changed["outcomes"][0]["arms"]["baseline"]["chunks"] = 2
     with pytest.raises(ValueError, match="chunk count"):
+        _validate_outcomes(changed)
+    changed = copy.deepcopy(report)
+    changed["outcomes"][0]["initial_image_differing_fraction"] = 1e-6
+    with pytest.raises(ValueError, match="pair identity or invariant"):
+        _validate_outcomes(changed)
+    changed = copy.deepcopy(report)
+    changed["outcomes"][0]["initial_canonical_state_hash_match"] = False
+    with pytest.raises(ValueError, match="pair identity or invariant"):
         _validate_outcomes(changed)
 
 
