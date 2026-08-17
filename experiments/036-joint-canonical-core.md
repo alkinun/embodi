@@ -53,12 +53,48 @@ passes, and do not evaluate the final split.
 
 ## result
 
-pending.
+all nine registered runs completed at fixed update 1,200. raw metrics and
+checkpoint identities are recorded in `reports/benchmark-exp36-summary.json`.
+the primary aggregates were:
+
+| endpoint | three-seed mean regression loss |
+| --- | ---: |
+| matched specialist ensemble | 0.011681 |
+| joint core | 0.012222 |
+| opposite-morphology specialist transfer | 0.085092 |
+
+the joint core was 4.64% worse than the matched in-domain specialist ensemble,
+inside the registered 10% margin, and reduced loss by 85.64% relative to
+opposite-morphology specialist transfer. both criteria held in all three paired
+seeds: joint specialist regressions were 2.69%, 4.62%, and 6.63%, while transfer
+loss reductions were 84.40%, 84.91%, and 87.23%.
+
+the SO-101 specialist and joint morphology means were 0.003914 and 0.004220;
+the Panda specialist and joint means were 0.019447 and 0.020224. thus the joint
+core stayed within 7.84% on SO-101 and 4.00% on Panda despite receiving half as
+many presentations from each morphology/task cell. joint six-cell macro losses
+were stable across seeds at 0.012049, 0.012220, and 0.012398.
 
 ## finding
 
-pending.
+matched-exposure joint training supports both morphologies in one canonical core
+with bounded interference relative to separate specialists. canonical
+coordinates alone do not make a specialist transferable: SO-101-to-Panda and
+Panda-to-SO-101 zero-shot specialist transfer remained far worse than joint
+training. the design does not include half-exposure specialist controls, so it
+cannot distinguish positive transfer from sufficient coverage of both
+morphologies or establish representation invariance.
+
+this is an offline canonical-regression result. supplied canonical state bypassed
+the learned native state adapters, and no native decoder or closed-loop behavior
+was evaluated. it therefore does not establish deployment performance or
+zero-shot transfer to an unseen morphology.
 
 ## decision
 
-pending.
+- admit the shared canonical core recipe for development-split closed-loop
+  evaluation.
+- retain separate native normalization, adapters, and decoders for each
+  embodiment around one shared core.
+- do not evaluate the final split. first test native wrapper and decoder quality,
+  closed-loop task success, and failure modes on the development split.

@@ -101,6 +101,75 @@ def test_frozen_validation_frames_are_balanced_and_hash_bound() -> None:
     assert all(len(indices) == len(set(indices)) == 256 for indices in values["cells"].values())
 
 
+def test_exp36_report_recomputes_registered_gate() -> None:
+    root = Path(__file__).parents[1]
+    report = json.loads((root / "reports" / "benchmark-exp36-summary.json").read_text())
+    matched = []
+    opposite = []
+    joint = []
+    for seed in report["model_seeds"]:
+        so101 = report["runs"][f"so101-seed{seed}"]["validation"]
+        panda = report["runs"][f"panda-seed{seed}"]["validation"]
+        joint_metrics = report["runs"][f"joint-seed{seed}"]["validation"]
+        matched.append((so101["macro/so101"] + panda["macro/panda"]) / 2)
+        opposite.append((so101["macro/panda"] + panda["macro/so101"]) / 2)
+        joint.append(joint_metrics["macro/all"])
+        gate = report["paired_gate"]["seeds"][str(seed)]
+        assert gate["matched_specialist_ensemble"] == pytest.approx(matched[-1])
+        assert gate["opposite_morphology_specialist_transfer"] == pytest.approx(opposite[-1])
+        assert gate["joint"] == pytest.approx(joint[-1])
+        relative_regression = joint[-1] / matched[-1] - 1
+        transfer_reduction = 1 - joint[-1] / opposite[-1]
+        assert gate["joint_relative_to_matched_specialists"] == pytest.approx(relative_regression)
+        assert gate["joint_reduction_from_opposite_transfer"] == pytest.approx(transfer_reduction)
+        passed = relative_regression <= 0.1 and transfer_reduction >= 0.1
+        assert gate["passed_both"] is passed
+
+    def mean(values):
+        return sum(values) / len(values)
+
+    aggregates = report["aggregates"]
+    assert aggregates["matched_specialist_ensemble_mean"] == pytest.approx(mean(matched))
+    assert aggregates["opposite_morphology_specialist_transfer_mean"] == pytest.approx(mean(opposite))
+    assert aggregates["joint_macro_all_mean"] == pytest.approx(mean(joint))
+    mean_margin_passed = mean(joint) <= 1.1 * mean(matched)
+    mean_transfer_passed = mean(joint) <= 0.9 * mean(opposite)
+    gate = report["paired_gate"]
+    assert gate["mean_joint_within_specialist_margin"] is mean_margin_passed
+    assert gate["mean_transfer_improvement_met"] is mean_transfer_passed
+    assert gate["paired_seeds_passing_both"] == sum(
+        value["passed_both"] for value in gate["seeds"].values()
+    )
+    assert gate["passed"] is (
+        mean_margin_passed
+        and mean_transfer_passed
+        and gate["paired_seeds_passing_both"] >= gate["minimum_paired_seeds_passing_both"]
+    )
+
+
+def test_exp36_report_matches_local_source_metrics() -> None:
+    root = Path(__file__).parents[1]
+    report = json.loads((root / "reports" / "benchmark-exp36-summary.json").read_text())
+    paths = [root / run["output"] for run in report["runs"].values()]
+    if not all(path.is_dir() for path in paths):
+        pytest.skip("local experiment 036 outputs are unavailable")
+
+    for run, output in zip(report["runs"].values(), paths, strict=True):
+        metrics_path = output / "metrics.jsonl"
+        manifest_path = output / "run_manifest.json"
+        records = [json.loads(line) for line in metrics_path.read_text().splitlines()]
+        final_train = next(value for value in records if value["step"] == 1200 and value["split"] == "train")
+        validation = next(value for value in records if value["step"] == 1200 and value["split"] == "validation")
+        assert file_sha256(metrics_path) == run["metrics_sha256"]
+        assert file_sha256(manifest_path) == run["run_manifest_sha256"]
+        assert final_train["metrics"]["regression_loss"] == run["final_train_regression_loss"]
+        assert final_train["metrics"]["grad_norm"] == run["final_gradient_norm"]
+        assert validation["metrics"] == run["validation"]
+        assert (output / "final" / "so101" / "core.pt").stat().st_ino == (
+            output / "final" / "panda" / "core.pt"
+        ).stat().st_ino
+
+
 def test_episode_mapping_groups_all_three_tasks(tmp_path: Path) -> None:
     metadata = tmp_path / "so101" / "meta"
     metadata.mkdir(parents=True)
