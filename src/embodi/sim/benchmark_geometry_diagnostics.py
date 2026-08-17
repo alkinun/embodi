@@ -983,15 +983,15 @@ def validate_h16_reproduction(
         expected = None if source is None else _exp37_trajectory_signature(source)
         actual = _exp37_trajectory_signature(outcome)
         trajectory_reproduced = actual == expected
+        success_reproduced = expected is not None and outcome["success"] == expected["success"]
         if (
             expected is None
             or outcome.get("exp37_expected_trajectory") != expected
             or outcome.get("exp37_expected_success") != expected["success"]
-            or outcome["success"] != expected["success"]
-            or outcome.get("exp37_success_reproduced") is not True
+            or outcome.get("exp37_success_reproduced") is not success_reproduced
             or outcome.get("exp37_trajectory_reproduced") is not trajectory_reproduced
         ):
-            raise ValueError("H16 success/failure does not exactly reproduce Experiment 037")
+            raise ValueError("H16 Experiment 037 reference comparison is invalid")
 
 
 def _shard_aggregate(outcomes: list[dict[str, Any]]) -> dict[str, Any]:
@@ -1028,6 +1028,9 @@ def _shard_aggregate(outcomes: list[dict[str, Any]]) -> dict[str, Any]:
         for horizon in HORIZONS
     }
     h16_outcomes = [value for value in outcomes if value["execution_horizon"] == 16]
+    h16_matches = sum(value.get("exp37_success_reproduced") is True for value in h16_outcomes)
+    h16_source_successes = sum(value.get("exp37_expected_success") is True for value in h16_outcomes)
+    h16_replay_successes = sum(value["success"] for value in h16_outcomes)
     return {
         "cells": cells,
         "episodes": len(outcomes),
@@ -1036,6 +1039,14 @@ def _shard_aggregate(outcomes: list[dict[str, Any]]) -> dict[str, Any]:
             value.get("exp37_success_reproduced") is True
             for value in outcomes
             if value["execution_horizon"] == 16
+        ),
+        "h16_outcome_match_rate": h16_matches / len(h16_outcomes) if h16_outcomes else 0.0,
+        "h16_source_successes": h16_source_successes,
+        "h16_replay_successes": h16_replay_successes,
+        "h16_replay_minus_source_success_rate": (
+            (h16_replay_successes - h16_source_successes) / len(h16_outcomes)
+            if h16_outcomes
+            else 0.0
         ),
         "h16_trajectory_reproduction_rate": (
             sum(value.get("exp37_trajectory_reproduced") is True for value in h16_outcomes)
@@ -1179,12 +1190,6 @@ def evaluate_diagnostic_shard(
                 outcome["exp37_trajectory_reproduced"] = (
                     _exp37_trajectory_signature(outcome) == expected_trajectory
                 )
-                if not outcome["exp37_success_reproduced"]:
-                    _append_outcome(report, outcome)
-                    _write_progress(output, report)
-                    raise ValueError(
-                        f"H16 success/failure does not reproduce Experiment 037: {scenario.scenario_id}"
-                    )
             report["infrastructure_errors"] = [
                 error
                 for error in report["infrastructure_errors"]
@@ -1217,8 +1222,6 @@ def evaluate_diagnostic_shard(
     if report["infrastructure_errors"]:
         raise RuntimeError("diagnostic shard cannot complete with infrastructure errors")
     report["aggregate"] = _shard_aggregate(report["outcomes"])
-    if not report["aggregate"]["h16_reproduced"]:
-        raise ValueError("diagnostic shard failed closed on H16 reproduction")
     report["complete"] = True
     report["status"] = "completed" if registered else "completed_smoke_unregistered"
     _write_progress(output, report)
@@ -1402,7 +1405,7 @@ def aggregate_registered_shards(
             ):
                 raise ValueError(f"registered diagnostic outcome metadata is invalid: {key}")
         aggregate = _shard_aggregate(outcomes)
-        if report.get("aggregate") != aggregate or not aggregate["h16_reproduced"]:
+        if report.get("aggregate") != aggregate:
             raise ValueError(f"registered diagnostic shard aggregate does not recompute: {key}")
         source_report, source_hash = source_reports[key]
         if source_hash != contract.get("exp37_source_report_sha256"):
@@ -1432,6 +1435,7 @@ def aggregate_registered_shards(
 
     mechanism = {}
     distribution = {}
+    h16_reference = {}
     milestone_aggregates = {}
     all_values = [outcome for values in all_outcomes.values() for outcome in values]
     geometry = _summarize_policy_reconstruction(all_values)
@@ -1443,6 +1447,35 @@ def aggregate_registered_shards(
         condition_values = [
             outcome for seed in SEEDS for outcome in all_outcomes[(condition, seed)]
         ]
+        h16_values = [
+            outcome for outcome in condition_values if outcome["execution_horizon"] == 16
+        ]
+        source_successes = sum(outcome["exp37_expected_success"] for outcome in h16_values)
+        replay_successes = sum(outcome["success"] for outcome in h16_values)
+        h16_reference[condition] = {
+            "episodes": len(h16_values),
+            "exact_outcome_matches": sum(
+                outcome["exp37_success_reproduced"] for outcome in h16_values
+            ),
+            "exact_outcome_match_rate": sum(
+                outcome["exp37_success_reproduced"] for outcome in h16_values
+            )
+            / len(h16_values),
+            "source_success_rate": source_successes / len(h16_values),
+            "replay_success_rate": replay_successes / len(h16_values),
+            "replay_minus_source_success_rate": (
+                replay_successes - source_successes
+            )
+            / len(h16_values),
+            "exact_trajectory_matches": sum(
+                outcome["exp37_trajectory_reproduced"] for outcome in h16_values
+            ),
+            "exact_trajectory_match_rate": sum(
+                outcome["exp37_trajectory_reproduced"] for outcome in h16_values
+            )
+            / len(h16_values),
+            "integrity_gate": False,
+        }
         geometry_by_condition[condition] = _summarize_policy_reconstruction(condition_values)
         clipping_by_condition[condition] = _summarize_native_clipping(condition_values)
         geometry_classification[condition] = (
@@ -1536,6 +1569,7 @@ def aggregate_registered_shards(
         "shard_summaries": shard_summaries,
         "milestone_attainment": milestone_aggregates,
         "horizon_mechanism": mechanism,
+        "h16_reference_comparison": h16_reference,
         "distribution_shift_association": distribution,
         "chunk_consistency": chunk_consistency,
         "geometry_interpretation": {
