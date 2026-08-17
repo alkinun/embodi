@@ -266,27 +266,31 @@ def _synthetic_registered_reports(*, treatment_failure: bool) -> tuple[
     exp36 = json.loads((ROOT / "reports/benchmark-exp36-summary.json").read_text())
     exp38 = json.loads((ROOT / "reports/benchmark-exp38-summary.json").read_text())
     templates = {
-        task: run_projection_pair(
+        (task, source_arm): run_projection_pair(
             {arm: FeasibilityEnv(task=task) for arm in ("baseline", "projection")},
             FakePolicy(),
             FakeProcessor(),
             "cpu",
-            order=("baseline", "projection"),
+            order=(source_arm, "projection" if source_arm == "baseline" else "baseline"),
             maximum_steps=1,
         )
         for task in projection.TASKS
+        for source_arm in projection.ARMS
     }
-    treatment_template = run_projection_pair(
-        {
-            "baseline": FeasibilityEnv(task="push_to_zone"),
-            "projection": InfeasibleEnv(task="push_to_zone"),
-        },
-        FakePolicy(),
-        FakeProcessor(),
-        "cpu",
-        order=("projection", "baseline"),
-        maximum_steps=1,
-    )
+    treatment_templates = {
+        source_arm: run_projection_pair(
+            {
+                "baseline": FeasibilityEnv(task="push_to_zone"),
+                "projection": InfeasibleEnv(task="push_to_zone"),
+            },
+            FakePolicy(),
+            FakeProcessor(),
+            "cpu",
+            order=(source_arm, "projection" if source_arm == "baseline" else "baseline"),
+            maximum_steps=1,
+        )
+        for source_arm in projection.ARMS
+    }
     runtime = _synthetic_runtime()
     runtime_signature = hashlib.sha256(
         json.dumps(runtime, sort_keys=True, separators=(",", ":")).encode()
@@ -299,10 +303,12 @@ def _synthetic_registered_reports(*, treatment_failure: bool) -> tuple[
         outcomes = []
         for ordinal, scenario in enumerate(scenarios):
             use_failure = treatment_failure and position == 0 and ordinal == 0
+            order = pair_arm_order(ordinal, condition, seed, morphology)
             pair = copy.deepcopy(
-                treatment_template if use_failure else templates[scenario.task]
+                treatment_templates[order[0]]
+                if use_failure
+                else templates[(scenario.task, order[0])]
             )
-            pair["arm_order"] = list(pair_arm_order(ordinal, condition, seed, morphology))
             pair.update(
                 scenario_id=scenario.scenario_id,
                 scenario_seed=scenario.seed,
@@ -523,11 +529,26 @@ def test_pair_counterbalance_and_initial_invariants() -> None:
     assert pair["initial_image_differing_channel_values"] == 0
     assert pair["initial_canonical_state_hash_match"] is True
     assert pair["initial_instruction_hash_match"] is True
+    assert pair["initial_policy_input_source_arm"] == "projection"
+    assert (
+        pair["initial_policy_input_anchor_hashes"]
+        == pair["initial_inputs"]["projection"]
+    )
     assert pair["first_chunk_max_abs_difference"] <= FIRST_CHUNK_MAX_ABS
     assert pair["arm_order"] == ["projection", "baseline"]
 
 
-def test_three_magnitude_one_image_channel_differences_are_equivalent() -> None:
+def test_bounded_actual_image_difference_uses_one_shared_first_prediction_anchor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed_snapshots = []
+    original_predict = projection.predict_from_input
+
+    def tracked_predict(snapshot, policy, processor, device):
+        observed_snapshots.append(snapshot)
+        return original_predict(snapshot, policy, processor, device)
+
+    monkeypatch.setattr(projection, "predict_from_input", tracked_predict)
     image_tolerant = run_projection_pair(
         {
             "baseline": FeasibilityEnv(),
@@ -536,7 +557,7 @@ def test_three_magnitude_one_image_channel_differences_are_equivalent() -> None:
         FakePolicy(),
         FakeProcessor(),
         "cpu",
-        order=("baseline", "projection"),
+        order=("projection", "baseline"),
         maximum_steps=1,
     )
     assert image_tolerant["initial_input_equivalent"] is True
@@ -546,6 +567,37 @@ def test_three_magnitude_one_image_channel_differences_are_equivalent() -> None:
     assert image_tolerant["initial_image_differing_fraction"] == pytest.approx(3 / 921_600)
     assert image_tolerant["initial_canonical_state_hash_match"] is True
     assert image_tolerant["initial_instruction_hash_match"] is True
+    assert image_tolerant["initial_policy_input_source_arm"] == "projection"
+    assert (
+        image_tolerant["initial_policy_input_anchor_hashes"]
+        == image_tolerant["initial_inputs"]["projection"]
+    )
+    assert len(observed_snapshots) == 2
+    assert observed_snapshots[0] is observed_snapshots[1]
+    assert np.count_nonzero(observed_snapshots[0].frame) == 3
+
+
+def test_first_predictions_are_assigned_in_counterbalanced_arm_order() -> None:
+    first = _chunk()
+    second = _chunk()
+    second[0, 0, 0] += 1e-6
+
+    class OrderedPolicy(FakePolicy):
+        def predict_canonical_action_chunk(self, _batch):
+            self.predict_calls += 1
+            value = first if self.predict_calls == 1 else second
+            return torch.from_numpy(value[None])
+
+    pair = run_projection_pair(
+        {arm: FeasibilityEnv() for arm in ("baseline", "projection")},
+        OrderedPolicy(),
+        FakeProcessor(),
+        "cpu",
+        order=("projection", "baseline"),
+        maximum_steps=1,
+    )
+    assert pair["first_chunks"]["projection"] == projection._array_sha256(first)
+    assert pair["first_chunks"]["baseline"] == projection._array_sha256(second)
 
 
 @pytest.mark.parametrize(
@@ -597,7 +649,17 @@ def test_initial_state_or_instruction_hash_mismatch_fails(changed: FeasibilityEn
     assert not mismatched["projection"].decoded
 
 
-def test_first_unprojected_chunk_tolerance_remains_a_hard_gate() -> None:
+def test_nonrepeatable_same_input_chunk_tolerance_remains_a_hard_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed_snapshots = []
+    original_predict = projection.predict_from_input
+
+    def tracked_predict(snapshot, policy, processor, device):
+        observed_snapshots.append(snapshot)
+        return original_predict(snapshot, policy, processor, device)
+
+    monkeypatch.setattr(projection, "predict_from_input", tracked_predict)
 
     class ChunkMismatchPolicy(FakePolicy):
         def predict_canonical_action_chunk(self, batch):
@@ -618,6 +680,8 @@ def test_first_unprojected_chunk_tolerance_remains_a_hard_gate() -> None:
         )
     assert not chunk_mismatched["baseline"].decoded
     assert not chunk_mismatched["projection"].decoded
+    assert len(observed_snapshots) == 2
+    assert observed_snapshots[0] is observed_snapshots[1]
 
 
 def test_milestones_advance_only_through_currently_true_ordered_prefix() -> None:
@@ -668,16 +732,20 @@ def test_resume_rejects_contract_and_hash_chain_corruption(tmp_path: Path) -> No
 
 
 def test_validation_reconciles_clipping_success_and_chunk_mutations() -> None:
+    expected_order = pair_arm_order(0, "joint", 36001, "panda")
     pair = run_projection_pair(
-        {arm: FeasibilityEnv() for arm in ("baseline", "projection")},
+        {
+            "baseline": FeasibilityEnv(),
+            "projection": FeasibilityEnv(image_difference_count=3),
+        },
         FakePolicy(),
         FakeProcessor(),
         "cpu",
-        order=("baseline", "projection"),
+        order=expected_order,
         maximum_steps=1,
     )
     pair.update(
-        arm_order=list(pair_arm_order(0, "joint", 36001, "panda")),
+        arm_order=list(expected_order),
         scenario_id="development-panda-push_to_zone-0007",
         scenario_seed=1,
         morphology="panda",
@@ -707,6 +775,22 @@ def test_validation_reconciles_clipping_success_and_chunk_mutations() -> None:
         _validate_outcomes(changed)
     changed = copy.deepcopy(report)
     changed["outcomes"][0]["initial_canonical_state_hash_match"] = False
+    with pytest.raises(ValueError, match="pair identity or invariant"):
+        _validate_outcomes(changed)
+    changed = copy.deepcopy(report)
+    changed["outcomes"][0]["initial_policy_input_source_arm"] = "baseline"
+    with pytest.raises(ValueError, match="pair identity or invariant"):
+        _validate_outcomes(changed)
+    changed = copy.deepcopy(report)
+    changed["outcomes"][0]["initial_policy_input_anchor_hashes"] = changed["outcomes"][0][
+        "initial_inputs"
+    ]["baseline"]
+    with pytest.raises(ValueError, match="pair identity or invariant"):
+        _validate_outcomes(changed)
+    changed = copy.deepcopy(report)
+    changed["outcomes"][0].pop("initial_policy_input_source_arm")
+    changed["outcomes"][0].pop("initial_policy_input_anchor_hashes")
+    changed["outcomes"][0]["initial_input_hash_agreement"] = True
     with pytest.raises(ValueError, match="pair identity or invariant"):
         _validate_outcomes(changed)
 
