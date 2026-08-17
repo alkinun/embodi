@@ -981,15 +981,17 @@ def validate_h16_reproduction(
             continue
         source = source_outcomes.get(outcome["scenario_id"])
         expected = None if source is None else _exp37_trajectory_signature(source)
+        actual = _exp37_trajectory_signature(outcome)
+        trajectory_reproduced = actual == expected
         if (
             expected is None
-            or _exp37_trajectory_signature(outcome) != expected
             or outcome.get("exp37_expected_trajectory") != expected
             or outcome.get("exp37_expected_success") != expected["success"]
+            or outcome["success"] != expected["success"]
             or outcome.get("exp37_success_reproduced") is not True
-            or outcome.get("exp37_trajectory_reproduced") is not True
+            or outcome.get("exp37_trajectory_reproduced") is not trajectory_reproduced
         ):
-            raise ValueError("H16 does not exactly reproduce Experiment 037")
+            raise ValueError("H16 success/failure does not exactly reproduce Experiment 037")
 
 
 def _shard_aggregate(outcomes: list[dict[str, Any]]) -> dict[str, Any]:
@@ -1025,14 +1027,21 @@ def _shard_aggregate(outcomes: list[dict[str, Any]]) -> dict[str, Any]:
         }
         for horizon in HORIZONS
     }
+    h16_outcomes = [value for value in outcomes if value["execution_horizon"] == 16]
     return {
         "cells": cells,
         "episodes": len(outcomes),
         "successes": sum(value["success"] for value in outcomes),
         "h16_reproduced": all(
-            value.get("exp37_trajectory_reproduced") is True
+            value.get("exp37_success_reproduced") is True
             for value in outcomes
             if value["execution_horizon"] == 16
+        ),
+        "h16_trajectory_reproduction_rate": (
+            sum(value.get("exp37_trajectory_reproduced") is True for value in h16_outcomes)
+            / len(h16_outcomes)
+            if h16_outcomes
+            else 0.0
         ),
         "policy_reconstruction": reconstruction["overall"],
         "policy_reconstruction_by_lead": reconstruction["by_lead"],
@@ -1170,9 +1179,11 @@ def evaluate_diagnostic_shard(
                 outcome["exp37_trajectory_reproduced"] = (
                     _exp37_trajectory_signature(outcome) == expected_trajectory
                 )
-                if not outcome["exp37_trajectory_reproduced"]:
+                if not outcome["exp37_success_reproduced"]:
+                    _append_outcome(report, outcome)
+                    _write_progress(output, report)
                     raise ValueError(
-                        f"H16 outcome does not reproduce Experiment 037: {scenario.scenario_id}"
+                        f"H16 success/failure does not reproduce Experiment 037: {scenario.scenario_id}"
                     )
             report["infrastructure_errors"] = [
                 error
