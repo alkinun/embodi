@@ -1,4 +1,5 @@
 from copy import deepcopy
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -13,6 +14,7 @@ from embodi.sim.benchmark_data import (
     _load_or_create_generation_manifest,
     _reconcile_progress,
     benchmark_features,
+    verify_benchmark_dataset,
 )
 from embodi.sim.morphology import SO101
 
@@ -328,3 +330,86 @@ def test_generate_benchmark_dataset_rejects_invalid_writer_contract(
             height=height,
             image_writer_threads=image_writer_threads,
         )
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        ("incomplete", "manifest is not complete"),
+        ("benchmark_id", "dataset id does not match"),
+        ("definition", "definition hash does not match"),
+        ("scenario", "scenario manifest hash does not match"),
+        ("split", "split does not match"),
+        ("software", "software contract does not match"),
+        ("progress", "progress does not cover all morphologies"),
+        ("pending", "contains a pending episode"),
+    ],
+)
+def test_verify_benchmark_dataset_rejects_corrupt_generation_manifest(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mutation: str,
+    message: str,
+) -> None:
+    definition_path = tmp_path / "definition.json"
+    manifest_path = tmp_path / "manifest.json"
+    definition_path.write_text("definition")
+    manifest_path.write_text("manifest")
+    scenario = Scenario("scenario-0", "train", "so101", "push_to_zone", 1, {})
+    definition = SimpleNamespace(
+        values={"benchmark_id": "benchmark", "morphologies": [{"id": "so101"}]},
+        morphology_ids=("so101",),
+        sha256="definition-sha",
+        path=definition_path,
+    )
+    manifest = SimpleNamespace(path=manifest_path, scenarios=(scenario,))
+    software = {
+        "generator": benchmark_data.GENERATOR_FORMAT,
+        "lerobot": benchmark_data.LEROBOT_VERSION,
+        "mujoco": "3.3.0",
+        "implementation_sha256": {"benchmark_data.py": "sha"},
+    }
+    value = {
+        "format_version": 1,
+        "generator": benchmark_data.GENERATOR_FORMAT,
+        "complete": True,
+        "contract": {
+            "benchmark_id": "benchmark",
+            "definition_sha256": "definition-sha",
+            "scenario_manifest_sha256": "manifest-sha",
+            "split": "train",
+            "limit_per_cell": None,
+            "software": software,
+        },
+        "lerobot_version": benchmark_data.LEROBOT_VERSION,
+        "progress": {"so101": {}},
+        "pending": {"so101": None},
+    }
+    if mutation == "incomplete":
+        value["complete"] = False
+    elif mutation == "benchmark_id":
+        value["contract"]["benchmark_id"] = "wrong"
+    elif mutation == "definition":
+        value["contract"]["definition_sha256"] = "wrong"
+    elif mutation == "scenario":
+        value["contract"]["scenario_manifest_sha256"] = "wrong"
+    elif mutation == "split":
+        value["contract"]["split"] = "validation"
+    elif mutation == "software":
+        value["contract"]["software"] = {}
+    elif mutation == "progress":
+        value["progress"] = {}
+    else:
+        value["pending"]["so101"] = {"scenario_id": "pending"}
+    root = tmp_path / "dataset"
+    root.mkdir()
+    (root / benchmark_data.GENERATION_MANIFEST_NAME).write_text(json.dumps(value))
+    monkeypatch.setattr(benchmark_data.BenchmarkDefinition, "load", lambda path: definition)
+    monkeypatch.setattr(benchmark_data.ScenarioManifest, "load", lambda *args, **kwargs: manifest)
+    monkeypatch.setattr(benchmark_data, "_validate_frozen_manifest_hash", lambda *args: None)
+    monkeypatch.setattr(benchmark_data, "file_sha256", lambda path: "manifest-sha")
+    monkeypatch.setattr(benchmark_data, "version", lambda package: "3.3.0")
+    monkeypatch.setattr(benchmark_data, "_implementation_hashes", lambda: {"benchmark_data.py": "sha"})
+
+    with pytest.raises(ValueError, match=message):
+        verify_benchmark_dataset(root, definition_path, manifest_path)
