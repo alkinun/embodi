@@ -13,6 +13,7 @@ from embodi.record_so101 import dataset_inventory
 from embodi.train import (
     load_json_object,
     prepare_model_batch,
+    validate_benchmark_dataset_lineage,
     validate_benchmark_training_dataset,
     validate_lerobot_training_dataset,
     write_or_validate_data_manifest,
@@ -362,6 +363,167 @@ def test_lerobot_admission_accepts_zero_variance_but_rejects_negative_std(
     metadata.stats["action"]["std"][0] = -torch.finfo(torch.float64).eps
     with pytest.raises(ValueError, match="finite and nonnegative"):
         validate_lerobot_training_dataset(metadata, config, "decoder")
+
+
+@pytest.mark.parametrize(
+    ("feature_name", "stage", "message"),
+    [
+        ("canonical_action", "core", "missing required canonical_action labels"),
+        ("canonical_state", "core", "missing required canonical_state labels"),
+        ("canonical_part_mask", "core", "canonical_part_mask schema"),
+        ("observation.state", "core", "observation.state schema"),
+        ("action", "decoder", "decoder stage requires matching native action labels"),
+    ],
+)
+def test_lerobot_admission_rejects_missing_required_features(
+    tmp_path,
+    feature_name: str,
+    stage: str,
+    message: str,
+) -> None:
+    config = EmbodiConfig(camera_names=("top",))
+    metadata = _metadata(tmp_path, config)
+    _write_schema(tmp_path, config)
+    metadata.features.pop(feature_name)
+
+    with pytest.raises(ValueError, match=message):
+        validate_lerobot_training_dataset(metadata, config, stage)
+
+
+@pytest.mark.parametrize(
+    ("feature_name", "replacement", "message"),
+    [
+        (
+            "canonical_action",
+            {"dtype": "uint8", "shape": (1, 10)},
+            "canonical_action must be float32",
+        ),
+        (
+            "canonical_state",
+            {"dtype": "float32", "shape": (2, 10)},
+            "canonical_state must be float32",
+        ),
+        (
+            "canonical_part_mask",
+            {"dtype": "bool", "shape": (1,), "names": ["wrong"]},
+            "canonical_part_mask schema",
+        ),
+        (
+            "observation.state",
+            {"dtype": "float32", "shape": (5,)},
+            "observation.state schema",
+        ),
+        (
+            "action",
+            {"dtype": "float32", "shape": (5,)},
+            "decoder stage requires matching native action labels",
+        ),
+        (
+            "observation.images.top",
+            {"dtype": "float32", "shape": (48, 64, 3)},
+            "configured camera 'top'",
+        ),
+        (
+            "observation.images.top",
+            {"dtype": "video", "shape": (48, 64)},
+            "configured camera 'top'",
+        ),
+    ],
+)
+def test_lerobot_admission_rejects_malformed_feature_schema(
+    tmp_path,
+    feature_name: str,
+    replacement: dict,
+    message: str,
+) -> None:
+    config = EmbodiConfig(camera_names=("top",))
+    metadata = _metadata(tmp_path, config)
+    _write_schema(tmp_path, config)
+    metadata.features[feature_name] = replacement
+
+    with pytest.raises(ValueError, match=message):
+        validate_lerobot_training_dataset(metadata, config, "decoder")
+
+
+@pytest.mark.parametrize("mutation", ["missing", "non_numeric", "wrong_shape"])
+def test_lerobot_admission_rejects_malformed_normalization_stats(tmp_path, mutation: str) -> None:
+    config = EmbodiConfig(camera_names=("top",))
+    metadata = _metadata(tmp_path, config)
+    _write_schema(tmp_path, config)
+    if mutation == "missing":
+        metadata.stats.pop("observation.state")
+    elif mutation == "non_numeric":
+        metadata.stats["observation.state"]["mean"] = ["bad"]
+    else:
+        metadata.stats["observation.state"]["std"] = [1.0]
+
+    with pytest.raises(ValueError, match="normalization stats"):
+        validate_lerobot_training_dataset(metadata, config, "decoder")
+
+
+@pytest.mark.parametrize("mutation", ["missing", "format", "parts"])
+def test_lerobot_admission_rejects_missing_or_mismatched_part_schema(tmp_path, mutation: str) -> None:
+    config = EmbodiConfig(camera_names=("top",))
+    metadata = _metadata(tmp_path, config)
+    schema_path = tmp_path / "meta" / "embodi.json"
+    _write_schema(tmp_path, config)
+    if mutation == "missing":
+        schema_path.unlink()
+    else:
+        schema = json.loads(schema_path.read_text())
+        schema["format_version"] = 2 if mutation == "format" else 3
+        if mutation == "parts":
+            schema["parts"] = []
+        _write_json(schema_path, schema)
+
+    expected = "missing meta/embodi.json" if mutation == "missing" else "part descriptors"
+    with pytest.raises((FileNotFoundError, ValueError), match=expected):
+        validate_lerobot_training_dataset(metadata, config, "decoder")
+
+
+def test_benchmark_lineage_returns_none_for_an_ordinary_dataset(tmp_path) -> None:
+    root = tmp_path / "ordinary"
+    (root / "meta").mkdir(parents=True)
+
+    assert validate_benchmark_dataset_lineage(SimpleNamespace(root=root), "train") is None
+
+
+def test_benchmark_lineage_rejects_validation_role_and_missing_generation_manifest(tmp_path) -> None:
+    metadata, _, _, manifest_path = _benchmark_dataset(tmp_path)
+
+    with pytest.raises(ValueError, match="split does not match"):
+        validate_benchmark_dataset_lineage(metadata, "validation")
+
+    manifest_path.unlink()
+    with pytest.raises(FileNotFoundError, match="root generation manifest"):
+        validate_benchmark_dataset_lineage(metadata, "train")
+
+
+@pytest.mark.parametrize("output_key", ["outputs", "contract"])
+def test_benchmark_lineage_rejects_ambiguous_morphology_mapping(tmp_path, output_key: str) -> None:
+    metadata, _, manifest, manifest_path = _benchmark_dataset(tmp_path)
+    if output_key == "outputs":
+        manifest[output_key].append(deepcopy(manifest[output_key][0]))
+    else:
+        manifest[output_key]["outputs"].append(
+            deepcopy(manifest[output_key]["outputs"][0])
+        )
+    _write_json(manifest_path, manifest)
+
+    with pytest.raises(ValueError, match="morphology mapping is ambiguous"):
+        validate_benchmark_dataset_lineage(metadata, "train")
+
+
+def test_benchmark_lineage_detects_outer_manifest_without_benchmark_metadata(tmp_path) -> None:
+    root = tmp_path / "train"
+    (root / "meta").mkdir(parents=True)
+    _write_json(
+        tmp_path / "benchmark-dataset.json",
+        {"outputs": [{"relative_root": "train"}]},
+    )
+
+    with pytest.raises(FileNotFoundError, match="meta/benchmark.json lineage"):
+        validate_benchmark_dataset_lineage(SimpleNamespace(root=root), "train")
 
 
 class _UnusedProcessor:
