@@ -44,6 +44,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [035](035-diversity-transfer.md) | does broader human pretraining improve expert-only SO-101 transfer? | fixed-step single-pair screen favors five sessions 7/30 to 3/30, but is not significant. |
 | [036](036-joint-canonical-core.md) | can one canonical core learn SO-101 and Panda jointly at matched exposure? | yes; joint loss is within 4.64% of specialists and 85.64% below the zero-shot specialist-transfer baseline. |
 | [037](037-canonical-core-geometry-control.md) | can the shared canonical core retain matched-specialist closed-loop geometry-control success? | no; joint success is 6.00% versus 13.08% for specialists and misses the 5-point margin. |
+| [038](038-canonical-trajectory-diagnostics.md) | which trajectory mechanism explains the canonical core's closed-loop failure? | pending diagnostic execution; no advancement gate. |
 
 ## current decision
 
