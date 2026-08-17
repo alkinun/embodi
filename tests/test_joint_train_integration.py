@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+import torch
 from torch.utils.data import SequentialSampler, Subset
 
 from embodi import EmbodiConfig
@@ -11,10 +12,12 @@ from embodi import joint_train
 from embodi.joint_train import (
     MORPHOLOGIES,
     TASKS,
+    evaluate_cells,
     load_benchmark_metadata,
     make_train_loaders,
     make_validation_loaders,
     prepare_validation_manifest,
+    runtime_provenance,
     validate_validation_manifest,
 )
 
@@ -300,3 +303,85 @@ def test_make_validation_loaders_use_nonshuffled_task_subsets(
         assert isinstance(loader.dataset, Subset)
         assert loader.dataset.indices == [0, 2]
         assert isinstance(loader.sampler, SequentialSampler)
+
+
+class _FakeEvaluationPolicy:
+    def __init__(self, objective: str, value: float) -> None:
+        self.config = SimpleNamespace(core_objective=objective, camera_names=("top",))
+        self.value = value
+        self.evaluated = False
+
+    def eval(self) -> "_FakeEvaluationPolicy":
+        self.evaluated = True
+        return self
+
+    def __call__(self, _batch):
+        metric_name = "regression_loss" if self.config.core_objective == "regression" else "flow_loss"
+        return None, {metric_name: self.value}
+
+
+def test_evaluate_cells_aggregates_task_and_morphology_metrics(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(joint_train, "prepare_model_batch", lambda raw, *args: raw)
+    policies = {
+        "so101": _FakeEvaluationPolicy("regression", 1.0),
+        "panda": _FakeEvaluationPolicy("flow", 3.0),
+    }
+    loaders = {
+        (morphology, task): [{"canonical_action": 0}]
+        for morphology in MORPHOLOGIES
+        for task in TASKS
+    }
+
+    results = evaluate_cells(policies, loaders, processor=None, device=torch.device("cpu"))
+
+    assert all(policy.evaluated for policy in policies.values())
+    assert results["macro/so101"] == 1.0
+    assert results["macro/panda"] == 3.0
+    assert results["macro/all"] == 2.0
+    assert all(results[f"{morphology}/{task}"] == (1.0 if morphology == "so101" else 3.0) for morphology, task in loaders)
+
+
+def test_evaluate_cells_rejects_empty_validation_cell(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(joint_train, "prepare_model_batch", lambda raw, *args: raw)
+    policies = {
+        "so101": _FakeEvaluationPolicy("regression", 1.0),
+        "panda": _FakeEvaluationPolicy("flow", 3.0),
+    }
+    loaders = {
+        (morphology, task): [{"canonical_action": 0}]
+        for morphology in MORPHOLOGIES
+        for task in TASKS
+    }
+    loaders["so101", "push_to_zone"] = []
+
+    with pytest.raises(RuntimeError, match="validation cell so101/push_to_zone"):
+        evaluate_cells(policies, loaders, processor=None, device=torch.device("cpu"))
+
+
+def test_runtime_provenance_records_clean_and_dirty_worktrees(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    status = {"output": ""}
+
+    def fake_run(command, **_kwargs):
+        if command[1] == "rev-parse":
+            return SimpleNamespace(stdout="commit-sha\n")
+        return SimpleNamespace(stdout=status["output"])
+
+    monkeypatch.setattr(joint_train.subprocess, "run", fake_run)
+    monkeypatch.setattr(joint_train, "version", lambda package: f"{package}-version")
+    monkeypatch.setattr(joint_train, "file_sha256", lambda path: "trainer-sha")
+
+    clean = runtime_provenance(require_clean=True)
+    assert clean["git_commit"] == "commit-sha"
+    assert clean["git_dirty"] is False
+    assert clean["lerobot"] == "lerobot-version"
+    assert clean["trainer_sha256"] == "trainer-sha"
+
+    status["output"] = " M experiment.py\n"
+    dirty = runtime_provenance(require_clean=False)
+    assert dirty["git_dirty"] is True
+    with pytest.raises(RuntimeError, match="clean git worktree"):
+        runtime_provenance(require_clean=True)
