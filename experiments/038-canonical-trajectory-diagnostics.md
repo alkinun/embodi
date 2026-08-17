@@ -95,16 +95,73 @@ or policy-visited state shift explain the Experiment 037 closed-loop failure?
 
 ## result
 
-pending registered diagnostic execution.
+all 12 registered shards completed sequentially from evaluator commit `45fcab4`
+without infrastructure errors: 756 development episodes across joint and matched
+conditions, three seeds, two morphologies, three tasks, and horizons 1, 4, and
+16. the aggregate report is `reports/benchmark-exp38-summary.json` at SHA-256
+`e0e7eaf7ec25600b611cd66780a6dc3d0ca8c374a4f871b15a801716703307bb`.
+
+the horizon mechanism was partial, not strong. joint H16-minus-H1 success gained
+3.17 percentage points in the three-seed mean, with per-seed changes of +14.29,
+-4.76, and 0.00 points. matched gained 1.59 points, with +2.38, +7.14, and
+-4.76 points. milestone progression improved for both, but neither condition
+reached the registered 5-point materiality threshold. H4 had the highest pooled
+success: joint was 6/126 at H1, 13/126 at H4, and 10/126 at H16; matched was
+18/126, 23/126, and 20/126.
+
+policy-visited state shift had no strong association. late-to-initial normalized
+first-action error ratios were 0.89, 0.73, and 0.82 for joint and 0.92, 0.89, and
+0.87 for matched; no seed reached the preregistered twofold criterion.
+
+policy-generated geometry reconstruction exceeded the frozen references in both
+conditions. translation p95 upper bounds were 0.05 m for joint and 0.10 m for
+matched against 0.001 m; rotation was 10 degrees for both against 1 degree.
+gripper p95 stayed at or below 0.0001 native units, and decoded-command clipping
+was zero. adjacent within-chunk translation changes averaged 0.040--0.053 mm,
+while cross-replan overlap error increased from about 8 mm at H1 to 12.6--13.8
+mm at H4 and 20.0--21.6 mm at H16 in both conditions.
+
+at H16, joint versus matched replay success was 19.05% versus 38.10% for push,
+4.76% versus 7.14% for lift, and 0% versus 2.38% for pick/place. both usually
+reached the object, but lift attainment remained 4.76% for joint and 9.52% for
+matched; pick/place lift attainment was 0% and 2.38%. the frozen-reference H16
+outcome match rate was 99.21% for both conditions, while exact trajectory match
+was 97.62% for joint and 93.65% for matched. the mismatches changed joint push
+from 21.43% source to 19.05% replay and matched lift from 4.76% source to 7.14%
+replay. aggregate replay success differed from the frozen source by -0.79 and
++0.79 points respectively, consistent with the documented boundary-outcome
+instability.
 
 ## finding
 
-pending. this experiment distinguishes diagnostic associations; it cannot by
-itself establish a causal mechanism.
+execution horizon does not receive strong or material support in this
+seven-scenario diagnostic: H16 misses the materiality criterion, H4 performs
+best descriptively, and effects reverse across seeds. this does not exclude a
+horizon contribution in the broader Experiment 037 population. policy-visited
+first-action error does not amplify, so this assay does not support the
+registered distribution-shift association.
+
+the strongest registered evidence is a shared policy-action reconstruction
+problem: both conditions exceed the physical references by large margins. both
+also show centimeter-scale descriptive cross-replan target differences despite
+smooth within-chunk commands, but no expert baseline, success association, or
+defect threshold was registered for overlap. these observations plausibly help
+explain why both conditions remain weak, but they do not explain the
+joint-specific deficit: matched reconstruction is at least as poor by p95 and
+its overlap differences are similar or larger. the remaining joint gap appears
+in task achievement, especially push and lift progression, rather than in a
+diagnosed joint-only geometry, horizon, or late-state mechanism. these are
+associations, not causal isolation.
 
 ## decision
 
 - do not advance or reject a model from this diagnostic.
 - keep the final split untouched.
+- treat policy-action FK/IK reconstruction as a shared prerequisite before
+  another closed-loop comparison; retain cross-replan target differences as a
+  candidate issue requiring a baseline or intervention.
+- do not attribute the joint-versus-matched gap to execution horizon or measured
+  policy-visited first-action shift; a future causal intervention must isolate
+  task-conditioned control quality after the shared geometry path is improved.
 - do not add training, nearest-neighbor references, counterfactual cloning,
   opposite specialists, stack, H8, H32, expert-first control, or online IK.
