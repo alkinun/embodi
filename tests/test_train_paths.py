@@ -1,4 +1,5 @@
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 import torch
@@ -9,6 +10,7 @@ from embodi.train import (
     evaluate,
     gradient_norm,
     load_json_object,
+    train,
     write_or_validate_data_manifest,
     xperience_manifest_samples,
 )
@@ -179,3 +181,100 @@ def test_evaluate_rejects_empty_validation_loader_and_restores_mode() -> None:
         evaluate(policy, [], _FakeProcessor(), torch.device("cpu"), max_batches=2, seed=17)
 
     assert policy.training is True
+
+
+def _train_args(tmp_path: Path, **updates: object) -> SimpleNamespace:
+    values = {
+        "steps": 2,
+        "batch_size": 1,
+        "accumulation_steps": 1,
+        "eval_every": 1,
+        "validation_batches": 1,
+        "checkpoint_step": [],
+        "config": None,
+        "cameras": None,
+        "dataset_format": "lerobot",
+        "validation_dataset": None,
+        "validation_dataset_root": None,
+        "resume": False,
+        "init_from": None,
+        "init_core": None,
+        "init_embodiment": None,
+        "deterministic": False,
+        "seed": 1,
+        "model_seed": None,
+        "loader_seed": None,
+        "validation_seed": 1,
+        "output_dir": tmp_path / "output",
+    }
+    values.update(updates)
+    return SimpleNamespace(**values)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("steps", 0),
+        ("batch_size", 0),
+        ("accumulation_steps", 0),
+        ("eval_every", 0),
+        ("validation_batches", 0),
+    ],
+)
+def test_train_rejects_nonpositive_preflight_arguments(
+    tmp_path: Path,
+    field: str,
+    value: int,
+) -> None:
+    args = _train_args(tmp_path, **{field: value})
+
+    with pytest.raises(ValueError, match=f"--{field.replace('_', '-')}"):
+        train(args)
+
+    assert not args.output_dir.exists()
+
+
+@pytest.mark.parametrize("checkpoint_step", [[0], [3]])
+def test_train_rejects_checkpoint_steps_outside_training_range(
+    tmp_path: Path,
+    checkpoint_step: list[int],
+) -> None:
+    args = _train_args(tmp_path, checkpoint_step=checkpoint_step)
+
+    with pytest.raises(ValueError, match="checkpoint-step"):
+        train(args)
+
+
+def test_train_rejects_mismatched_validation_dataset_arguments(tmp_path: Path) -> None:
+    args = _train_args(tmp_path, validation_dataset=Path("validation"))
+
+    with pytest.raises(ValueError, match="provided together"):
+        train(args)
+
+
+def test_train_rejects_xperience_without_processor_rescaling(tmp_path: Path) -> None:
+    config_path = tmp_path / "config.json"
+    EmbodiConfig(image_do_rescale=False).save(config_path)
+    args = _train_args(tmp_path, config=config_path, dataset_format="xperience")
+
+    with pytest.raises(ValueError, match="requires image_do_rescale=true"):
+        train(args)
+
+
+def test_train_rejects_explicit_validation_for_xperience(tmp_path: Path) -> None:
+    args = _train_args(
+        tmp_path,
+        dataset_format="xperience",
+        validation_dataset=Path("validation"),
+        validation_dataset_root=tmp_path / "validation",
+    )
+
+    with pytest.raises(ValueError, match="cannot be used with Xperience"):
+        train(args)
+
+
+def test_train_rejects_resume_with_initialization_checkpoint(tmp_path: Path) -> None:
+    args = _train_args(tmp_path, resume=True, init_core=Path("core"))
+
+    with pytest.raises(ValueError, match="cannot be combined"):
+        train(args)
