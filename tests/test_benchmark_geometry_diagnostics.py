@@ -285,7 +285,7 @@ def test_resume_rejects_contract_mismatch_and_chain_corruption(tmp_path: Path) -
         _load_or_create_report(output, expected)
 
 
-def test_h16_reproduction_mismatch_rejected() -> None:
+def test_h16_outcome_mismatch_is_descriptive() -> None:
     source = {
         "success": True,
         "steps": 1,
@@ -310,7 +310,9 @@ def test_h16_reproduction_mismatch_rejected() -> None:
         "exp37_expected_trajectory": source,
         "exp37_trajectory_reproduced": False,
     }
-    with pytest.raises(ValueError, match="exactly reproduce"):
+    validate_h16_reproduction([outcome], {"scenario": source})
+    outcome["exp37_success_reproduced"] = True
+    with pytest.raises(ValueError, match="reference comparison"):
         validate_h16_reproduction([outcome], {"scenario": source})
 
 
