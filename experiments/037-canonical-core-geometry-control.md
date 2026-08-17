@@ -60,17 +60,58 @@ invariance.
 
 ## result
 
-pending registered execution.
+the registered geometry admission passed all 400 development scenarios. it
+retained 100% privileged success in every cell with zero command clipping,
+translation p95 `7.83e-6 m`, rotation p95 `0.01095` degrees, and maximum gripper
+round-trip error `3.73e-9` native units. the deterministic geometry path was
+therefore admitted on privileged expert trajectories, but this does not measure
+FK/IK reconstruction error for off-distribution policy-generated commands.
+
+all 18 policy shards completed without infrastructure errors. the primary
+three-seed results were:
+
+| endpoint | matched specialists | joint core | joint difference |
+| --- | ---: | ---: | ---: |
+| overall eight-cell macro | 13.08% | 6.00% | -7.08 pp |
+| pretraining-task macro | 17.33% | 8.00% | -9.33 pp |
+| held-out stack macro | 0.33% | 0.00% | -0.33 pp |
+| SO-101 four-task macro | 14.83% | 9.17% | -5.67 pp |
+| Panda four-task macro | 11.33% | 2.83% | -8.50 pp |
+
+the joint-minus-matched overall differences were -4.75, -7.25, and -9.25
+percentage points for seeds 36001, 36002, and 36003. only seed 36001 met the
+registered 5-point margin, below the required two of three. the joint core also
+missed its 10% overall and pretraining-task floors, its 5% Panda floor, and its
+5% held-out-stack floor. all policy shards retained zero command clipping.
+
+success was concentrated in push: the joint core averaged 21.67% push success
+across morphology/seed cells, 2.33% lift success, and zero pick/place or stack
+success. raw admission, shard, and aggregate reports are
+`reports/benchmark-exp37-*.json`; the aggregate report is
+`reports/benchmark-exp37-summary.json` at SHA-256
+`7efde348c16863399167794636d9941360a144b565919bd176f181cca1e15aa4`.
 
 ## finding
 
-pending registered execution.
+the offline canonical-regression result from experiment 036 does not translate
+to matched-specialist closed-loop geometry control. joint training remains much
+better than opposite-specialist transfer, but loses too much success relative to
+the in-domain specialists, especially on Panda and across later seeds. neither
+joint nor specialist cores demonstrate meaningful zero-shot stack behavior, and
+all conditions remain weak on lift and pick/place.
+
+the failure is not explained by the registered expert-trajectory geometry check
+or native command clipping. policy-action reconstruction outside the privileged
+trajectory distribution remains unmeasured. temporally coherent,
+task-conditioned canonical prediction under closed-loop replanning is the
+priority hypothesis to diagnose, not an established sole cause. low fixed-frame
+regression loss is not an adequate admission criterion for control.
 
 ## decision
 
-- run geometry admission before policy shards.
+- reject the Experiment 036 joint core as a closed-loop geometry-control recipe.
+- do not advance these checkpoints to learned-state or full-learned control;
+  adding adapters or native decoders would confound an already failing core.
+- diagnose anchor-relative chunk consistency, task-stage progression, and
+  closed-loop trajectory error before another training experiment.
 - keep the final split untouched.
-- registered admission and shard reports may be written to an external reports
-  directory with their exact registered filenames so each run can execute from
-  the same clean detached worktree; Experiment 036 artifacts are resolved from
-  an explicit read-only artifact root.
