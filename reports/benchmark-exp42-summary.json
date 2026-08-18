@@ -1,0 +1,2741 @@
+{
+  "format_version": 1,
+  "experiment": 42,
+  "registered": true,
+  "status": "completed_development_diagnostic",
+  "scope": "development-only diagnostic; no inferential, population, closed-loop, admission, advancement, or final-split claim",
+  "contract": {
+    "definition_sha256": "9b14210d0c296f53c12dd3c5efec2f022a31ceb4d9bb2a1037bf068f443fd45f",
+    "manifest_sha256": "4fec8d65180e94fabd851ecf3468a2f05f5a970ea57c6b301ada859ad8b88576",
+    "exp36_summary_sha256": "76d7a3b0dc8954fc1fdbf8def99c840881ee3d9b523bf9f3386be5b82be0308f",
+    "exp41_summary_sha256": "d8195516eb6c84d90da31e74459b33779aab3382000650df8e9b941f35cd217f",
+    "exp41_evaluator_sha256": "2ca9ae5b48782b4b378882accf886dd9b65bd1c7ed3905bb20dfc3c859f9d62c",
+    "expert_sha256": "7fb869a10756864530889f809a8305ee1758bdc51eaeeeda0ff2f451f3b7f8e9",
+    "preregistration_git_commit": "38a868b6dee792a220f8fd4c6a786eb00f0c1da0",
+    "split": "development",
+    "scenario_indices": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "tasks": [
+      "push_to_zone",
+      "lift_object",
+      "pick_place_bin"
+    ],
+    "conditions": [
+      "joint",
+      "matched"
+    ],
+    "model_seeds": [
+      36001,
+      36002,
+      36003
+    ],
+    "limit_scenarios": null,
+    "protocol": {
+      "camera": "top",
+      "resolution": [
+        640,
+        480
+      ],
+      "state_path": "forward_kinematics_canonical",
+      "expert": "PrivilegedBenchmarkExpert",
+      "frequency_hz": 30,
+      "maximum_episode_steps": 500,
+      "capture": "first loop-entry phase_tick==1 and final pre-call phase record",
+      "endpoints": [
+        "first",
+        "last"
+      ],
+      "expert_action_calls_per_step": 1,
+      "execute_original_native_expert_action": true,
+      "state_unchanged_before_canonical_conversion": true,
+      "ik_iterations": 20,
+      "predictor": "predict_canonical_action_chunk",
+      "required_output_shape": [
+        1,
+        32,
+        1,
+        10
+      ],
+      "policy_reset_before_every_prediction": true,
+      "correct_prompt_only": true,
+      "immediate_repeat": true,
+      "repeat_max_abs_tolerance": 1e-05,
+      "lead": 0,
+      "action_scales": [
+        0.25,
+        0.25,
+        0.25,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.5
+      ],
+      "hierarchy": [
+        "endpoint",
+        "phase",
+        "scenario",
+        "task",
+        "morphology",
+        "seed"
+      ],
+      "condition_order_formula": "(anchor_ordinal + seed_ordinal + morphology_ordinal) % 2",
+      "final_split_loaded": false
+    },
+    "final_split_loaded": false,
+    "evaluator_sha256": "cc4fb718a3f6341dbaaea0026aca193fd86d5b84412ea7061204ed8f4ce24b7d",
+    "evaluator_git_commit": "7fcebe15042b85a6e31789b994d8356ec0505010",
+    "orchestrator_run_id": "6d2cb0f78d0f4341b3b7aca4479c795a",
+    "runtime_signature_sha256": "3aa84f19c93cf319562a39a2580ede618b3d52f63171b58c2406857afcc5cb68",
+    "shards": 2,
+    "expert_episodes": 42,
+    "scenario_phase_units": 182,
+    "endpoint_records": 364,
+    "scored_chunks": 2184,
+    "repeat_chunks": 2184,
+    "policy_inferences": 4368,
+    "paired_joint_matched_comparisons": 1092
+  },
+  "source_shard_sha256": {
+    "so101": "f02815631edb583a5faab4a82926afc650b69d5fc131a60227107bc0abecdd51",
+    "panda": "55018696519b930d01e859a19365171a5b70d1fb227777b9bf624daecd0732e5"
+  },
+  "delivery_gates_by_shard": {
+    "so101": {
+      "measurements": {
+        "commands": 182,
+        "clipped_commands": 0,
+        "clipping_rate": 0.0,
+        "translation_p95_m": 6.385638698702678e-06,
+        "rotation_p95_deg": 0.004808137742734815,
+        "maximum_gripper_error_native": 0.0,
+        "degenerate_expert_targets": 0
+      },
+      "checks": {
+        "decoded_action_clipping_at_most_one_percent": true,
+        "translation_p95_at_most_1mm": true,
+        "rotation_p95_at_most_1deg": true,
+        "maximum_gripper_error_at_most_one_native_unit": true,
+        "expert_targets_non_degenerate": true
+      },
+      "passed": true,
+      "integrity_checks": {
+        "all_expected_endpoint_anchors": true,
+        "all_expert_episodes_successful_in_done": true,
+        "identical_anchor_hashes_across_six_arms": true,
+        "exact_correct_instruction_hashes": true,
+        "deterministic_immediate_repeats": true,
+        "complete_checkpoint_hashes": true,
+        "final_split_not_loaded": true
+      }
+    },
+    "panda": {
+      "measurements": {
+        "commands": 182,
+        "clipped_commands": 0,
+        "clipping_rate": 0.0,
+        "translation_p95_m": 5.098725523566827e-06,
+        "rotation_p95_deg": 0.011441299857035086,
+        "maximum_gripper_error_native": 7.450580596923828e-09,
+        "degenerate_expert_targets": 0
+      },
+      "checks": {
+        "decoded_action_clipping_at_most_one_percent": true,
+        "translation_p95_at_most_1mm": true,
+        "rotation_p95_at_most_1deg": true,
+        "maximum_gripper_error_at_most_one_native_unit": true,
+        "expert_targets_non_degenerate": true
+      },
+      "passed": true,
+      "integrity_checks": {
+        "all_expected_endpoint_anchors": true,
+        "all_expert_episodes_successful_in_done": true,
+        "identical_anchor_hashes_across_six_arms": true,
+        "exact_correct_instruction_hashes": true,
+        "deterministic_immediate_repeats": true,
+        "complete_checkpoint_hashes": true,
+        "final_split_not_loaded": true
+      }
+    }
+  },
+  "delivery_gate_passed": true,
+  "metrics": {
+    "overall": {
+      "normalized_loss": {
+        "joint": 0.030811516903811075,
+        "matched": 0.02720916693636857,
+        "difference": 0.003602349967442506,
+        "ratio": 1.1323947174078122
+      },
+      "translation_norm_error_m": {
+        "joint": 0.02736819358587206,
+        "matched": 0.028283765309399748,
+        "difference": -0.0009155717235276861,
+        "ratio": 0.9676290722429588
+      },
+      "rotation_geodesic_error_deg": {
+        "joint": 3.2346831958854168,
+        "matched": 3.243935426638688,
+        "difference": -0.009252230753271196,
+        "ratio": 0.9971478375687465
+      },
+      "effective_gripper_error": {
+        "joint": 0.13439281899144115,
+        "matched": 0.11687126367346568,
+        "difference": 0.017521555317975473,
+        "ratio": 1.1499218436358325
+      },
+      "degenerate_rotation_rate": {
+        "joint": 0.0,
+        "matched": 0.0,
+        "difference": 0.0,
+        "ratio": null
+      },
+      "channels": {
+        "0": {
+          "joint": 0.003816071019222652,
+          "matched": 0.004262217623827928,
+          "difference": -0.00044614660460527613,
+          "ratio": 0.8953252405247697
+        },
+        "1": {
+          "joint": 0.0018283569514298125,
+          "matched": 0.002947257419274382,
+          "difference": -0.0011189004678445697,
+          "ratio": 0.6203587577633296
+        },
+        "2": {
+          "joint": 0.016128882599539214,
+          "matched": 0.01801680261655615,
+          "difference": -0.0018879200170169343,
+          "ratio": 0.8952133706964147
+        },
+        "3": {
+          "joint": 0.00010930831216642883,
+          "matched": 8.874182289002876e-05,
+          "difference": 2.0566489276400068e-05,
+          "ratio": 1.2317564436543817
+        },
+        "4": {
+          "joint": 0.0023422140372135183,
+          "matched": 0.0023042917907356545,
+          "difference": 3.7922246477863856e-05,
+          "ratio": 1.0164572241372942
+        },
+        "5": {
+          "joint": 0.00042407292269192525,
+          "matched": 0.00045432364872036564,
+          "difference": -3.0250726028440388e-05,
+          "ratio": 0.9334159115123246
+        },
+        "6": {
+          "joint": 0.00238280561624485,
+          "matched": 0.002272639340182002,
+          "difference": 0.00011016627606284801,
+          "ratio": 1.0484750369823421
+        },
+        "7": {
+          "joint": 0.00015134034944333516,
+          "matched": 0.00012816011694588054,
+          "difference": 2.3180232497454616e-05,
+          "ratio": 1.180869314493862
+        },
+        "8": {
+          "joint": 0.002465761948518401,
+          "matched": 0.0027258196627435775,
+          "difference": -0.00026005771422517657,
+          "ratio": 0.9045946737490973
+        },
+        "9": {
+          "joint": 0.2784663552816406,
+          "matched": 0.23889141532180977,
+          "difference": 0.03957493995983083,
+          "ratio": 1.1656607873770581
+        }
+      },
+      "degenerate_rotation_count": {
+        "joint": 0,
+        "matched": 0
+      },
+      "records_per_condition": {
+        "joint": 1092,
+        "matched": 1092
+      }
+    },
+    "by_seed": {
+      "36001": {
+        "normalized_loss": {
+          "joint": 0.028438796576780556,
+          "matched": 0.027327153462451386,
+          "difference": 0.00111164311432917,
+          "ratio": 1.0406790672821673
+        },
+        "translation_norm_error_m": {
+          "joint": 0.028384303160110327,
+          "matched": 0.027006711991541914,
+          "difference": 0.0013775911685684136,
+          "ratio": 1.0510092146352306
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.2954303537403753,
+          "matched": 3.1674753338042185,
+          "difference": 0.12795501993615677,
+          "ratio": 1.0403965323961906
+        },
+        "effective_gripper_error": {
+          "joint": 0.1293797536886164,
+          "matched": 0.11567889580338381,
+          "difference": 0.013700857885232592,
+          "ratio": 1.118438698693317
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0037644695637081968,
+            "matched": 0.003925460181017653,
+            "difference": -0.0001609906173094559,
+            "ratio": 0.9589880905968787
+          },
+          "1": {
+            "joint": 0.001785481596535371,
+            "matched": 0.0019714576126581974,
+            "difference": -0.0001859760161228264,
+            "ratio": 0.9056657292915026
+          },
+          "2": {
+            "joint": 0.01793694552489735,
+            "matched": 0.017085472091052913,
+            "difference": 0.000851473433844438,
+            "ratio": 1.0498361080868421
+          },
+          "3": {
+            "joint": 0.00011034276404333599,
+            "matched": 7.814549004680055e-05,
+            "difference": 3.219727399653544e-05,
+            "ratio": 1.4120170463740493
+          },
+          "4": {
+            "joint": 0.002581678617973676,
+            "matched": 0.002102810833931353,
+            "difference": 0.00047886778404232326,
+            "ratio": 1.2277274666437998
+          },
+          "5": {
+            "joint": 0.0004327562468243951,
+            "matched": 0.00046478024145824357,
+            "difference": -3.2023994633848484e-05,
+            "ratio": 0.9310986316170121
+          },
+          "6": {
+            "joint": 0.002613368945688688,
+            "matched": 0.002067689763604498,
+            "difference": 0.00054567918208419,
+            "ratio": 1.263907667237727
+          },
+          "7": {
+            "joint": 0.0001447145729792465,
+            "matched": 0.00012308752469290232,
+            "difference": 2.162704828634419e-05,
+            "ratio": 1.175704632458104
+          },
+          "8": {
+            "joint": 0.0025600388927105337,
+            "matched": 0.002684233474813204,
+            "difference": -0.0001241945821026701,
+            "ratio": 0.9537318257640339
+          },
+          "9": {
+            "joint": 0.2524581690424448,
+            "matched": 0.24276839741123818,
+            "difference": 0.0096897716312066,
+            "ratio": 1.0399136449988282
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 364,
+          "matched": 364
+        }
+      },
+      "36002": {
+        "normalized_loss": {
+          "joint": 0.03232668052194119,
+          "matched": 0.027739420167651373,
+          "difference": 0.0045872603542898155,
+          "ratio": 1.1653697275056707
+        },
+        "translation_norm_error_m": {
+          "joint": 0.02709346928600575,
+          "matched": 0.02999039814233941,
+          "difference": -0.0028969288563336602,
+          "ratio": 0.9034047883397761
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.3393747273069985,
+          "matched": 3.3735926674029413,
+          "difference": -0.03421794009594281,
+          "ratio": 0.9898571216298367
+        },
+        "effective_gripper_error": {
+          "joint": 0.14028360853668578,
+          "matched": 0.11683969064710699,
+          "difference": 0.023443917889578794,
+          "ratio": 1.2006502906652405
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.004255166762147795,
+            "matched": 0.004245716614240082,
+            "difference": 9.450147907713244e-06,
+            "ratio": 1.002225807505856
+          },
+          "1": {
+            "joint": 0.0017735058058610804,
+            "matched": 0.003454452868654837,
+            "difference": -0.0016809470627937566,
+            "ratio": 0.5133970192367057
+          },
+          "2": {
+            "joint": 0.015082442720383239,
+            "matched": 0.02123527805813944,
+            "difference": -0.006152835337756202,
+            "ratio": 0.7102540724491323
+          },
+          "3": {
+            "joint": 0.00011735810933676314,
+            "matched": 0.00010861494022744664,
+            "difference": 8.743169109316496e-06,
+            "ratio": 1.0804969287927402
+          },
+          "4": {
+            "joint": 0.0022706246581319016,
+            "matched": 0.0028557018478870973,
+            "difference": -0.0005850771897551958,
+            "ratio": 0.7951196515182115
+          },
+          "5": {
+            "joint": 0.00040519794456927825,
+            "matched": 0.00047422308954107585,
+            "difference": -6.90251449717976e-05,
+            "ratio": 0.8544458367925613
+          },
+          "6": {
+            "joint": 0.0023030351227594607,
+            "matched": 0.0028395840551164574,
+            "difference": -0.0005365489323569967,
+            "ratio": 0.8110466455852134
+          },
+          "7": {
+            "joint": 0.00016853689542590042,
+            "matched": 0.00014448568785383582,
+            "difference": 2.4051207572064603e-05,
+            "ratio": 1.1664608303377093
+          },
+          "8": {
+            "joint": 0.002600954138813818,
+            "matched": 0.0027319697878302415,
+            "difference": -0.00013101564901642345,
+            "ratio": 0.9520435220037783
+          },
+          "9": {
+            "joint": 0.2942899830619826,
+            "matched": 0.23930417472702323,
+            "difference": 0.05498580833495939,
+            "ratio": 1.2297737112095193
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 364,
+          "matched": 364
+        }
+      },
+      "36003": {
+        "normalized_loss": {
+          "joint": 0.031669073612711485,
+          "matched": 0.02656092717900295,
+          "difference": 0.005108146433708535,
+          "ratio": 1.1923180768232613
+        },
+        "translation_norm_error_m": {
+          "joint": 0.026626808311500112,
+          "matched": 0.027854185794317917,
+          "difference": -0.0012273774828178048,
+          "ratio": 0.9559356180115599
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.069244506608878,
+          "matched": 3.1907382787089036,
+          "difference": -0.12149377210002577,
+          "ratio": 0.9619229903904287
+        },
+        "effective_gripper_error": {
+          "joint": 0.1335150947490213,
+          "matched": 0.11809520456990621,
+          "difference": 0.015419890179115076,
+          "ratio": 1.1305716877774432
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.003428576731811965,
+            "matched": 0.004615476076226052,
+            "difference": -0.0011868993444140866,
+            "ratio": 0.7428435713213399
+          },
+          "1": {
+            "joint": 0.0019260834518929858,
+            "matched": 0.0034158617765101124,
+            "difference": -0.0014897783246171266,
+            "ratio": 0.5638645758848034
+          },
+          "2": {
+            "joint": 0.015367259553337051,
+            "matched": 0.015729657700476084,
+            "difference": -0.0003623981471390335,
+            "ratio": 0.9769608370353752
+          },
+          "3": {
+            "joint": 0.00010022406311918738,
+            "matched": 7.946503839583908e-05,
+            "difference": 2.0759024723348296e-05,
+            "ratio": 1.261234690656555
+          },
+          "4": {
+            "joint": 0.0021743388355349768,
+            "matched": 0.0019543626903885136,
+            "difference": 0.0002199761451464632,
+            "ratio": 1.1125564595703235
+          },
+          "5": {
+            "joint": 0.00043426457668210237,
+            "matched": 0.00042396761516177756,
+            "difference": 1.0296961520324811e-05,
+            "ratio": 1.0242871416402777
+          },
+          "6": {
+            "joint": 0.0022320127802864,
+            "matched": 0.0019106442018250488,
+            "difference": 0.00032136857846135113,
+            "ratio": 1.1681990703210883
+          },
+          "7": {
+            "joint": 0.0001407695799248585,
+            "matched": 0.00011690713829090348,
+            "difference": 2.3862441633955015e-05,
+            "ratio": 1.2041144961959243
+          },
+          "8": {
+            "joint": 0.002236292814030851,
+            "matched": 0.0027612557255872862,
+            "difference": -0.0005249629115564353,
+            "ratio": 0.8098825448538339
+          },
+          "9": {
+            "joint": 0.28865091374049445,
+            "matched": 0.23460167382716793,
+            "difference": 0.054049239913326524,
+            "ratio": 1.2303872731664516
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 364,
+          "matched": 364
+        }
+      }
+    },
+    "by_task": {
+      "lift_object": {
+        "normalized_loss": {
+          "joint": 0.04557131769099502,
+          "matched": 0.04030659827462666,
+          "difference": 0.0052647194163683575,
+          "ratio": 1.1306168131703276
+        },
+        "translation_norm_error_m": {
+          "joint": 0.026791579439984805,
+          "matched": 0.02646638020933591,
+          "difference": 0.00032519923064889406,
+          "ratio": 1.0122872575726916
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.3485694061085507,
+          "matched": 2.467196701396142,
+          "difference": -0.1186272952875913,
+          "ratio": 0.9519181850314318
+        },
+        "effective_gripper_error": {
+          "joint": 0.1924353525308626,
+          "matched": 0.17939751502126455,
+          "difference": 0.013037837509598055,
+          "ratio": 1.0726756862159024
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0013689125337820994,
+            "matched": 0.001221092469551471,
+            "difference": 0.0001478200642306283,
+            "ratio": 1.1210555858107332
+          },
+          "1": {
+            "joint": 0.0006190424014788767,
+            "matched": 0.0007109429126086944,
+            "difference": -9.190051112981774e-05,
+            "ratio": 0.8707343311256833
+          },
+          "2": {
+            "joint": 0.019561807299742003,
+            "matched": 0.02045992747702123,
+            "difference": -0.0008981201772792283,
+            "ratio": 0.9561034525519254
+          },
+          "3": {
+            "joint": 3.0384922301478275e-05,
+            "matched": 9.803410715648028e-06,
+            "difference": 2.058151158583025e-05,
+            "ratio": 3.0994235764271725
+          },
+          "4": {
+            "joint": 0.0012669924795414868,
+            "matched": 0.001576663227551979,
+            "difference": -0.00030967074801049226,
+            "ratio": 0.8035910633297985
+          },
+          "5": {
+            "joint": 0.00012507480307896355,
+            "matched": 0.0001002358218063137,
+            "difference": 2.483898127264984e-05,
+            "ratio": 1.2478054334771291
+          },
+          "6": {
+            "joint": 0.0012405822879264588,
+            "matched": 0.0015690470907900012,
+            "difference": -0.00032846480286354246,
+            "ratio": 0.7906596909732242
+          },
+          "7": {
+            "joint": 5.4907031651584336e-05,
+            "matched": 2.997350845577808e-05,
+            "difference": 2.4933523195806256e-05,
+            "ratio": 1.831852008002078
+          },
+          "8": {
+            "joint": 0.0010807356941807565,
+            "matched": 0.001151162954077731,
+            "difference": -7.042725989697446e-05,
+            "ratio": 0.9388207728128307
+          },
+          "9": {
+            "joint": 0.4303647374562665,
+            "matched": 0.3762371338736878,
+            "difference": 0.05412760358257873,
+            "ratio": 1.143865660003541
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 336,
+          "matched": 336
+        }
+      },
+      "pick_place_bin": {
+        "normalized_loss": {
+          "joint": 0.041311471847451174,
+          "matched": 0.03644803593426376,
+          "difference": 0.004863435913187414,
+          "ratio": 1.1334347870474808
+        },
+        "translation_norm_error_m": {
+          "joint": 0.024293632228538375,
+          "matched": 0.02593471629094118,
+          "difference": -0.0016410840624028061,
+          "ratio": 0.936722497983291
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.966789585999919,
+          "matched": 2.923661669057345,
+          "difference": 0.04312791694257401,
+          "ratio": 1.0147513364487484
+        },
+        "effective_gripper_error": {
+          "joint": 0.17726016242285167,
+          "matched": 0.1574206903171377,
+          "difference": 0.019839472105713962,
+          "ratio": 1.1260283642877287
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.002380979566731326,
+            "matched": 0.0023646439173508724,
+            "difference": 1.6335649380453624e-05,
+            "ratio": 1.0069082914601175
+          },
+          "1": {
+            "joint": 0.004202398755652239,
+            "matched": 0.007544291106626827,
+            "difference": -0.003341892350974588,
+            "ratio": 0.5570303022852466
+          },
+          "2": {
+            "joint": 0.010739644938822545,
+            "matched": 0.012571626994006798,
+            "difference": -0.0018319820551842524,
+            "ratio": 0.8542764547454674
+          },
+          "3": {
+            "joint": 4.0576769286205056e-05,
+            "matched": 2.7083582314020067e-05,
+            "difference": 1.3493186972184989e-05,
+            "ratio": 1.498205400442914
+          },
+          "4": {
+            "joint": 0.0011830077077118488,
+            "matched": 0.0019978043511183637,
+            "difference": -0.0008147966434065149,
+            "ratio": 0.5921539349184044
+          },
+          "5": {
+            "joint": 0.0006252828144571529,
+            "matched": 0.0007084482610728826,
+            "difference": -8.31654466157297e-05,
+            "ratio": 0.8826090045167406
+          },
+          "6": {
+            "joint": 0.00114704717422356,
+            "matched": 0.0017482435345166677,
+            "difference": -0.0006011963602931077,
+            "ratio": 0.6561140662480306
+          },
+          "7": {
+            "joint": 0.00010502652721131555,
+            "matched": 7.196061431106854e-05,
+            "difference": 3.306591290024701e-05,
+            "ratio": 1.4595001476406382
+          },
+          "8": {
+            "joint": 0.0026588437610384655,
+            "matched": 0.0025636961409390793,
+            "difference": 9.514762009938619e-05,
+            "ratio": 1.0371134545081204
+          },
+          "9": {
+            "joint": 0.3900319104593771,
+            "matched": 0.3348825608403811,
+            "difference": 0.05514934961899598,
+            "ratio": 1.1646826561544434
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 588,
+          "matched": 588
+        }
+      },
+      "push_to_zone": {
+        "normalized_loss": {
+          "joint": 0.005551761172987025,
+          "matched": 0.004872866600215287,
+          "difference": 0.0006788945727717382,
+          "ratio": 1.1393213950781547
+        },
+        "translation_norm_error_m": {
+          "joint": 0.031019369089093002,
+          "matched": 0.03245019942792215,
+          "difference": -0.0014308303388291463,
+          "ratio": 0.9559068861192276
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 4.388690595547781,
+          "matched": 4.340947909462577,
+          "difference": 0.047742686085204156,
+          "ratio": 1.0109982167676173
+        },
+        "effective_gripper_error": {
+          "joint": 0.03348294202060926,
+          "matched": 0.013795585681994757,
+          "difference": 0.0196873563386145,
+          "ratio": 2.4270765150847753
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.007698320957154531,
+            "matched": 0.009200916484581441,
+            "difference": -0.00150259552742691,
+            "ratio": 0.8366906677237094
+          },
+          "1": {
+            "joint": 0.0006636296971583214,
+            "matched": 0.0005865382385876254,
+            "difference": 7.709145857069601e-05,
+            "ratio": 1.1314346678510356
+          },
+          "2": {
+            "joint": 0.018085195560053096,
+            "matched": 0.02101885337864041,
+            "difference": -0.0029336578185873152,
+            "ratio": 0.8604273141955245
+          },
+          "3": {
+            "joint": 0.0002569632449116032,
+            "matched": 0.00022933847564041816,
+            "difference": 2.762476927118502e-05,
+            "ratio": 1.1204541418270266
+          },
+          "4": {
+            "joint": 0.004576641924387219,
+            "matched": 0.0033384077935366212,
+            "difference": 0.0012382341308505977,
+            "ratio": 1.3709055955500407
+          },
+          "5": {
+            "joint": 0.0005218611505396592,
+            "matched": 0.0005542868632819007,
+            "difference": -3.242571274224152e-05,
+            "ratio": 0.9415001240508376
+          },
+          "6": {
+            "joint": 0.00476078738658453,
+            "matched": 0.003500627395239334,
+            "difference": 0.0012601599913451959,
+            "ratio": 1.3599811831041904
+          },
+          "7": {
+            "joint": 0.0002940874894671055,
+            "matched": 0.000282546228070795,
+            "difference": 1.1541261396310525e-05,
+            "ratio": 1.04084733841649
+          },
+          "8": {
+            "joint": 0.003657706390335981,
+            "matched": 0.0044625998932139215,
+            "difference": -0.0008048935028779403,
+            "ratio": 0.8196357454985139
+          },
+          "9": {
+            "joint": 0.015002417929278214,
+            "matched": 0.005554551251360406,
+            "difference": 0.009447866677917808,
+            "ratio": 2.7009234860518863
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 168,
+          "matched": 168
+        }
+      }
+    },
+    "by_morphology": {
+      "panda": {
+        "normalized_loss": {
+          "joint": 0.05393959637391007,
+          "matched": 0.047395286380789596,
+          "difference": 0.006544309993120473,
+          "ratio": 1.1380793427544946
+        },
+        "translation_norm_error_m": {
+          "joint": 0.03848045502091127,
+          "matched": 0.04199058506156189,
+          "difference": -0.003510130040650622,
+          "ratio": 0.9164067365219022
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.8729251480967744,
+          "matched": 2.933152919379461,
+          "difference": -0.06022777128268686,
+          "ratio": 0.9794665423392147
+        },
+        "effective_gripper_error": {
+          "joint": 0.2058230803734591,
+          "matched": 0.18108680215822595,
+          "difference": 0.024736278215233137,
+          "ratio": 1.1365990117469722
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0049832679167662155,
+            "matched": 0.005936944105109681,
+            "difference": -0.0009536761883434655,
+            "ratio": 0.8393658132097495
+          },
+          "1": {
+            "joint": 0.002454331060271632,
+            "matched": 0.004867821582062244,
+            "difference": -0.0024134905217906124,
+            "ratio": 0.5041949502249133
+          },
+          "2": {
+            "joint": 0.03022131804792981,
+            "matched": 0.0345397423762192,
+            "difference": -0.00431842432828939,
+            "ratio": 0.8749723063579464
+          },
+          "3": {
+            "joint": 2.9507128588994247e-05,
+            "matched": 1.2063409259594268e-05,
+            "difference": 1.744371932939998e-05,
+            "ratio": 2.446002448729545
+          },
+          "4": {
+            "joint": 0.0005895366826296334,
+            "matched": 0.0006601431275661649,
+            "difference": -7.060644493653149e-05,
+            "ratio": 0.893043732505638
+          },
+          "5": {
+            "joint": 9.176195374728562e-05,
+            "matched": 1.1667282081177203e-05,
+            "difference": 8.009467166610842e-05,
+            "ratio": 7.864895449414474
+          },
+          "6": {
+            "joint": 0.0005694785036782449,
+            "matched": 0.000661632307987858,
+            "difference": -9.215380430961304e-05,
+            "ratio": 0.8607174964144825
+          },
+          "7": {
+            "joint": 8.374032769664717e-05,
+            "matched": 7.344392276996205e-05,
+            "difference": 1.0296404926685116e-05,
+            "ratio": 1.140194103723668
+          },
+          "8": {
+            "joint": 0.003429734933934481,
+            "matched": 0.003972050381564955,
+            "difference": -0.0005423154476304746,
+            "ratio": 0.8634671276710224
+          },
+          "9": {
+            "joint": 0.4969432871838578,
+            "matched": 0.42321735531327515,
+            "difference": 0.07372593187058263,
+            "ratio": 1.1742034700254884
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 546,
+          "matched": 546
+        }
+      },
+      "so101": {
+        "normalized_loss": {
+          "joint": 0.007683437433712077,
+          "matched": 0.00702304749194755,
+          "difference": 0.0006603899417645274,
+          "ratio": 1.0940318205909492
+        },
+        "translation_norm_error_m": {
+          "joint": 0.016255932150832857,
+          "matched": 0.014576945557237606,
+          "difference": 0.0016789865935952514,
+          "ratio": 1.1151809607165348
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.5964412436740596,
+          "matched": 3.5547179338979142,
+          "difference": 0.041723309776145356,
+          "ratio": 1.0117374459948765
+        },
+        "effective_gripper_error": {
+          "joint": 0.06296255760942322,
+          "matched": 0.05265572518870539,
+          "difference": 0.01030683242071783,
+          "ratio": 1.1957400146666033
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.002648874121679089,
+            "matched": 0.002587491142546177,
+            "difference": 6.138297913291192e-05,
+            "ratio": 1.0237229716939278
+          },
+          "1": {
+            "joint": 0.0012023828425879928,
+            "matched": 0.0010266932564865204,
+            "difference": 0.0001756895861014724,
+            "ratio": 1.1711217883155338
+          },
+          "2": {
+            "joint": 0.0020364471511486186,
+            "matched": 0.0014938628568930978,
+            "difference": 0.0005425842942555208,
+            "ratio": 1.3632089061936885
+          },
+          "3": {
+            "joint": 0.0001891094957438634,
+            "matched": 0.00016542023652046323,
+            "difference": 2.3689259223400174e-05,
+            "ratio": 1.1432065370095739
+          },
+          "4": {
+            "joint": 0.004094891391797403,
+            "matched": 0.0039484404539051445,
+            "difference": 0.00014645093789225887,
+            "ratio": 1.0370908310767137
+          },
+          "5": {
+            "joint": 0.0007563838916365648,
+            "matched": 0.0008969800153595541,
+            "difference": -0.0001405961237229893,
+            "ratio": 0.8432561246455068
+          },
+          "6": {
+            "joint": 0.004196132728811455,
+            "matched": 0.003883646372376145,
+            "difference": 0.0003124863564353099,
+            "ratio": 1.080462103516423
+          },
+          "7": {
+            "joint": 0.0002189403711900231,
+            "matched": 0.000182876311121799,
+            "difference": 3.606406006822409e-05,
+            "ratio": 1.1972046562345888
+          },
+          "8": {
+            "joint": 0.0015017889631023208,
+            "matched": 0.001479588943922198,
+            "difference": 2.2200019180122765e-05,
+            "ratio": 1.0150041802294585
+          },
+          "9": {
+            "joint": 0.05998942337942342,
+            "matched": 0.05456547533034439,
+            "difference": 0.00542394804907903,
+            "ratio": 1.0994025620823782
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 546,
+          "matched": 546
+        }
+      }
+    },
+    "by_endpoint": {
+      "first": {
+        "normalized_loss": {
+          "joint": 0.014126281051469194,
+          "matched": 0.01220498706958006,
+          "difference": 0.0019212939818891352,
+          "ratio": 1.1574187642261256
+        },
+        "translation_norm_error_m": {
+          "joint": 0.03297193450999437,
+          "matched": 0.034325232645797864,
+          "difference": -0.0013532981358034962,
+          "ratio": 0.9605742472376464
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.7861479344909768,
+          "matched": 3.7934282691906644,
+          "difference": -0.007280334699687696,
+          "ratio": 0.9980808033833625
+        },
+        "effective_gripper_error": {
+          "joint": 0.07613187233438028,
+          "matched": 0.06017749076561323,
+          "difference": 0.015954381568767044,
+          "ratio": 1.2651220807944312
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0037365721136366856,
+            "matched": 0.0041686512697618,
+            "difference": -0.0004320791561251147,
+            "ratio": 0.8963503713396962
+          },
+          "1": {
+            "joint": 0.001391785226218928,
+            "matched": 0.0016389326415354453,
+            "difference": -0.00024714741531651737,
+            "ratio": 0.8492022130421567
+          },
+          "2": {
+            "joint": 0.02460940793082091,
+            "matched": 0.027910761526403954,
+            "difference": -0.0033013535955830446,
+            "ratio": 0.8817175377869959
+          },
+          "3": {
+            "joint": 0.00018773322610201085,
+            "matched": 0.00015764146996866276,
+            "difference": 3.0091756133348094e-05,
+            "ratio": 1.1908873099148973
+          },
+          "4": {
+            "joint": 0.003469612841942063,
+            "matched": 0.003003760394155845,
+            "difference": 0.00046585244778621793,
+            "ratio": 1.155089749732564
+          },
+          "5": {
+            "joint": 0.0005623910894448019,
+            "matched": 0.0005916705664113835,
+            "difference": -2.9279476966581576e-05,
+            "ratio": 0.9505138862252888
+          },
+          "6": {
+            "joint": 0.0035725051052930353,
+            "matched": 0.0030337012629034423,
+            "difference": 0.000538803842389593,
+            "ratio": 1.1776060975344433
+          },
+          "7": {
+            "joint": 0.0002323224864655053,
+            "matched": 0.00020379120841072272,
+            "difference": 2.8531278054782583e-05,
+            "ratio": 1.140002497052181
+          },
+          "8": {
+            "joint": 0.002653240990443626,
+            "matched": 0.002956527255924059,
+            "difference": -0.00030328626548043304,
+            "ratio": 0.8974180722086252
+          },
+          "9": {
+            "joint": 0.1008472395043244,
+            "matched": 0.07838443310032527,
+            "difference": 0.02246280640399914,
+            "ratio": 1.2865722888529245
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 546,
+          "matched": 546
+        }
+      },
+      "last": {
+        "normalized_loss": {
+          "joint": 0.04749675275615295,
+          "matched": 0.04221334680315709,
+          "difference": 0.005283405952995861,
+          "ratio": 1.1251596083492892
+        },
+        "translation_norm_error_m": {
+          "joint": 0.021764452661749752,
+          "matched": 0.02224229797300163,
+          "difference": -0.000477845311251876,
+          "ratio": 0.9785163694941997
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.683218457279857,
+          "matched": 2.6944425840867114,
+          "difference": -0.011224126806854251,
+          "ratio": 0.9958343418140941
+        },
+        "effective_gripper_error": {
+          "joint": 0.1926537656485021,
+          "matched": 0.17356503658131814,
+          "difference": 0.01908872906718395,
+          "ratio": 1.1099802670121328
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0038955699248086188,
+            "matched": 0.004355783977894056,
+            "difference": -0.0004602140530854371,
+            "ratio": 0.8943441512662108
+          },
+          "1": {
+            "joint": 0.0022649286766406973,
+            "matched": 0.00425558219701332,
+            "difference": -0.0019906535203726224,
+            "ratio": 0.5322253388103475
+          },
+          "2": {
+            "joint": 0.007648357268257514,
+            "matched": 0.008122843706708337,
+            "difference": -0.00047448643845082305,
+            "ratio": 0.9415861666698125
+          },
+          "3": {
+            "joint": 3.0883398230846833e-05,
+            "matched": 1.9842175811394744e-05,
+            "difference": 1.104122241945209e-05,
+            "ratio": 1.5564522018352172
+          },
+          "4": {
+            "joint": 0.0012148152324849735,
+            "matched": 0.0016048231873154637,
+            "difference": -0.0003900079548304902,
+            "ratio": 0.7569776172770206
+          },
+          "5": {
+            "joint": 0.0002857547559390486,
+            "matched": 0.00031697673102934785,
+            "difference": -3.1221975090299254e-05,
+            "ratio": 0.9015007348050147
+          },
+          "6": {
+            "joint": 0.0011931061271966631,
+            "matched": 0.0015115774174605603,
+            "difference": -0.0003184712902638972,
+            "ratio": 0.7893119554545034
+          },
+          "7": {
+            "joint": 7.035821242116495e-05,
+            "matched": 5.252902548103837e-05,
+            "difference": 1.7829186940126575e-05,
+            "ratio": 1.3394159091446014
+          },
+          "8": {
+            "joint": 0.0022782829065931764,
+            "matched": 0.0024951120695630956,
+            "difference": -0.00021682916296991922,
+            "ratio": 0.9130984272750975
+          },
+          "9": {
+            "joint": 0.4560854710589568,
+            "matched": 0.39939839754329426,
+            "difference": 0.056687073515662545,
+            "ratio": 1.1419311491091242
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 546,
+          "matched": 546
+        }
+      }
+    },
+    "by_task_phase": {
+      "lift_object/close": {
+        "normalized_loss": {
+          "joint": 0.004810441950637473,
+          "matched": 0.004478693700981326,
+          "difference": 0.0003317482496561471,
+          "ratio": 1.0740725469981254
+        },
+        "translation_norm_error_m": {
+          "joint": 0.017918374045737238,
+          "matched": 0.01736310773651194,
+          "difference": 0.0005552663092252969,
+          "ratio": 1.031979661570472
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 1.912115714718034,
+          "matched": 1.8422776643509902,
+          "difference": 0.06983805036704394,
+          "ratio": 1.0379085366546237
+        },
+        "effective_gripper_error": {
+          "joint": 0.0578286587482407,
+          "matched": 0.057270746145929606,
+          "difference": 0.0005579126023110906,
+          "ratio": 1.0097416681265072
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0005970232935060194,
+            "matched": 0.0005547574310163892,
+            "difference": 4.226586248963027e-05,
+            "ratio": 1.076188006012274
+          },
+          "1": {
+            "joint": 0.0005804869255959517,
+            "matched": 0.0007719037796686143,
+            "difference": -0.00019141685407266255,
+            "ratio": 0.7520197994692556
+          },
+          "2": {
+            "joint": 0.005283591276061557,
+            "matched": 0.005139203023038193,
+            "difference": 0.00014438825302336405,
+            "ratio": 1.0280954561195763
+          },
+          "3": {
+            "joint": 2.9259470780685332e-05,
+            "matched": 1.3286946194930527e-05,
+            "difference": 1.5972524585754805e-05,
+            "ratio": 2.2021215673958947
+          },
+          "4": {
+            "joint": 0.0012111332598952987,
+            "matched": 0.001073749735549871,
+            "difference": 0.0001373835243454278,
+            "ratio": 1.1279474348602034
+          },
+          "5": {
+            "joint": 0.00010560885636129566,
+            "matched": 9.584146651099301e-05,
+            "difference": 9.767389850302651e-06,
+            "ratio": 1.10191194068574
+          },
+          "6": {
+            "joint": 0.0011521147722058727,
+            "matched": 0.0010018975450377659,
+            "difference": 0.00015021722716810682,
+            "ratio": 1.1499327230734402
+          },
+          "7": {
+            "joint": 4.2871668183550695e-05,
+            "matched": 1.606034037256639e-05,
+            "difference": 2.6811327810984305e-05,
+            "ratio": 2.669412178634913
+          },
+          "8": {
+            "joint": 0.00039272292015062635,
+            "matched": 0.0003072539475353782,
+            "difference": 8.546897261524816e-05,
+            "ratio": 1.2781704622538885
+          },
+          "9": {
+            "joint": 0.038709607063633876,
+            "matched": 0.03581298279488856,
+            "difference": 0.002896624268745318,
+            "ratio": 1.080881960749685
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "lift_object/contact": {
+        "normalized_loss": {
+          "joint": 0.13016720503591403,
+          "matched": 0.11355770039161023,
+          "difference": 0.016609504644303802,
+          "ratio": 1.146264890773809
+        },
+        "translation_norm_error_m": {
+          "joint": 0.020470354076368644,
+          "matched": 0.022650438427807507,
+          "difference": -0.002180084351438863,
+          "ratio": 0.9037508983153979
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.0222754054171044,
+          "matched": 2.5222204458281103,
+          "difference": -0.49994504041100596,
+          "ratio": 0.8017837650797168
+        },
+        "effective_gripper_error": {
+          "joint": 0.44758301157326924,
+          "matched": 0.41701463290623253,
+          "difference": 0.03056837866703671,
+          "ratio": 1.073302892164722
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0007251116390062568,
+            "matched": 0.00047727073342925685,
+            "difference": 0.000247840905577,
+            "ratio": 1.51928787628822
+          },
+          "1": {
+            "joint": 0.00076565301324463,
+            "matched": 0.001236655452976845,
+            "difference": -0.00047100243973221493,
+            "ratio": 0.6191320398916044
+          },
+          "2": {
+            "joint": 0.00985118907843008,
+            "matched": 0.012397703247895941,
+            "difference": -0.002546514169465861,
+            "ratio": 0.7945979091007813
+          },
+          "3": {
+            "joint": 2.8225548255269995e-05,
+            "matched": 1.090609465425105e-05,
+            "difference": 1.7319453601018944e-05,
+            "ratio": 2.5880527494109042
+          },
+          "4": {
+            "joint": 0.0011556988607619061,
+            "matched": 0.0018830283808148936,
+            "difference": -0.0007273295200529875,
+            "ratio": 0.6137447913885236
+          },
+          "5": {
+            "joint": 9.458601724701037e-05,
+            "matched": 6.094732165898764e-05,
+            "difference": 3.3638695588022734e-05,
+            "ratio": 1.5519306619614543
+          },
+          "6": {
+            "joint": 0.0011380238337952231,
+            "matched": 0.0019579360440393333,
+            "difference": -0.0008199122102441102,
+            "ratio": 0.5812364695260501
+          },
+          "7": {
+            "joint": 4.0326124241948e-05,
+            "matched": 1.6616803862160422e-05,
+            "difference": 2.370932037978758e-05,
+            "ratio": 2.426827961409483
+          },
+          "8": {
+            "joint": 0.0005221375553090061,
+            "matched": 0.000765695950690951,
+            "difference": -0.0002435583953819449,
+            "ratio": 0.6819123894253823
+          },
+          "9": {
+            "joint": 1.2873510986888486,
+            "matched": 1.1167702438860794,
+            "difference": 0.1705808548027692,
+            "ratio": 1.1527448064959098
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "lift_object/lift": {
+        "normalized_loss": {
+          "joint": 0.016312231405008346,
+          "matched": 0.015384233834345529,
+          "difference": 0.0009279975706628172,
+          "ratio": 1.0603213381085672
+        },
+        "translation_norm_error_m": {
+          "joint": 0.018838895383072544,
+          "matched": 0.011958890272039521,
+          "difference": 0.006880005111033023,
+          "ratio": 1.575304644036982
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 1.9269187745971752,
+          "matched": 1.411031362139039,
+          "difference": 0.5158874124581363,
+          "ratio": 1.365610167357359
+        },
+        "effective_gripper_error": {
+          "joint": 0.13270356240017075,
+          "matched": 0.12727189613949685,
+          "difference": 0.005431666260673901,
+          "ratio": 1.042677656461726
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0004170471412892006,
+            "matched": 0.00027552621086944956,
+            "difference": 0.00014152093041975102,
+            "ratio": 1.5136387205165276
+          },
+          "1": {
+            "joint": 0.0005324161131798221,
+            "matched": 0.0003826163246296672,
+            "difference": 0.00014979978855015496,
+            "ratio": 1.3915143680687059
+          },
+          "2": {
+            "joint": 0.009218179002627705,
+            "matched": 0.0022629920915610857,
+            "difference": 0.00695518691106662,
+            "ratio": 4.073447289985316
+          },
+          "3": {
+            "joint": 3.2466880904339725e-05,
+            "matched": 9.124124979151934e-06,
+            "difference": 2.334275592518779e-05,
+            "ratio": 3.558355565988471
+          },
+          "4": {
+            "joint": 0.0011660847545808947,
+            "matched": 0.0008606232899324384,
+            "difference": 0.00030546146464845625,
+            "ratio": 1.3549305116672312
+          },
+          "5": {
+            "joint": 8.762547738887928e-05,
+            "matched": 8.241283677599405e-05,
+            "difference": 5.212640612885239e-06,
+            "ratio": 1.0632503480865936
+          },
+          "6": {
+            "joint": 0.001158103398852683,
+            "matched": 0.0007857394978948366,
+            "difference": 0.0003723639009578464,
+            "ratio": 1.4739024854363165
+          },
+          "7": {
+            "joint": 4.90239144032382e-05,
+            "matched": 1.0456322492810191e-05,
+            "difference": 3.856759191042801e-05,
+            "ratio": 4.688447055544359
+          },
+          "8": {
+            "joint": 0.00031759775084460646,
+            "matched": 0.00010749429915921987,
+            "difference": 0.00021010345168538658,
+            "ratio": 2.9545543654755373
+          },
+          "9": {
+            "joint": 0.1501437696160121,
+            "matched": 0.14906535334516063,
+            "difference": 0.0010784162708514788,
+            "ratio": 1.0072345199380732
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "lift_object/precontact": {
+        "normalized_loss": {
+          "joint": 0.030995392372420272,
+          "matched": 0.027805765171569588,
+          "difference": 0.0031896272008506837,
+          "ratio": 1.1147110025985534
+        },
+        "translation_norm_error_m": {
+          "joint": 0.0499386942547608,
+          "matched": 0.05389308440098468,
+          "difference": -0.003954390146223875,
+          "ratio": 0.9266252768759395
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.5329677297018893,
+          "matched": 4.093257333266428,
+          "difference": -0.5602896035645388,
+          "ratio": 0.8631188909109151
+        },
+        "effective_gripper_error": {
+          "joint": 0.1316261774017697,
+          "matched": 0.11603278489339919,
+          "difference": 0.015593392508370524,
+          "ratio": 1.1343878156737888
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.003736468061326921,
+            "matched": 0.0035768155028907886,
+            "difference": 0.00015965255843613255,
+            "ratio": 1.044635390980357
+          },
+          "1": {
+            "joint": 0.000597613553895103,
+            "matched": 0.00045259609315965126,
+            "difference": 0.0001450174607354517,
+            "ratio": 1.3204125332215306
+          },
+          "2": {
+            "joint": 0.05389426984184867,
+            "matched": 0.06203981154558972,
+            "difference": -0.00814554170374105,
+            "ratio": 0.8687046027250529
+          },
+          "3": {
+            "joint": 3.158778926561806e-05,
+            "matched": 5.8964770342586e-06,
+            "difference": 2.569131223135946e-05,
+            "ratio": 5.357061357500867
+          },
+          "4": {
+            "joint": 0.0015350530429278468,
+            "matched": 0.0024892515039107127,
+            "difference": -0.0009541984609828659,
+            "ratio": 0.6166725381168667
+          },
+          "5": {
+            "joint": 0.00021247886131866883,
+            "matched": 0.0001617416622792801,
+            "difference": 5.073719903938873e-05,
+            "ratio": 1.3136928254872302
+          },
+          "6": {
+            "joint": 0.0015140871468520565,
+            "matched": 0.00253061527618807,
+            "difference": -0.0010165281293360137,
+            "ratio": 0.5983079139286491
+          },
+          "7": {
+            "joint": 8.740641977760043e-05,
+            "matched": 7.676056709557532e-05,
+            "difference": 1.0645852682025103e-05,
+            "ratio": 1.1386890832733148
+          },
+          "8": {
+            "joint": 0.0030904845504187875,
+            "matched": 0.0034242076189253735,
+            "difference": -0.000333723068506586,
+            "ratio": 0.902540060169798
+          },
+          "9": {
+            "joint": 0.24525447445657142,
+            "matched": 0.20329995546862245,
+            "difference": 0.04195451898794897,
+            "ratio": 1.2063675758867751
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/close": {
+        "normalized_loss": {
+          "joint": 0.004944088967393143,
+          "matched": 0.003601720994491065,
+          "difference": 0.001342367972902078,
+          "ratio": 1.372701820867099
+        },
+        "translation_norm_error_m": {
+          "joint": 0.018148988455810932,
+          "matched": 0.015965432073422773,
+          "difference": 0.002183556382388159,
+          "ratio": 1.1367677600171602
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.5327273982110827,
+          "matched": 2.152883748998065,
+          "difference": 0.3798436492130177,
+          "ratio": 1.1764348165059046
+        },
+        "effective_gripper_error": {
+          "joint": 0.057074504594008126,
+          "matched": 0.04865866757574536,
+          "difference": 0.008415837018262769,
+          "ratio": 1.1729565858983317
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.001556405047445918,
+            "matched": 0.0008035917861876103,
+            "difference": 0.0007528132612583076,
+            "ratio": 1.9368105475913266
+          },
+          "1": {
+            "joint": 0.0026664220663069095,
+            "matched": 0.002121211314155737,
+            "difference": 0.0005452107521511725,
+            "ratio": 1.257028023805432
+          },
+          "2": {
+            "joint": 0.0030746569675444324,
+            "matched": 0.0030806358498072575,
+            "difference": -5.978882262825096e-06,
+            "ratio": 0.9980592051270197
+          },
+          "3": {
+            "joint": 3.6062059443043805e-05,
+            "matched": 1.003614075629449e-05,
+            "difference": 2.6025918686749316e-05,
+            "ratio": 3.593219776279674
+          },
+          "4": {
+            "joint": 0.0006886925226400006,
+            "matched": 0.0007749288709480049,
+            "difference": -8.623634830800435e-05,
+            "ratio": 0.888717079023643
+          },
+          "5": {
+            "joint": 0.0006561780762037764,
+            "matched": 0.0003089886736331652,
+            "difference": 0.00034718940257061115,
+            "ratio": 2.1236314861909737
+          },
+          "6": {
+            "joint": 0.0007664902378139832,
+            "matched": 0.0007679088914493204,
+            "difference": -1.4186536353371455e-06,
+            "ratio": 0.9981525755839867
+          },
+          "7": {
+            "joint": 0.00011469170932815451,
+            "matched": 3.951500891462091e-05,
+            "difference": 7.517670041353361e-05,
+            "ratio": 2.9024847134911704
+          },
+          "8": {
+            "joint": 0.0023195540352338854,
+            "matched": 0.0011433889450940293,
+            "difference": 0.0011761650901398561,
+            "ratio": 2.0286657879512133
+          },
+          "9": {
+            "joint": 0.037561736951971327,
+            "matched": 0.02696700446396461,
+            "difference": 0.010594732488006717,
+            "ratio": 1.3928776183563218
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/contact": {
+        "normalized_loss": {
+          "joint": 0.1272854661981939,
+          "matched": 0.10938119942180609,
+          "difference": 0.017904266776387803,
+          "ratio": 1.163686875541963
+        },
+        "translation_norm_error_m": {
+          "joint": 0.022917699499353423,
+          "matched": 0.025127086375981284,
+          "difference": -0.0022093868766278613,
+          "ratio": 0.9120715054834296
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.510037958068736,
+          "matched": 2.547839459085937,
+          "difference": -0.037801501017201034,
+          "ratio": 0.9851633112587233
+        },
+        "effective_gripper_error": {
+          "joint": 0.450911938789345,
+          "matched": 0.41796976292417165,
+          "difference": 0.03294217586517334,
+          "ratio": 1.0788147344312793
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0008259022786391608,
+            "matched": 0.0008457105964803664,
+            "difference": -1.980831784120557e-05,
+            "ratio": 0.9765779003791099
+          },
+          "1": {
+            "joint": 0.004069034183216634,
+            "matched": 0.0013078599991399225,
+            "difference": 0.0027611741840767113,
+            "ratio": 3.111215409824079
+          },
+          "2": {
+            "joint": 0.007765019669528597,
+            "matched": 0.01407363137897999,
+            "difference": -0.006308611709451392,
+            "ratio": 0.5517424366483145
+          },
+          "3": {
+            "joint": 3.601929430871057e-05,
+            "matched": 1.1595438842374303e-05,
+            "difference": 2.4423855466336265e-05,
+            "ratio": 3.106332998547832
+          },
+          "4": {
+            "joint": 0.0012455348521472663,
+            "matched": 0.00168068414932335,
+            "difference": -0.00043514929717608356,
+            "ratio": 0.7410879983896579
+          },
+          "5": {
+            "joint": 0.0004000403782691438,
+            "matched": 0.0001614231165311498,
+            "difference": 0.000238617261737994,
+            "ratio": 2.478209979250079
+          },
+          "6": {
+            "joint": 0.0012445554787057485,
+            "matched": 0.0016774717955702987,
+            "difference": -0.0004329163168645502,
+            "ratio": 0.7419233408229261
+          },
+          "7": {
+            "joint": 7.252563241183772e-05,
+            "matched": 2.484062045918091e-05,
+            "difference": 4.76850119526568e-05,
+            "ratio": 2.919638522355539
+          },
+          "8": {
+            "joint": 0.0010796562166606356,
+            "matched": 0.0008965006898287159,
+            "difference": 0.00018315552683191973,
+            "ratio": 1.204300486223734
+          },
+          "9": {
+            "joint": 1.2561163739980512,
+            "matched": 1.0731322764329057,
+            "difference": 0.18298409756514555,
+            "ratio": 1.1705140191788705
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/lift": {
+        "normalized_loss": {
+          "joint": 0.012536906219019832,
+          "matched": 0.01470387857416062,
+          "difference": -0.002166972355140788,
+          "ratio": 0.8526257990902587
+        },
+        "translation_norm_error_m": {
+          "joint": 0.034308063982762614,
+          "matched": 0.04272897441234125,
+          "difference": -0.008420910429578633,
+          "ratio": 0.8029227112189603
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 4.996556121586946,
+          "matched": 5.803212997021703,
+          "difference": -0.806656875434757,
+          "ratio": 0.860998230489085
+        },
+        "effective_gripper_error": {
+          "joint": 0.07790260194312959,
+          "matched": 0.07477059002433505,
+          "difference": 0.0031320119187945444,
+          "ratio": 1.0418882867953188
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0044791054070112265,
+            "matched": 0.004948541625175467,
+            "difference": -0.0004694362181642403,
+            "ratio": 0.905136451560596
+          },
+          "1": {
+            "joint": 0.015668037418065443,
+            "matched": 0.0384696967932927,
+            "difference": -0.022801659375227257,
+            "ratio": 0.4072825814628518
+          },
+          "2": {
+            "joint": 0.004657845048788855,
+            "matched": 0.002413923619089876,
+            "difference": 0.002243921429698979,
+            "ratio": 1.9295743295079928
+          },
+          "3": {
+            "joint": 6.466185625887887e-05,
+            "matched": 8.357052534638651e-05,
+            "difference": -1.8908669087507637e-05,
+            "ratio": 0.7737399757972776
+          },
+          "4": {
+            "joint": 0.0032206220001029626,
+            "matched": 0.006547146816287948,
+            "difference": -0.0033265248161849855,
+            "ratio": 0.4919122925563118
+          },
+          "5": {
+            "joint": 0.001626772115322757,
+            "matched": 0.002392852136141304,
+            "difference": -0.0007660800208185469,
+            "ratio": 0.6798464856027744
+          },
+          "6": {
+            "joint": 0.0029757866730247564,
+            "matched": 0.005628922929353683,
+            "difference": -0.002653136256328927,
+            "ratio": 0.5286600492443477
+          },
+          "7": {
+            "joint": 0.00020632411481485185,
+            "matched": 0.00019033609677182858,
+            "difference": 1.5988018043023276e-05,
+            "ratio": 1.0839988752222307
+          },
+          "8": {
+            "joint": 0.005698173330055842,
+            "matched": 0.006339096434142449,
+            "difference": -0.0006409231040866072,
+            "ratio": 0.8988936182395668
+          },
+          "9": {
+            "joint": 0.08677173422675277,
+            "matched": 0.08002469876600454,
+            "difference": 0.00674703546074823,
+            "ratio": 1.0843119132566414
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/precontact": {
+        "normalized_loss": {
+          "joint": 0.031562693292643544,
+          "matched": 0.026515109735432547,
+          "difference": 0.005047583557210997,
+          "ratio": 1.1903663084021046
+        },
+        "translation_norm_error_m": {
+          "joint": 0.05020792196175258,
+          "matched": 0.05427550225280115,
+          "difference": -0.004067580291048568,
+          "ratio": 0.9250567913291187
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.7343089189680754,
+          "matched": 4.0173482545334,
+          "difference": -0.28303933556532446,
+          "ratio": 0.9295457307576143
+        },
+        "effective_gripper_error": {
+          "joint": 0.13561157562902995,
+          "matched": 0.11122308387642815,
+          "difference": 0.0243884917526018,
+          "ratio": 1.2192754498670264
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0032440318903816045,
+            "matched": 0.003781310252435247,
+            "difference": -0.0005372783620536427,
+            "ratio": 0.8579121187668682
+          },
+          "1": {
+            "joint": 0.0030251529019015653,
+            "matched": 0.0006232990436843454,
+            "difference": 0.0024018538582172197,
+            "ratio": 4.853453462754838
+          },
+          "2": {
+            "joint": 0.05259599514767236,
+            "matched": 0.06205104228846905,
+            "difference": -0.009455047140796688,
+            "ratio": 0.8476246845807823
+          },
+          "3": {
+            "joint": 2.8961472136046496e-05,
+            "matched": 9.748072248580034e-06,
+            "difference": 1.9213399887466463e-05,
+            "ratio": 2.970994818002627
+          },
+          "4": {
+            "joint": 0.0015790099952749815,
+            "matched": 0.00210700721842542,
+            "difference": -0.0005279972231504383,
+            "ratio": 0.7494089158626547
+          },
+          "5": {
+            "joint": 0.000302741730018552,
+            "matched": 0.00016008270446865675,
+            "difference": 0.00014265902554989524,
+            "ratio": 1.8911582673681469
+          },
+          "6": {
+            "joint": 0.0015797169840875232,
+            "matched": 0.0021244504503605045,
+            "difference": -0.0005447334662729813,
+            "ratio": 0.7435885284212942
+          },
+          "7": {
+            "joint": 8.937036119450156e-05,
+            "matched": 8.87270100609918e-05,
+            "difference": 6.433511335097607e-07,
+            "ratio": 1.0072509051422731
+          },
+          "8": {
+            "joint": 0.0033007243861553036,
+            "matched": 0.003509425273239081,
+            "difference": -0.00020870088708377756,
+            "ratio": 0.9405313204201229
+          },
+          "9": {
+            "joint": 0.24988122805761295,
+            "matched": 0.19069600504093362,
+            "difference": 0.059185223016679334,
+            "ratio": 1.3103642522766799
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/release": {
+        "normalized_loss": {
+          "joint": 0.004768829846905793,
+          "matched": 0.00403452861626337,
+          "difference": 0.0007343012306424233,
+          "ratio": 1.1820042191998394
+        },
+        "translation_norm_error_m": {
+          "joint": 0.0117588984591124,
+          "matched": 0.009878919369966975,
+          "difference": 0.001879979089145424,
+          "ratio": 1.1903020987154498
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 1.6444484742551533,
+          "matched": 0.9763537361311441,
+          "difference": 0.6680947381240092,
+          "ratio": 1.6842752922433335
+        },
+        "effective_gripper_error": {
+          "joint": 0.07209518267994836,
+          "matched": 0.05112937695923306,
+          "difference": 0.020965805720715297,
+          "ratio": 1.4100540035414855
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0004946476497974078,
+            "matched": 0.0001609753081369908,
+            "difference": 0.000333672341660417,
+            "ratio": 3.0728169153523854
+          },
+          "1": {
+            "joint": 0.000596024341374064,
+            "matched": 0.0006829615312851292,
+            "difference": -8.693718991106521e-05,
+            "ratio": 0.8727055830692609
+          },
+          "2": {
+            "joint": 0.002490249604923924,
+            "matched": 0.0028540253689036056,
+            "difference": -0.0003637757639796818,
+            "ratio": 0.8725394076929915
+          },
+          "3": {
+            "joint": 3.105413832969023e-05,
+            "matched": 8.035244983881216e-06,
+            "difference": 2.3018893345809012e-05,
+            "ratio": 3.8647407007484094
+          },
+          "4": {
+            "joint": 0.00041355184920837236,
+            "matched": 0.00021505075332876495,
+            "difference": 0.0001985010958796074,
+            "ratio": 1.9230430156928733
+          },
+          "5": {
+            "joint": 0.00013562345295413188,
+            "matched": 9.828606055653987e-06,
+            "difference": 0.0001257948468984779,
+            "ratio": 13.798849214850092
+          },
+          "6": {
+            "joint": 0.0004647487083192653,
+            "matched": 0.00022480377402363664,
+            "difference": 0.00023994493429562865,
+            "ratio": 2.067352785057781
+          },
+          "7": {
+            "joint": 4.875936617081728e-05,
+            "matched": 7.849596984220244e-06,
+            "difference": 4.0909769186597036e-05,
+            "ratio": 6.211703131872431
+          },
+          "8": {
+            "joint": 0.0007006440181973123,
+            "matched": 0.0002316174930885736,
+            "difference": 0.0004690265251087387,
+            "ratio": 3.0250047561363456
+          },
+          "9": {
+            "joint": 0.042312995339782944,
+            "matched": 0.03595013848584324,
+            "difference": 0.006362856853939704,
+            "ratio": 1.1769911639268185
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/retreat": {
+        "normalized_loss": {
+          "joint": 0.0029846070877450645,
+          "matched": 0.0008060160560666706,
+          "difference": 0.002178591031678394,
+          "ratio": 3.7029126966897405
+        },
+        "translation_norm_error_m": {
+          "joint": 0.009748023997475389,
+          "matched": 0.007963374264377017,
+          "difference": 0.0017846497330983712,
+          "ratio": 1.224107228148467
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 1.651400637920793,
+          "matched": 0.881346278034572,
+          "difference": 0.7700543598862211,
+          "ratio": 1.8737250942994448
+        },
+        "effective_gripper_error": {
+          "joint": 0.05503170759904952,
+          "matched": 0.015880803267161053,
+          "difference": 0.03915090433188846,
+          "ratio": 3.4652974835880146
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0005101075097126141,
+            "matched": 0.00017310457740823474,
+            "difference": 0.0003370029323043794,
+            "ratio": 2.9468169897646384
+          },
+          "1": {
+            "joint": 0.0005041884356856392,
+            "matched": 0.000372748883552634,
+            "difference": 0.00013143955213300518,
+            "ratio": 1.3526222557134642
+          },
+          "2": {
+            "joint": 0.001621698590720826,
+            "matched": 0.002211040477938851,
+            "difference": -0.0005893418872180249,
+            "ratio": 0.7334549534039223
+          },
+          "3": {
+            "joint": 4.169509476534404e-05,
+            "matched": 6.1343322481749716e-06,
+            "difference": 3.5560762517169074e-05,
+            "ratio": 6.797006271994604
+          },
+          "4": {
+            "joint": 0.0003488944531703777,
+            "matched": 0.00015914387693661546,
+            "difference": 0.00018975057623376226,
+            "ratio": 2.1923209355351885
+          },
+          "5": {
+            "joint": 0.00014142278150839976,
+            "matched": 1.3662582549016283e-05,
+            "difference": 0.00012776019895938348,
+            "ratio": 10.351101704310091
+          },
+          "6": {
+            "joint": 0.00036950330933033904,
+            "matched": 0.0001518395995735611,
+            "difference": 0.00021766370975677795,
+            "ratio": 2.4335108256876516
+          },
+          "7": {
+            "joint": 6.407941012594638e-05,
+            "matched": 7.805039501056806e-06,
+            "difference": 5.6274370624889574e-05,
+            "ratio": 8.210004589633403
+          },
+          "8": {
+            "joint": 0.0007036910207196776,
+            "matched": 0.00019710115677400806,
+            "difference": 0.0005065898639456696,
+            "ratio": 3.570202388647138
+          },
+          "9": {
+            "joint": 0.02554079027171148,
+            "matched": 0.004767580034184553,
+            "difference": 0.02077321023752693,
+            "ratio": 5.3571812300115855
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "pick_place_bin/transit": {
+        "normalized_loss": {
+          "joint": 0.10509771132025696,
+          "matched": 0.09609379814162596,
+          "difference": 0.009003913178631001,
+          "ratio": 1.0936992121527007
+        },
+        "translation_norm_error_m": {
+          "joint": 0.022965829243501292,
+          "matched": 0.025603725287697793,
+          "difference": -0.0026378960441965013,
+          "ratio": 0.8969721782843854
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 3.6980475929886496,
+          "matched": 4.086647209596594,
+          "difference": -0.38859961660794484,
+          "ratio": 0.90490991840563
+        },
+        "effective_gripper_error": {
+          "joint": 0.39219362572545097,
+          "matched": 0.3823125475928897,
+          "difference": 0.009881078132561283,
+          "ratio": 1.0258455501781838
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0055566571841313495,
+            "matched": 0.005839273275632194,
+            "difference": -0.0002826160915008445,
+            "ratio": 0.9516008108953855
+          },
+          "1": {
+            "joint": 0.0028879319430154212,
+            "matched": 0.009232260181277326,
+            "difference": -0.006344328238261905,
+            "ratio": 0.31280876906740973
+          },
+          "2": {
+            "joint": 0.002972049542578807,
+            "matched": 0.0013170899748589664,
+            "difference": 0.0016549595677198407,
+            "ratio": 2.2565273438491196
+          },
+          "3": {
+            "joint": 4.558346976172142e-05,
+            "matched": 6.046532177244893e-05,
+            "difference": -1.4881852010727509e-05,
+            "ratio": 0.7538778993563806
+          },
+          "4": {
+            "joint": 0.0007847482814389794,
+            "matched": 0.0025006687725784424,
+            "difference": -0.001715920491139463,
+            "ratio": 0.31381536413150174
+          },
+          "5": {
+            "joint": 0.0011142011669233096,
+            "matched": 0.001912300008131233,
+            "difference": -0.0007980988412079233,
+            "ratio": 0.5826497736681737
+          },
+          "6": {
+            "joint": 0.0006285288282833048,
+            "matched": 0.001662307301285669,
+            "difference": -0.0010337784730023642,
+            "ratio": 0.3781062790238516
+          },
+          "7": {
+            "joint": 0.00013943509643309952,
+            "matched": 0.00014465092748558052,
+            "difference": -5.215831052480992e-06,
+            "ratio": 0.9639419453221209
+          },
+          "8": {
+            "joint": 0.0048094633202466,
+            "matched": 0.005628742994406695,
+            "difference": -0.000819279674160095,
+            "ratio": 0.854447134116051
+          },
+          "9": {
+            "joint": 1.0320385143697568,
+            "matched": 0.9326402226588311,
+            "difference": 0.09939829171092573,
+            "ratio": 1.106577315985316
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "push_to_zone/precontact": {
+        "normalized_loss": {
+          "joint": 0.0072637687903605195,
+          "matched": 0.006962765307168442,
+          "difference": 0.0003010034831920777,
+          "ratio": 1.04323045082134
+        },
+        "translation_norm_error_m": {
+          "joint": 0.0434978359156483,
+          "matched": 0.04538032849535709,
+          "difference": -0.0018824925797087944,
+          "ratio": 0.9585174316245553
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 5.991457659135094,
+          "matched": 5.934989006423998,
+          "difference": 0.05646865271109558,
+          "ratio": 1.0095145336663596
+        },
+        "effective_gripper_error": {
+          "joint": 0.02349620596283958,
+          "matched": 0.007447576948574611,
+          "difference": 0.01604862901426497,
+          "ratio": 3.1548792479863548
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.011711417829545887,
+            "matched": 0.013024113311509012,
+            "difference": -0.0013126954819631248,
+            "ratio": 0.8992103761257102
+          },
+          "1": {
+            "joint": 0.0008972563815281745,
+            "matched": 0.0007527767066750346,
+            "difference": 0.00014447967485313993,
+            "ratio": 1.1919289924515561
+          },
+          "2": {
+            "joint": 0.030459866048384004,
+            "matched": 0.03546978076164196,
+            "difference": -0.005009914713257953,
+            "ratio": 0.8587554079647478
+          },
+          "3": {
+            "joint": 0.0004966932611965225,
+            "matched": 0.00044083729932909403,
+            "difference": 5.585596186742848e-05,
+            "ratio": 1.126704255634528
+          },
+          "4": {
+            "joint": 0.008101744668311418,
+            "matched": 0.005737351901592662,
+            "difference": 0.002364392766718755,
+            "ratio": 1.4121052372719913
+          },
+          "5": {
+            "joint": 0.0009002734960029613,
+            "matched": 0.0009939569561472576,
+            "difference": -9.368346014429626e-05,
+            "ratio": 0.9057469646297069
+          },
+          "6": {
+            "joint": 0.008466828144258596,
+            "matched": 0.00608139595922922,
+            "difference": 0.0023854321850293753,
+            "ratio": 1.3922507596975668
+          },
+          "7": {
+            "joint": 0.000529655934087883,
+            "matched": 0.0004924798718979011,
+            "difference": 3.717606218998188e-05,
+            "ratio": 1.0754874753494272
+          },
+          "8": {
+            "joint": 0.004954593632599477,
+            "matched": 0.006057024814483489,
+            "difference": -0.0011024311818840114,
+            "ratio": 0.8179913050301708
+          },
+          "9": {
+            "joint": 0.006119358507690271,
+            "matched": 0.0005779354891787745,
+            "difference": 0.005541423018511496,
+            "ratio": 10.58830721121774
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      },
+      "push_to_zone/push": {
+        "normalized_loss": {
+          "joint": 0.003839753555613532,
+          "matched": 0.002782967893262133,
+          "difference": 0.0010567856623513992,
+          "ratio": 1.3797333289075997
+        },
+        "translation_norm_error_m": {
+          "joint": 0.018540902262537698,
+          "matched": 0.019520070360487207,
+          "difference": -0.0009791680979495086,
+          "ratio": 0.9498378807111498
+        },
+        "rotation_geodesic_error_deg": {
+          "joint": 2.785923531960467,
+          "matched": 2.746906812501154,
+          "difference": 0.039016719459313176,
+          "ratio": 1.0142038744386044
+        },
+        "effective_gripper_error": {
+          "joint": 0.04346967807837895,
+          "matched": 0.0201435944154149,
+          "difference": 0.023326083662964046,
+          "ratio": 2.1579901373070607
+        },
+        "degenerate_rotation_rate": {
+          "joint": 0.0,
+          "matched": 0.0,
+          "difference": 0.0,
+          "ratio": null
+        },
+        "channels": {
+          "0": {
+            "joint": 0.0036852240847631765,
+            "matched": 0.005377719657653869,
+            "difference": -0.0016924955728906928,
+            "ratio": 0.6852763474790213
+          },
+          "1": {
+            "joint": 0.0004300030127884684,
+            "matched": 0.00042029977050021583,
+            "difference": 9.70324228825257e-06,
+            "ratio": 1.0230864801013437
+          },
+          "2": {
+            "joint": 0.005710525071722179,
+            "matched": 0.006567925995638849,
+            "difference": -0.0008574009239166701,
+            "ratio": 0.8694563665172247
+          },
+          "3": {
+            "joint": 1.723322862668382e-05,
+            "matched": 1.7839651951742243e-05,
+            "difference": -6.06423325058422e-07,
+            "ratio": 0.9660069979672895
+          },
+          "4": {
+            "joint": 0.0010515391804630204,
+            "matched": 0.0009394636854805795,
+            "difference": 0.00011207549498244089,
+            "ratio": 1.119297314749435
+          },
+          "5": {
+            "joint": 0.00014344880507635718,
+            "matched": 0.00011461677041654378,
+            "difference": 2.88320346598134e-05,
+            "ratio": 1.251551623336019
+          },
+          "6": {
+            "joint": 0.0010547466289104622,
+            "matched": 0.0009198588312494506,
+            "difference": 0.00013488779766101155,
+            "ratio": 1.1466396723916783
+          },
+          "7": {
+            "joint": 5.851904484632797e-05,
+            "matched": 7.261258424368882e-05,
+            "difference": -1.4093539397360845e-05,
+            "ratio": 0.8059077562910757
+          },
+          "8": {
+            "joint": 0.0023608191480724854,
+            "matched": 0.002868174971944356,
+            "difference": -0.0005073558238718706,
+            "ratio": 0.8231084822806572
+          },
+          "9": {
+            "joint": 0.023885477350866158,
+            "matched": 0.010531167013542037,
+            "difference": 0.013354310337324121,
+            "ratio": 2.2680750689977476
+          }
+        },
+        "degenerate_rotation_count": {
+          "joint": 0,
+          "matched": 0
+        },
+        "records_per_condition": {
+          "joint": 84,
+          "matched": 84
+        }
+      }
+    },
+    "by_channel": {
+      "0": {
+        "joint": 0.003816071019222652,
+        "matched": 0.004262217623827928,
+        "difference": -0.00044614660460527613,
+        "ratio": 0.8953252405247697
+      },
+      "1": {
+        "joint": 0.0018283569514298125,
+        "matched": 0.002947257419274382,
+        "difference": -0.0011189004678445697,
+        "ratio": 0.6203587577633296
+      },
+      "2": {
+        "joint": 0.016128882599539214,
+        "matched": 0.01801680261655615,
+        "difference": -0.0018879200170169343,
+        "ratio": 0.8952133706964147
+      },
+      "3": {
+        "joint": 0.00010930831216642883,
+        "matched": 8.874182289002876e-05,
+        "difference": 2.0566489276400068e-05,
+        "ratio": 1.2317564436543817
+      },
+      "4": {
+        "joint": 0.0023422140372135183,
+        "matched": 0.0023042917907356545,
+        "difference": 3.7922246477863856e-05,
+        "ratio": 1.0164572241372942
+      },
+      "5": {
+        "joint": 0.00042407292269192525,
+        "matched": 0.00045432364872036564,
+        "difference": -3.0250726028440388e-05,
+        "ratio": 0.9334159115123246
+      },
+      "6": {
+        "joint": 0.00238280561624485,
+        "matched": 0.002272639340182002,
+        "difference": 0.00011016627606284801,
+        "ratio": 1.0484750369823421
+      },
+      "7": {
+        "joint": 0.00015134034944333516,
+        "matched": 0.00012816011694588054,
+        "difference": 2.3180232497454616e-05,
+        "ratio": 1.180869314493862
+      },
+      "8": {
+        "joint": 0.002465761948518401,
+        "matched": 0.0027258196627435775,
+        "difference": -0.00026005771422517657,
+        "ratio": 0.9045946737490973
+      },
+      "9": {
+        "joint": 0.2784663552816406,
+        "matched": 0.23889141532180977,
+        "difference": 0.03957493995983083,
+        "ratio": 1.1656607873770581
+      }
+    }
+  },
+  "broad_correct_prompt_expert_action_agreement_deficit": {
+    "confirmed": true,
+    "classification": "broad_correct_prompt_expert_action_agreement_deficit",
+    "checks": {
+      "delivery_gate_passed": true,
+      "overall_normalized_ratio_at_least_1_10": true,
+      "at_least_two_seed_normalized_ratios_at_least_1_10": true,
+      "both_endpoint_ratios_at_least_1_10": true,
+      "every_task_difference_nonnegative": true,
+      "both_morphology_differences_nonnegative": true,
+      "overall_gripper_ratio_at_least_1_10": true,
+      "overall_gripper_absolute_difference_at_least_0_01": true,
+      "at_least_two_seed_gripper_ratios_at_least_1_10": true
+    },
+    "overall_normalized_ratio": 1.1323947174078122,
+    "per_seed_normalized_ratio": {
+      "36001": 1.0406790672821673,
+      "36002": 1.1653697275056707,
+      "36003": 1.1923180768232613
+    },
+    "per_endpoint_normalized_ratio": {
+      "first": 1.1574187642261256,
+      "last": 1.1251596083492892
+    },
+    "per_task_normalized_difference": {
+      "push_to_zone": 0.0006788945727717382,
+      "lift_object": 0.0052647194163683575,
+      "pick_place_bin": 0.004863435913187414
+    },
+    "per_morphology_normalized_difference": {
+      "so101": 0.0006603899417645274,
+      "panda": 0.006544309993120473
+    },
+    "overall_effective_gripper_ratio": 1.1499218436358325,
+    "overall_effective_gripper_difference": 0.017521555317975473,
+    "per_seed_effective_gripper_ratio": {
+      "36001": 1.118438698693317,
+      "36002": 1.2006502906652405,
+      "36003": 1.1305716877774432
+    },
+    "inferential_claim": false,
+    "physical_component_claim": false
+  },
+  "multiplicity_adjusted_inferential_claim": false,
+  "closed_loop_success_claim": false,
+  "admission_gate": null,
+  "advancement_gate": null,
+  "final_split_loaded": false
+}
