@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from decimal import Decimal
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -723,3 +724,45 @@ def test_cli_registration_and_smoke_path_guards() -> None:
     assert mechanism.parse_args(["aggregate"]).output == mechanism.SUMMARY_PATH
     assert "embodi-diagnose-exp43-gripper" in (ROOT / "pyproject.toml").read_text()
     assert "reports/exp43-runtime/" in (ROOT / ".gitignore").read_text().splitlines()
+
+
+def test_registered_summary_hash_counts_decomposition_and_classification() -> None:
+    path = ROOT / "reports/benchmark-exp43-summary.json"
+    report = json.loads(path.read_text())
+    assert mechanism.file_sha256(path) == (
+        "acdf15900cdb708e8f9b96a5c12f2d70be18f951906b92ade8d2a874b69d15a4"
+    )
+    assert report["delivery_gate_passed"] is True
+    assert report["contract"]["endpoint_records"] == 364
+    primary = report["metrics"]["overall"]["effective_gripper_error"]
+    exact = {
+        contrast: Decimal(values["difference_decimal"])
+        for contrast, values in primary["contrasts"].items()
+    }
+    assert exact["J-F"] == exact["H-F"] + exact["J-H"]
+    classification = report["mechanism_classification"]
+    assert classification["premise"]["supported"] is True
+    assert classification["exposure"]["supported"] is False
+    assert classification["shared_training"]["supported"] is False
+    assert classification["classification"] == "neither-materially-supported"
+
+
+def test_registered_source_archives_reconstruct_validated_reports() -> None:
+    archives = {
+        "so101": (
+            "72f5767a8ff96dfa6d13237ff47e269af0f3848e7d45ebb9a59d924f313feec0",
+            "7b2ce863b96ecd873f28cc80a86d8279ec8e58dee3db346d5d82593aee998bb8",
+        ),
+        "panda": (
+            "4dee6a5b629e112b9867d2766e3b03c0a0c0121568691d5522b0836b0b83db06",
+            "ec3d3534227b86c4bebfa20ceae264f66d86fd1dbaf32cfd3a78818dd20b05ec",
+        ),
+    }
+    for morphology, (archive_sha256, source_sha256) in archives.items():
+        path = ROOT / f"reports/benchmark-exp43-{morphology}-gripper-mechanism.json.gz"
+        assert mechanism.file_sha256(path) == archive_sha256
+        digest = hashlib.sha256()
+        with gzip.open(path, "rb") as source:
+            while chunk := source.read(1024 * 1024):
+                digest.update(chunk)
+        assert digest.hexdigest() == source_sha256
