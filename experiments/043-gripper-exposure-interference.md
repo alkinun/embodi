@@ -171,20 +171,57 @@ joint. thus `H-F` was 0.000314 and `J-H` was 0.000228, both positive in all
 three paired seeds. these are descriptive full-chunk offline losses, not the
 registered lead-zero effective-gripper endpoint, and they do not trigger either
 mechanism classification gate. the hypothesis-fresh indices 0035--0041 remain
-unevaluated.
+unevaluated by that training report.
+
+both registered phase shards then completed sequentially from clean evaluator
+commit `d8bf4b8` under one orchestrator: 42 successful expert episodes, 182
+scenario-phase units, 364 endpoint records, 3,276 scored chunks, 3,276 repeat
+chunks, 6,552 policy inferences, and 1,092 paired observations per contrast. the
+aggregate report is `reports/benchmark-exp43-summary.json` at SHA-256
+`acdf15900cdb708e8f9b96a5c12f2d70be18f951906b92ade8d2a874b69d15a4`.
+the promoted SO-101 and Panda source reports are committed as deterministic gzip
+archives at SHA-256 `72f5767a8ff96dfa6d13237ff47e269af0f3848e7d45ebb9a59d924f313feec0`
+and `4dee6a5b629e112b9867d2766e3b03c0a0c0121568691d5522b0836b0b83db06`.
+they decompress byte-for-byte to the registered source-report SHA-256 values
+`7b2ce863b96ecd873f28cc80a86d8279ec8e58dee3db346d5d82593aee998bb8`
+and `ec3d3534227b86c4bebfa20ceae264f66d86fd1dbaf32cfd3a78818dd20b05ec`.
+all delivery, source, checkpoint, common-input, immediate-repeat, endpoint,
+runtime, shard-order, outcome-chain, hierarchy, and exact decimal decomposition
+checks passed independently.
+
+the fresh-slice premise replicated: effective gripper error was 0.117927 for
+`F`, 0.124825 for `H`, and 0.135448 for `J`. `J-F` was 0.017521 and 1.1486x;
+seed ratios were 1.1240, 1.1960, and 1.1257, and every endpoint, task, and
+morphology difference was nonnegative. lower exposure was directionally worse
+but not materially supported: `H-F` was 0.006899 and 1.0585x, with seed ratios
+1.0640, 1.0690, and 1.0427. shared training was also directionally worse but not
+materially supported: `J-H` was 0.010623 and 1.0851x, with seed ratios 1.0563,
+1.1188, and 1.0796. only the shared absolute-difference floor passed; its ratio
+and two-seed gates failed. both component contrasts were nonnegative at both
+endpoints, all tasks, and both morphologies. the exact registered classification
+is `neither-materially-supported`.
 
 ## finding
 
-the missing half-exposure controls were delivered without schedule or artifact
-failure. offline regression is directionally compatible with both reduced
-target exposure and shared-training effects, but the registered gripper
-mechanism remains unresolved until all `F`, `H`, and `J` checkpoints are compared
-on the frozen fresh phase assay. no causal gripper, closed-loop, or final-split
-claim follows from the training report.
+the joint gripper deficit transports to another hypothesis-fresh development
+slice, and the exact decomposition places `H` between `F` and `J` broadly. both
+reduced target exposure and adding the other morphology's gradients are
+directionally compatible contributors, but neither independently reaches the
+registered materiality standard. this is not evidence that either effect is
+zero, and the result does not support naming one as the dominant mechanism.
+
+the registered assay therefore narrows the remaining mechanism to distributed
+sub-threshold training effects or another gripper-specific representation
+defect. it remains expert-agreement evidence on expert-visited states, not unique
+action optimality or closed-loop performance. no inferential, population,
+admission, advancement, retraining, or final-split claim follows.
 
 ## decision
 
-- freeze and merge the Experiment 043 three-condition evaluator and training
-  summary hash before launching any phase shard.
-- keep the final split untouched and do not retrain or reweight the joint core
-  until the registered mechanism result is complete.
+- classify the registered mechanism result as `neither-materially-supported`;
+  retain both positive component differences as descriptive diagnostics.
+- do not change exposure, capacity, or gripper loss weighting from this result.
+- keep the final split untouched and do not advance or reject a model from this
+  development-only assay.
+- next localize the remaining gripper-specific error by target state and
+  transition direction with the fixed checkpoints before considering retraining.
