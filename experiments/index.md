@@ -46,6 +46,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [037](037-canonical-core-geometry-control.md) | can the shared canonical core retain matched-specialist closed-loop geometry-control success? | no; joint success is 6.00% versus 13.08% for specialists and misses the 5-point margin. |
 | [038](038-canonical-trajectory-diagnostics.md) | which trajectory mechanism explains the canonical core's closed-loop failure? | no measured joint-specific mechanism among the assayed candidates; both conditions show large reconstruction error. |
 | [039](039-canonical-feasibility-projection.md) | does feasible canonical action projection causally improve H4 control? | no; joint gains 1.59 points with one delivery failure, while matched gains zero. |
+| [040](040-lead-zero-replan-continuity.md) | does lead-zero replan alignment causally improve H4 control? | pending. |
 
 ## current decision
 
