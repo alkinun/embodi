@@ -60,6 +60,7 @@ embodi-train-joint = "embodi.joint_train:main"
 embodi-evaluate-benchmark-geometry = "embodi.sim.benchmark_geometry_evaluation:main"
 embodi-diagnose-benchmark-geometry = "embodi.sim.benchmark_geometry_diagnostics:main"
 embodi-project-benchmark-geometry = "embodi.sim.benchmark_geometry_projection:main"
+embodi-align-benchmark-replans = "embodi.sim.benchmark_replan_alignment:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/embodi"]
