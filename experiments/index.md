@@ -49,6 +49,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [040](040-lead-zero-replan-continuity.md) | does lead-zero replan alignment causally improve H4 control? | no; continuity improves, but joint loses 0.79 points and matched gains only 2.38 points inconsistently. |
 | [041](041-task-instruction-action-agreement.md) | does the correct task instruction improve expert-action agreement? | no; joint gains 0.072% and matched 0.298%, with no joint-specific prompt-effect deficit. |
 | [042](042-correct-prompt-phase-agreement.md) | is joint correct-prompt expert-action agreement broadly worse than matched specialists? | yes; normalized loss is 13.24% worse, corroborated by a 14.99% gripper-error deficit. |
+| [043](043-gripper-exposure-interference.md) | does exposure or shared training explain the joint gripper deficit? | preregistered; run six half-exposure specialist controls before changing the joint recipe. |
 
 ## current decision
 
