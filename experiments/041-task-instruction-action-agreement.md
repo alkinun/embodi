@@ -131,19 +131,57 @@ than in matched specialists?
 
 ## result
 
-pending.
+all six registered shards completed sequentially from evaluator commit `3335a3e`
+under one runtime signature: 126 successful deterministic-expert episodes, 546
+phase anchors, and 4,368 policy inferences. the aggregate report is
+`reports/benchmark-exp41-summary.json` at SHA-256
+`d8195516eb6c84d90da31e74459b33779aab3382000650df8e9b941f35cd217f`.
+all frozen inputs, checkpoint artifacts, six source hashes, outcome chains,
+expert arrays, tokenizer and output hashes, schedules, delivery gates, and
+hierarchical aggregates validated independently.
+
+neither condition received counterfactual-instruction expert-agreement support.
+joint correct and mean-wrong normalized losses were 0.016016 and 0.016028, a
+relative benefit of 0.072%, versus the registered 10% requirement. seed benefits
+were -0.052%, +0.300%, and -0.031%; only one seed had a nonnegative margin, and
+push and pick/place task margins were negative. matched correct and wrong losses
+were 0.013163 and 0.013201, a 0.298% benefit. seed benefits were +0.534%, -0.081%,
+and +0.441%; two seed margins were nonnegative, but push remained negative and
+the mean effect was far below materiality.
+
+delivery passed in every shard. all expert episodes reached `done`, no sampled
+expert round trip clipped, repeat-correct chunk difference was exactly zero, and
+no policy rotation was degenerate. SO-101 translation and rotation p95 were
+0.0055 mm and 0.0042 degrees; Panda values were 0.0090 mm and 0.0113 degrees.
+the policies were nearly instruction-invariant: normalized output separation was
+`2.06e-7` for joint and `5.33e-6` for matched.
+
+there was no registered joint-specific prompt-effect deficit. joint correct loss
+was descriptively 1.217 times matched and the three per-seed ratios were
+1.134--1.283, but matched lacked prompt-effect support and its relative benefit
+exceeded joint by only 0.226 percentage points, not the required 10 points.
 
 ## finding
 
-pending.
+changing only the task instruction on identical expert-visited images and states
+barely changed either policy family's lead-zero action or expert agreement. this
+does not support a material counterfactual prompt effect in joint or matched
+models, and the small difference between their prompt effects does not support a
+joint-specific language-conditioning deficit.
+
+instruction invariance remains mechanistically ambiguous because the image and
+scene geometry can identify the task. the result therefore does not show that
+task supervision is defective or language is unused. the joint core is
+descriptively less accurate than matched specialists on these expert-phase
+anchors despite similar prompt sensitivity; this shifts the next diagnosis
+toward broader phase-conditioned action quality, not a prompt repair. no
+closed-loop, inferential, admission, advancement, or final-split claim follows.
 
 ## decision
 
 - do not advance or reject a model from this development-only diagnostic.
 - keep the final split untouched.
-- if both conditions use the correct instruction but remain inaccurate, target
-  broader phase-conditioned action quality rather than language conditioning.
-- instruction invariance is ambiguous because vision may identify the task; do
-  not prescribe a conditioning repair without a visually task-ambiguous assay.
-- if a joint-specific prompt-effect deficit is supported, isolate shared-core
-  task interference.
+- do not prescribe a task-conditioning repair from instruction invariance because
+  vision may identify the task.
+- next isolate broader phase-conditioned action quality under the correct prompt,
+  using matched specialists as the reference.

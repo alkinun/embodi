@@ -47,7 +47,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [038](038-canonical-trajectory-diagnostics.md) | which trajectory mechanism explains the canonical core's closed-loop failure? | no measured joint-specific mechanism among the assayed candidates; both conditions show large reconstruction error. |
 | [039](039-canonical-feasibility-projection.md) | does feasible canonical action projection causally improve H4 control? | no; joint gains 1.59 points with one delivery failure, while matched gains zero. |
 | [040](040-lead-zero-replan-continuity.md) | does lead-zero replan alignment causally improve H4 control? | no; continuity improves, but joint loses 0.79 points and matched gains only 2.38 points inconsistently. |
-| [041](041-task-instruction-action-agreement.md) | does the correct task instruction improve expert-action agreement? | pending. |
+| [041](041-task-instruction-action-agreement.md) | does the correct task instruction improve expert-action agreement? | no; joint gains 0.072% and matched 0.298%, with no joint-specific prompt-effect deficit. |
 
 ## current decision
 
