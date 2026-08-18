@@ -76,6 +76,16 @@ shared core, or materially by both?
   report contract and resolve all `F`, `H`, and `J` checkpoints by registered
   hashes. implementation-only corrections before any phase shard begins must be
   recorded; a contract-changing correction requires a new preregistration.
+- for the phase assay, freeze Experiment 043 training-summary SHA-256
+  `7bba5697e1a022983ecd619f1c1a5f925a21dce3d491b2f7689109edd8c10712`,
+  Experiment 043 evaluator SHA-256
+  `a1056895ab4926aa1d5822ff6ce1bab6d743fc779b3fb1599da26040356e9794`,
+  and byte-complete Experiment 042 source-shard SHA-256 values
+  `f02815631edb583a5faab4a82926afc650b69d5fc131a60227107bc0abecdd51`
+  for SO-101 and
+  `55018696519b930d01e859a19365171a5b70d1fb227777b9bf624daecd0732e5`
+  for Panda. the latter bind the full and joint embodiment/trainer identities
+  omitted from the compact Experiment 036 summary.
 - use exact development indices 0035--0041 in SO-101 and Panda crossed with push,
   lift, and pick/place. this is hypothesis-fresh to Experiment 042 and
   slice-fresh to Experiments 038--042, not globally unseen because Experiment
@@ -92,6 +102,10 @@ shared core, or materially by both?
   `F,H,J`; `F,J,H`; `H,F,J`; `H,J,F`; `J,F,H`; `J,H,F`, selected by
   `(anchor_ordinal + seed_ordinal + morphology_ordinal) % 6`.
 - use two non-resumable sequential morphology shards under one registered lock.
+  stage them under ignored `reports/exp43-runtime/` as
+  `benchmark-exp43-{morphology}-gripper-mechanism.json`, with lock identity
+  `exp43-so101-panda-three-condition-gripper-v1`, then aggregate to
+  `reports/benchmark-exp43-summary.json`.
   expect 42 successful expert episodes, 182 scenario-phase units, 364 endpoint
   records, 3,276 scored chunks, 3,276 repeat chunks, 6,552 policy inferences,
   and 1,092 paired observations for each of `J-F`, `H-F`, and `J-H`. write only
