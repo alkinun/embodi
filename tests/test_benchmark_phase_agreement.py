@@ -1328,6 +1328,7 @@ def _synthetic_registered_artifacts(
     return artifact_root, summary_path
 
 
+@pytest.mark.timeout(180)
 def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publication(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
