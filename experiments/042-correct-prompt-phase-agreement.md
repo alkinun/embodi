@@ -131,17 +131,57 @@ phase endpoints?
 
 ## result
 
-pending.
+both registered morphology shards completed sequentially from evaluator commit
+`7fcebe1` under one orchestrator and runtime signature: 42 successful expert
+episodes, 182 scenario-phase units, 364 endpoint records, 4,368 policy
+inferences, and 1,092 paired joint/matched comparisons. the aggregate report is
+`reports/benchmark-exp42-summary.json` at SHA-256
+`104c16ca2552eb0d2ba7efc65c9228eeecd488d67d765f49d70931aa0d15abf8`.
+both promoted source reports are byte-identical to their staged files; all frozen
+inputs, 57 checkpoint artifacts, expert and policy arrays, tokenizer and output
+hashes, endpoint transitions, outcome chains, schedules, delivery gates, and
+hierarchical aggregates validated independently.
+
+the registered broad correct-prompt expert-action agreement deficit was
+confirmed. joint normalized loss was 0.030812 versus 0.027209 for matched, a
+paired difference of 0.003602 and ratio of 1.1324. seed ratios were 1.0407,
+1.1654, and 1.1923, satisfying two of three. every task difference was positive:
+push, lift, and pick/place ratios were 1.1393, 1.1306, and 1.1334. SO-101 and
+Panda differences were both positive, with ratios 1.0940 and 1.1381. first and
+last endpoint ratios were 1.1574 and 1.1252.
+
+gripper physically corroborated the deficit. joint effective-gripper error was
+0.13439 versus 0.11687, a 0.01752 absolute difference and 1.1499 ratio. seed
+ratios were 1.1184, 1.2007, and 1.1306. by contrast, joint translation error was
+slightly lower at 0.02737 versus 0.02828 m, and rotation error was 3.2347 versus
+3.2439 degrees. normalized channel 9 carried the dominant absolute excess.
+
+delivery passed both shards with zero clipping and exact deterministic repeats.
+SO-101 expert round-trip translation and rotation p95 were 0.0064 mm and 0.0048
+degrees; Panda values were 0.0051 mm and 0.0114 degrees. no expert or predicted
+rotation was degenerate. all nine registered confirmation gates passed.
 
 ## finding
 
-pending.
+the fresh development slice confirms that the joint core has broadly worse
+correct-prompt agreement with the deterministic expert than matched specialists
+across tasks, morphologies, and first/last phase endpoints. the effect is not a
+uniform physical action degradation: translation and rotation slightly favor the
+joint core, while gripper target error is materially and seed-consistently worse.
+
+this narrows the next mechanism to gripper target quality. it does not determine
+whether the source is half per-cell exposure in joint training, shared-capacity
+interference, or another gripper-specific representation defect. agreement with
+one phase-stateful expert is not unique optimality, and endpoint states are
+expert-visited rather than policy-visited. no inferential, population,
+closed-loop, admission, advancement, broad-physical-deficit, or final-split claim
+follows.
 
 ## decision
 
 - do not advance or reject a model from this development-only diagnostic.
 - keep the final split untouched.
-- if confirmed with gripper corroboration, isolate gripper target quality and the
-  joint model's per-cell exposure versus shared-capacity interference.
-- if not confirmed, retain only localized phase/channel differences as descriptive
-  and do not treat broad correct-prompt expert agreement as a supported bottleneck.
+- isolate gripper target quality next, separating the joint model's lower per-cell
+  exposure from shared-capacity interference before any retraining decision.
+- do not modify translation, rotation, geometry projection, or replan alignment
+  from this result.
