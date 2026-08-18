@@ -50,7 +50,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [041](041-task-instruction-action-agreement.md) | does the correct task instruction improve expert-action agreement? | no; joint gains 0.072% and matched 0.298%, with no joint-specific prompt-effect deficit. |
 | [042](042-correct-prompt-phase-agreement.md) | is joint correct-prompt expert-action agreement broadly worse than matched specialists? | yes; normalized loss is 13.24% worse, corroborated by a 14.99% gripper-error deficit. |
 | [043](043-gripper-exposure-interference.md) | does exposure or shared training explain the joint gripper deficit? | neither is materially supported alone; both component differences are broad, positive, and sub-threshold. |
-| [044](044-gripper-target-direction-localization.md) | where is the fixed joint core's gripper deficit localized? | freeze target-state and setpoint-transition partitions before offline aggregation. |
+| [044](044-gripper-target-direction-localization.md) | where is the fixed joint core's gripper deficit localized? | invalid delivery; one legitimate one-action phase violated the frozen support table, so metrics are not interpreted. |
 
 ## current decision
 

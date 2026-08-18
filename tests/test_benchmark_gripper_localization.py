@@ -1,6 +1,7 @@
 from decimal import Decimal
 import gzip
 import hashlib
+import json
 from pathlib import Path
 
 import numpy as np
@@ -273,3 +274,27 @@ def test_registered_support_and_cli_contract() -> None:
     assert localization.registered_evaluator_sha256() == file_sha256(
         Path(localization.__file__)
     )
+
+
+def test_registered_report_hash_and_invalid_delivery() -> None:
+    path = Path("reports/benchmark-exp44-summary.json")
+    assert file_sha256(path) == (
+        "956ed4db9de635475e8590fcbf396e2540dae3296f84cc043b6552144609c33b"
+    )
+    report = json.loads(path.read_text())
+    assert report["delivery_gate_passed"] is False
+    assert report["localization_classification"] == {
+        "classification": "invalid_delivery",
+        "delivery_gate_passed": False,
+    }
+    assert [name for name, passed in report["delivery_checks"].items() if not passed] == [
+        "registered_partition_support"
+    ]
+    assert report["partitions"]["open_steady"]["support"]["by_slice"] == {
+        "exp42": {"endpoint_anchors": 153, "scenario_phase_units": 83},
+        "exp43": {"endpoint_anchors": 154, "scenario_phase_units": 84},
+    }
+    assert report["partitions"]["terminal_noop"]["support"]["by_slice"] == {
+        "exp42": {"endpoint_anchors": 57, "scenario_phase_units": 42},
+        "exp43": {"endpoint_anchors": 56, "scenario_phase_units": 42},
+    }

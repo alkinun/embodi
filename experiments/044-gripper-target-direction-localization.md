@@ -113,15 +113,42 @@ transition, or an intentional terminal no-op target?
 
 ## result
 
-pending the clean merged evaluator and registered offline aggregation.
+the zero-inference aggregate completed from clean preregistration commit
+`da9a9ca`. its immutable report is `reports/benchmark-exp44-summary.json` at
+SHA-256 `956ed4db9de635475e8590fcbf396e2540dae3296f84cc043b6552144609c33b`.
+all four source hashes, both imported evaluator hashes, both source-summary
+delivery states, every outcome-bearing array reconstruction, 728 endpoint
+anchors, 2,184 primary paired observations, 5,460 condition records, exhaustive
+labels, zero-inference and zero-training declarations, and the untouched final
+split passed validation.
+
+the registered partition-support gate failed. Experiment 042 contained 153
+open-steady endpoint anchors and 83 open-steady scenario-phase units rather than
+the registered 154 and 84; it contained 57 terminal-noop anchors rather than 56.
+Experiment 043 matched the registered counts, and all other partition counts
+matched in both slices. the exact discrepancy is SO-101 push scenario
+`development-so101-push_to_zone-0028`: its `push` phase starts and transitions to
+`done` on the same expert call, so the duplicated first and last endpoints both
+correctly receive the terminal-noop label. the source validators require those
+same-call endpoint records to be identical.
+
+the registered classification is therefore `invalid_delivery`. the report
+contains mechanically computed partition and localization metrics, but they are
+not model results and are not interpreted.
 
 ## finding
 
-pending.
+the failure is a preregistered support-table error, not source corruption, label
+failure, checkpoint behavior, or a final-split event. the target-first labeling
+rule correctly exposed a legitimate structural difference between the two
+development slices that the fixed support table incorrectly assumed away.
 
 ## decision
 
-- freeze and merge the Experiment 044 evaluator, source identities, partition
-  support, localization contrasts, and decision mapping before aggregation.
-- keep the final split untouched and make no training-recipe change before the
-  registered localization result is complete.
+- retain `invalid_delivery` and make no exposure, weighting, architecture,
+  admission, advancement, or retraining decision from Experiment 044.
+- keep the final split untouched.
+- any corrected localization assay must use a new experiment number, freeze the
+  observed structural support explicitly, and disclose that its source outcomes
+  have already been mechanically aggregated; do not retroactively change this
+  experiment's gate or interpret its metrics.
