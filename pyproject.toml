@@ -65,6 +65,7 @@ embodi-align-benchmark-replans = "embodi.sim.benchmark_replan_alignment:main"
 embodi-diagnose-task-instruction = "embodi.sim.benchmark_task_instruction:main"
 embodi-diagnose-phase-agreement = "embodi.sim.benchmark_phase_agreement:main"
 embodi-diagnose-exp43-gripper = "embodi.sim.benchmark_gripper_mechanism:main"
+embodi-localize-exp44-gripper = "embodi.sim.benchmark_gripper_localization:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/embodi"]
