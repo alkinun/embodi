@@ -1245,6 +1245,89 @@ def test_main_cli_guards(
         phase_agreement.main()
 
 
+def _synthetic_registered_artifacts(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> tuple[Path, Path]:
+    artifact_root = tmp_path / "artifacts"
+    artifact_root.mkdir()
+    config_hashes: dict[str, str] = {}
+    data_hashes: dict[str, str] = {}
+    runs = {}
+    for source in ("joint", "so101", "panda"):
+        for seed in phase_agreement.SEEDS:
+            output = Path("outputs") / f"fake-{source}-seed{seed}"
+            final = artifact_root / output / "final"
+            final.mkdir(parents=True)
+            data_manifest = final / "data_manifest.json"
+            data_manifest.write_text(json.dumps({"source": source}) + "\n")
+            data_hash = phase_agreement.file_sha256(data_manifest)
+            if source in data_hashes:
+                assert data_hashes[source] == data_hash
+            data_hashes[source] = data_hash
+            core_bytes = f"core:{source}:{seed}".encode()
+            morphologies = phase_agreement.MORPHOLOGIES if source == "joint" else (source,)
+            core_hash = hashlib.sha256(core_bytes).hexdigest()
+            for morphology in morphologies:
+                checkpoint = final / morphology
+                checkpoint.mkdir()
+                config = checkpoint / "config.json"
+                config.write_text(json.dumps({"morphology": morphology}) + "\n")
+                config_hash = phase_agreement.file_sha256(config)
+                if morphology in config_hashes:
+                    assert config_hashes[morphology] == config_hash
+                config_hashes[morphology] = config_hash
+                (checkpoint / "core.pt").write_bytes(core_bytes)
+                (checkpoint / "embodiment.pt").write_bytes(
+                    f"embodiment:{source}:{seed}:{morphology}".encode()
+                )
+                torch.save(
+                    {"step": 1200, "stage": "core"}, checkpoint / "trainer.pt"
+                )
+            runs[f"{source}-seed{seed}"] = {
+                "model_seed": seed,
+                "output": str(output),
+                "core_sha256": core_hash,
+            }
+    summary = {
+        "experiment": 36,
+        "status": "completed_gate_passed",
+        "fixed_step": 1200,
+        "runs": runs,
+    }
+    summary_path = tmp_path / "benchmark-exp36-summary.json"
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n")
+    summary_hash = phase_agreement.file_sha256(summary_path)
+    monkeypatch.setattr(phase_agreement, "EXP36_SUMMARY_SHA256", summary_hash)
+    monkeypatch.setattr(phase_agreement, "CONFIG_SHA256", config_hashes)
+    monkeypatch.setattr(phase_agreement, "DATA_MANIFEST_SHA256", data_hashes)
+
+    def resolve(_summary, source, seed, morphology, *, root):
+        assert _summary == summary_path
+        assert root == artifact_root
+        run = runs[f"{source}-seed{seed}"]
+        checkpoint = artifact_root / run["output"] / "final" / morphology
+        data_manifest = checkpoint.parent / "data_manifest.json"
+        identity = {
+            "model_seed": seed,
+            "morphology": morphology,
+            "checkpoint_path": str(checkpoint),
+            "core_sha256": phase_agreement.file_sha256(checkpoint / "core.pt"),
+            "config_sha256": phase_agreement.file_sha256(checkpoint / "config.json"),
+            "embodiment_sha256": phase_agreement.file_sha256(
+                checkpoint / "embodiment.pt"
+            ),
+            "trainer_sha256": phase_agreement.file_sha256(checkpoint / "trainer.pt"),
+            "data_manifest_sha256": phase_agreement.file_sha256(data_manifest),
+            "exp36_summary_sha256": summary_hash,
+            "step": 1200,
+            "stage": "core",
+        }
+        return checkpoint, identity
+
+    monkeypatch.setattr(phase_agreement, "resolve_checkpoint", resolve)
+    return artifact_root, summary_path
+
+
 def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publication(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
@@ -1257,6 +1340,9 @@ def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publica
     monkeypatch.setattr(phase_agreement, "REGISTERED_RUNTIME_DIR", runtime_dir)
     monkeypatch.setattr(phase_agreement, "REGISTERED_LOCK_PATH", lock_path)
     monkeypatch.setattr(phase_agreement, "SUMMARY_PATH", summary_path)
+    artifact_root, exp36_summary_path = _synthetic_registered_artifacts(
+        monkeypatch, tmp_path
+    )
     monkeypatch.setattr(
         phase_agreement,
         "camera_frame_to_tensor",
@@ -1302,10 +1388,10 @@ def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publica
 
     monkeypatch.setattr(phase_agreement, "evaluate_phase_agreement_shard", evaluate)
     args = SimpleNamespace(
-        exp36_summary=_frozen_sources()["exp36_summary"],
+        exp36_summary=exp36_summary_path,
         exp41_summary=_frozen_sources()["exp41_summary"],
         device="cpu",
-        artifact_root=ROOT,
+        artifact_root=artifact_root,
     )
     reports = phase_agreement._run_all_registered(
         args, BenchmarkDefinition.load(ROOT / "benchmarks/sim-v1/definition.json"), _manifest()
@@ -1330,9 +1416,9 @@ def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publica
         phase_agreement.validate_shard_report(
             report,
             _manifest(),
-            json.loads(_frozen_sources()["exp36_summary"].read_text()),
+            json.loads(exp36_summary_path.read_text()),
             require_registered=True,
-            artifact_root=ROOT,
+            artifact_root=artifact_root,
         )
         for seed in phase_agreement.SEEDS:
             for condition in phase_agreement.CONDITIONS:
@@ -1349,9 +1435,12 @@ def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publica
         morphology: runtime_dir / phase_agreement.registered_shard_filename(morphology)
         for morphology in phase_agreement.MORPHOLOGIES
     }
-    exp36 = json.loads(_frozen_sources()["exp36_summary"].read_text())
+    exp36 = json.loads(exp36_summary_path.read_text())
     summary = phase_agreement.aggregate_registered_shards(
-        source_paths, _manifest(), exp36_summary=exp36, artifact_root=ROOT
+        source_paths,
+        _manifest(),
+        exp36_summary=exp36,
+        artifact_root=artifact_root,
     )
     assert summary["contract"]["orchestrator_run_id"] == next(iter(run_ids))
     assert summary["source_shard_sha256"] == {
@@ -1392,14 +1481,17 @@ def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publica
                     source_paths,
                     _manifest(),
                     exp36_summary=exp36,
-                    artifact_root=ROOT,
+                    artifact_root=artifact_root,
                 )
         finally:
             panda_path.write_bytes(original_panda_bytes)
     swapped = {"so101": source_paths["panda"], "panda": source_paths["so101"]}
     with pytest.raises(ValueError, match="misattributed"):
         phase_agreement.aggregate_registered_shards(
-            swapped, _manifest(), exp36_summary=exp36, artifact_root=ROOT
+            swapped,
+            _manifest(),
+            exp36_summary=exp36,
+            artifact_root=artifact_root,
         )
 
     with pytest.raises(FileExistsError, match="delete both"):
@@ -1434,10 +1526,10 @@ def test_registered_two_shard_orchestrator_validation_aggregate_and_main_publica
             command="aggregate",
             shard_dir=runtime_dir,
             output=summary_path,
-            artifact_root=ROOT,
+            artifact_root=artifact_root,
             definition=ROOT / "benchmarks/sim-v1/definition.json",
             manifest=ROOT / "benchmarks/sim-v1/manifests/development.json",
-            exp36_summary=_frozen_sources()["exp36_summary"],
+            exp36_summary=exp36_summary_path,
             exp41_summary=_frozen_sources()["exp41_summary"],
         ),
     )
