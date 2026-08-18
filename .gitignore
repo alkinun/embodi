@@ -41,6 +41,7 @@ reports/**/sample-*.png
 # Experiment 039 resumable registered staging; promote completed immutable reports explicitly.
 reports/exp39-runtime/
 reports/exp40-runtime/
+reports/exp41-runtime/
 
 # Generated media and logs
 *.mp4
