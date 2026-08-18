@@ -42,6 +42,7 @@ reports/**/sample-*.png
 reports/exp39-runtime/
 reports/exp40-runtime/
 reports/exp41-runtime/
+reports/exp42-runtime/
 
 # Generated media and logs
 *.mp4
