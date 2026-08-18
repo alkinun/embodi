@@ -45,7 +45,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [036](036-joint-canonical-core.md) | can one canonical core learn SO-101 and Panda jointly at matched exposure? | yes; joint loss is within 4.64% of specialists and 85.64% below the zero-shot specialist-transfer baseline. |
 | [037](037-canonical-core-geometry-control.md) | can the shared canonical core retain matched-specialist closed-loop geometry-control success? | no; joint success is 6.00% versus 13.08% for specialists and misses the 5-point margin. |
 | [038](038-canonical-trajectory-diagnostics.md) | which trajectory mechanism explains the canonical core's closed-loop failure? | no measured joint-specific mechanism among the assayed candidates; both conditions show large reconstruction error. |
-| [039](039-canonical-feasibility-projection.md) | does feasible canonical action projection causally improve H4 control? | pending. |
+| [039](039-canonical-feasibility-projection.md) | does feasible canonical action projection causally improve H4 control? | no; joint gains 1.59 points with one delivery failure, while matched gains zero. |
 
 ## current decision
 

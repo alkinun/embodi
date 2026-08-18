@@ -163,18 +163,63 @@ closed-loop control for the joint canonical core or matched specialists?
 
 ## result
 
-pending.
+all 12 registered shards completed sequentially from evaluator commit `2b0b2b8`
+under one runtime signature: 252 development pairs and 504 fresh episodes. the
+aggregate report is `reports/benchmark-exp39-summary.json` at SHA-256
+`87bd3d30f350e3cda16a8ac91dfeeec5249b46ace97e42de860362d7bef5a8a8`.
+all 12 source report hashes, checkpoint artifacts, pair input invariants, outcome
+chains, telemetry, schedules, and aggregates validated.
+
+neither condition received registered causal support. the joint core improved
+from 11/125 to 13/125 eligible-pair successes, an equal-weight three-seed gain of
+1.59 percentage points. seed gains were +2.38, +2.38, and 0.00 points; ordered
+progression improved by 0.0146, and discordant outcomes favored projection 6 to
+4. this missed the 5-point materiality margin. in addition, one
+`joint/seed36003/so101` lift pair exhausted all 17 grid points at chunk 30,
+including alpha zero. its 120 prior projected commands were retained, its task
+outcome was excluded, and the joint delivery gate correctly failed. the other
+executed projected commands passed all physical thresholds.
+
+matched specialists remained 24/126 successes in both arms. seed changes were
+-4.76, 0.00, and +4.76 points, discordant outcomes tied 9 to 9, and ordered
+progression decreased by 0.0196. matched delivery passed, but success and
+progression criteria did not.
+
+projection changed 24,827/57,889 joint commands (42.89%) and 25,951/53,682
+matched commands (48.34%); accepted alpha zero occurred in 10.80% and 10.70%.
+exposure was strongly morphology-dependent: 72.33% of SO-101 commands versus
+20.91% of Panda commands were scaled, with alpha zero at 21.77% versus 0.65%.
+native clipping was zero in both arms of every shard. joint descriptive gains
+were concentrated in push (+7.14 points) and SO-101 (+4.76), while Panda was
+-1.59; matched SO-101 and Panda effects canceled at -6.35 and +6.35 points.
 
 ## finding
 
-pending.
+this deterministic feasibility projection does not receive development
+diagnostic causal support for either model condition. the small joint gain is
+directionally consistent and accompanies better ordered progression, but it is
+not material, is concentrated in SO-101 push behavior, and cannot clear the
+registered delivery gate. matched specialists show no mean success gain,
+negative progression, and opposing morphology effects despite successful
+delivery.
+
+the result does not support round-trip geometry as a sufficient explanation for
+weak closed-loop control, nor does it establish that geometry is irrelevant.
+the intervention frequently suppresses arm motion, especially on SO-101, and
+one alpha-zero failure shows that the registered treatment was not universally
+deliverable. subgroup effects are exploratory because treatment intensity is
+trajectory- and morphology-dependent. no final-split, model-admission,
+advancement, or uniform-effect claim follows.
 
 ## decision
 
 - do not advance or reject a model from this development-only causal diagnostic.
 - keep the final split untouched.
-- if projection receives support, repair or replace the canonical-to-native
-  action path before a newly preregistered closed-loop comparison.
-- if projection does not receive support despite successful treatment delivery,
-  do not attribute weak control to round-trip geometry alone; next isolate
-  task-conditioned policy quality or cross-replan consistency.
+- do not deploy or advance this projection and do not open the final split.
+- for matched specialists, successful delivery with zero mean gain does not
+  support attributing weak control to round-trip geometry alone.
+- for the joint core, retain geometry as unresolved rather than excluded because
+  delivery failed once, but do not treat the sub-material gain as causal support.
+- next isolate task-conditioned policy quality or cross-replan consistency. any
+  future geometry intervention must avoid alpha-zero intent suppression and pass
+  an offline universal-delivery check before another closed-loop diagnostic.
