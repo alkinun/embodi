@@ -139,14 +139,38 @@ shared core, or materially by both?
 
 ## result
 
-pending registered execution.
+the six registered half-exposure specialist runs completed at fixed update 1,200
+from clean trainer commit `dd86c02`, with 18,000 presentations per run and
+exactly 6,000 in each target task cell. the independently validated training
+report is `reports/benchmark-exp43-training-summary.json` at SHA-256
+`7bba5697e1a022983ecd619f1c1a5f925a21dce3d491b2f7689109edd8c10712`.
+all 18 per-cell sequence digests matched fresh reconstructions of the
+corresponding Experiment 036 joint target streams. all payload schemas, finite
+weights and optimizer states, hard-linked cores, source hashes, runtimes,
+lineage, metric schedules, and fixed validation-frame results passed; a clean
+validator run reloaded all six cores and reproduced every stored validation
+metric.
+
+the secondary offline six-cell regression decomposition was 0.011681 for full
+matched specialists, 0.011995 for half matched specialists, and 0.012222 for
+joint. thus `H-F` was 0.000314 and `J-H` was 0.000228, both positive in all
+three paired seeds. these are descriptive full-chunk offline losses, not the
+registered lead-zero effective-gripper endpoint, and they do not trigger either
+mechanism classification gate. the hypothesis-fresh indices 0035--0041 remain
+unevaluated.
 
 ## finding
 
-pending registered execution.
+the missing half-exposure controls were delivered without schedule or artifact
+failure. offline regression is directionally compatible with both reduced
+target exposure and shared-training effects, but the registered gripper
+mechanism remains unresolved until all `F`, `H`, and `J` checkpoints are compared
+on the frozen fresh phase assay. no causal gripper, closed-loop, or final-split
+claim follows from the training report.
 
 ## decision
 
-- merge this preregistration and trainer support before launching any new run.
+- freeze and merge the Experiment 043 three-condition evaluator and training
+  summary hash before launching any phase shard.
 - keep the final split untouched and do not retrain or reweight the joint core
   until the registered mechanism result is complete.

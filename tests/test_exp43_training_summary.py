@@ -1,5 +1,7 @@
 import hashlib
+import json
 import math
+from pathlib import Path
 
 import pytest
 import torch
@@ -7,6 +9,7 @@ import torch
 from embodi.exp43_training_summary import (
     STEPS,
     _finite_tensors,
+    file_sha256,
     expected_validation_keys,
     sequence_sha256,
     validate_metrics_records,
@@ -84,3 +87,19 @@ def test_validate_metrics_records_requires_fixed_schedule_and_gripper_cells() ->
 def test_finite_tensor_validation_rejects_nested_nonfinite_state() -> None:
     assert _finite_tensors({"state": [torch.tensor([1.0]), {"step": torch.tensor(2)}]})
     assert not _finite_tensors({"state": {"exp_avg": torch.tensor([float("nan")])}})
+
+
+def test_registered_training_summary_hash_and_offline_decomposition() -> None:
+    root = Path(__file__).parents[1]
+    path = root / "reports" / "benchmark-exp43-training-summary.json"
+    report = json.loads(path.read_text())
+    assert file_sha256(path) == "7bba5697e1a022983ecd619f1c1a5f925a21dce3d491b2f7689109edd8c10712"
+    assert report["delivery_gate_passed"] is True
+    assert report["mechanism_classification"] is None
+    aggregate = report["offline_validation"]["aggregate"]
+    assert aggregate["half_minus_full"] == pytest.approx(
+        aggregate["half_matched"] - aggregate["full_matched"]
+    )
+    assert aggregate["joint_minus_half"] == pytest.approx(
+        aggregate["joint"] - aggregate["half_matched"]
+    )
