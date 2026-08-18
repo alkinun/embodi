@@ -9,12 +9,16 @@ from torch import nn
 from embodi import EmbodiConfig
 from embodi.joint_train import (
     balanced_cells,
+    backward_scaled,
+    batch_sample_index,
     canonical_only_batch,
     cell_loader_seed,
     cell_schedule,
     deduplicated_trainable_parameters,
     episode_indices_by_task,
     file_sha256,
+    lead_zero_gripper_metrics,
+    optimization_loss_denominator,
     save_policies,
     validate_registered_protocol,
     validate_joint_configs,
@@ -27,13 +31,51 @@ def test_joint_schedule_balances_cells_at_matched_exposure() -> None:
     assert len(specialist) == len(joint) == 30
     assert all(specialist.count(cell) == 10 for cell in balanced_cells("so101"))
     assert all(joint.count(cell) == 5 for cell in balanced_cells("joint"))
+    half_specialist = cell_schedule("so101", 15)
+    assert all(half_specialist.count(cell) == 5 for cell in balanced_cells("so101"))
+    assert optimization_loss_denominator("exp36", len(specialist)) == 30
+    assert optimization_loss_denominator("exp43-half-specialist", len(half_specialist)) == 30
     with pytest.raises(ValueError, match="divisible"):
         cell_schedule("joint", 31)
+
+
+def test_registered_denominator_controls_accumulated_gradient_coefficient() -> None:
+    half_parameter = torch.tensor(1.0, requires_grad=True)
+    for _ in range(15):
+        backward_scaled(2 * half_parameter, 30)
+    assert half_parameter.grad is not None
+    assert half_parameter.grad.item() == pytest.approx(1.0)
+
+    full_parameter = torch.tensor(1.0, requires_grad=True)
+    for _ in range(30):
+        backward_scaled(2 * full_parameter, 30)
+    assert full_parameter.grad is not None
+    assert full_parameter.grad.item() == pytest.approx(2.0)
 
 
 def test_cell_loader_seeds_do_not_depend_on_condition() -> None:
     assert cell_loader_seed(36101, "so101", "push_to_zone") == 36101
     assert cell_loader_seed(36101, "panda", "push_to_zone") == 36104
+
+
+def test_batch_sample_index_requires_one_dataset_index() -> None:
+    assert batch_sample_index({"index": torch.tensor([17])}) == 17
+    with pytest.raises(ValueError, match="one dataset index"):
+        batch_sample_index({"index": torch.tensor([1, 2])})
+
+
+def test_lead_zero_gripper_metrics_report_raw_effective_and_saturation() -> None:
+    metrics = lead_zero_gripper_metrics(
+        torch.tensor([-0.2, 0.8, 1.4]),
+        torch.tensor([0.1, 0.5, 1.0]),
+    )
+    assert metrics["normalized_channel9_loss"] == pytest.approx(
+        ((-0.3 / 0.5) ** 2 + (0.3 / 0.5) ** 2 + (0.4 / 0.5) ** 2) / 3
+    )
+    assert metrics["raw_absolute_error"] == pytest.approx(1 / 3)
+    assert metrics["signed_bias"] == pytest.approx(0.4 / 3)
+    assert metrics["effective_error"] == pytest.approx(0.4 / 3)
+    assert metrics["saturation_rate"] == pytest.approx(2 / 3)
 
 
 def test_deduplicated_parameters_include_shared_module_once() -> None:
@@ -71,6 +113,8 @@ def test_panda_and_so101_configs_share_core_behavior() -> None:
     assert configs["panda"].state_dim == 8
     args = SimpleNamespace(
         smoke_test=False,
+        protocol="exp36",
+        condition="so101",
         steps=1200,
         presentations_per_step=30,
         lr=1e-4,
@@ -84,6 +128,18 @@ def test_panda_and_so101_configs_share_core_behavior() -> None:
     validate_registered_protocol(args, configs)
     args.steps = 1199
     with pytest.raises(ValueError, match="steps"):
+        validate_registered_protocol(args, configs)
+
+    args.steps = 1200
+    args.protocol = "exp43-half-specialist"
+    args.presentations_per_step = 15
+    validate_registered_protocol(args, configs)
+    args.condition = "joint"
+    with pytest.raises(ValueError, match="specialist"):
+        validate_registered_protocol(args, configs)
+    args.condition = "so101"
+    args.presentations_per_step = 30
+    with pytest.raises(ValueError, match="presentations-per-step"):
         validate_registered_protocol(args, configs)
 
 

@@ -35,6 +35,7 @@ from .train import (
 MORPHOLOGIES = ("so101", "panda")
 TASKS = ("push_to_zone", "lift_object", "pick_place_bin")
 CONDITIONS = ("so101", "panda", "joint")
+PROTOCOLS = ("exp36", "exp43-half-specialist")
 TRAIN_GENERATION_SHA256 = "9d858858c217c2b1200507a503148c99562a06f0beecea054a2b9cc184b840af"
 VALIDATION_GENERATION_SHA256 = "2735a044d11db30172ae6039f09dfe06adc49462f3b47d5e7b99cb312c354f45"
 VALIDATION_FRAMES_SHA256 = "32681217e8d6f4142ce754b18b2a3a69527edea9abce3506fb55e7d25c28cc1a"
@@ -132,9 +133,13 @@ def validate_joint_configs(configs: dict[str, EmbodiConfig]) -> None:
 def validate_registered_protocol(args: argparse.Namespace, configs: dict[str, EmbodiConfig]) -> None:
     if args.smoke_test:
         return
+    if args.protocol not in PROTOCOLS:
+        raise ValueError("unknown registered joint-core protocol")
+    if args.protocol == "exp43-half-specialist" and args.condition == "joint":
+        raise ValueError("Experiment 043 requires an SO-101 or Panda specialist condition")
     expected = {
         "steps": 1200,
-        "presentations_per_step": 30,
+        "presentations_per_step": 15 if args.protocol == "exp43-half-specialist" else 30,
         "lr": 1e-4,
         "warmup_steps": 120,
         "workers": 0,
@@ -143,9 +148,11 @@ def validate_registered_protocol(args: argparse.Namespace, configs: dict[str, Em
     }
     for name, value in expected.items():
         if getattr(args, name) != value:
-            raise ValueError(f"experiment 036 requires --{name.replace('_', '-')}={value}")
+            raise ValueError(
+                f"{args.protocol} requires --{name.replace('_', '-')}={value}"
+            )
     if args.model_seed not in REGISTERED_MODEL_SEEDS or args.loader_seed != args.model_seed + 100:
-        raise ValueError("experiment 036 requires a registered paired model/loader seed")
+        raise ValueError("registered joint-core training requires a paired model/loader seed")
     for config in configs.values():
         if (
             config.backbone_name != "LiquidAI/LFM2.5-VL-450M"
@@ -168,7 +175,47 @@ def validate_registered_protocol(args: argparse.Namespace, configs: dict[str, Em
             or config.freeze_vision_encoder is not True
             or config.freeze_backbone is not False
         ):
-            raise ValueError("experiment 036 config differs from the registered core architecture")
+            raise ValueError("config differs from the registered joint-core architecture")
+
+
+def optimization_loss_denominator(protocol: str, schedule_length: int) -> int:
+    if protocol not in PROTOCOLS:
+        raise ValueError("unknown registered joint-core protocol")
+    if schedule_length <= 0:
+        raise ValueError("schedule length must be positive")
+    return 30 if protocol == "exp43-half-specialist" else schedule_length
+
+
+def backward_scaled(loss: torch.Tensor, denominator: int) -> None:
+    if denominator <= 0:
+        raise ValueError("loss denominator must be positive")
+    (loss / denominator).backward()
+
+
+def batch_sample_index(raw_batch: dict[str, Any]) -> int:
+    value = raw_batch.get("index")
+    if not torch.is_tensor(value) or value.numel() != 1:
+        raise ValueError("benchmark training batch must contain one dataset index")
+    return int(value.item())
+
+
+def lead_zero_gripper_metrics(prediction: torch.Tensor, target: torch.Tensor) -> dict[str, float]:
+    predicted = prediction.detach().float().reshape(-1)
+    expected = target.detach().float().reshape(-1)
+    if predicted.shape != expected.shape or predicted.numel() == 0:
+        raise ValueError("gripper prediction and target must have the same nonempty shape")
+    if not torch.isfinite(predicted).all() or not torch.isfinite(expected).all():
+        raise ValueError("gripper prediction and target must be finite")
+    difference = predicted - expected
+    return {
+        "normalized_channel9_loss": float((difference / 0.5).square().mean().item()),
+        "raw_absolute_error": float(difference.abs().mean().item()),
+        "signed_bias": float(difference.mean().item()),
+        "effective_error": float(
+            (predicted.clamp(0.0, 1.0) - expected.clamp(0.0, 1.0)).abs().mean().item()
+        ),
+        "saturation_rate": float(((predicted < 0.0) | (predicted > 1.0)).float().mean().item()),
+    }
 
 
 def make_policies(
@@ -393,7 +440,7 @@ def runtime_provenance(require_clean: bool) -> dict[str, Any]:
         ).stdout.strip()
     )
     if require_clean and dirty:
-        raise RuntimeError("registered experiment 036 must run from a clean git worktree")
+        raise RuntimeError("registered joint-core training must run from a clean git worktree")
     return {
         "git_commit": commit,
         "git_dirty": dirty,
@@ -442,6 +489,8 @@ def evaluate_cells(
     loaders: dict[tuple[str, str], DataLoader],
     processor: EmbodiProcessor,
     device: torch.device,
+    *,
+    detailed_gripper: bool = False,
 ) -> dict[str, float]:
     for policy in policies.values():
         policy.eval()
@@ -449,6 +498,7 @@ def evaluate_cells(
     for (morphology, task), loader in loaders.items():
         total = 0.0
         count = 0
+        gripper_totals: dict[str, float] = {}
         for raw_batch in loader:
             config = policies[morphology].config
             model_batch = prepare_model_batch(
@@ -466,9 +516,24 @@ def evaluate_cells(
             )
             total += metrics[metric_name]
             count += 1
+            if detailed_gripper:
+                policies[morphology].reset()
+                prediction = policies[morphology].predict_canonical_action_chunk(model_batch)
+                target = model_batch.get("canonical_action")
+                if not torch.is_tensor(prediction) or not torch.is_tensor(target):
+                    raise ValueError("detailed gripper validation requires tensor actions")
+                if prediction.shape != target.shape or prediction.shape[1:] != (32, 1, 10):
+                    raise ValueError("detailed gripper validation requires canonical action chunks")
+                batch_gripper = lead_zero_gripper_metrics(
+                    prediction[:, 0, :, 9], target[:, 0, :, 9]
+                )
+                for name, value in batch_gripper.items():
+                    gripper_totals[name] = gripper_totals.get(name, 0.0) + value
         if count == 0:
             raise RuntimeError(f"validation cell {morphology}/{task} produced no batches")
         results[f"{morphology}/{task}"] = total / count
+        for name, value in gripper_totals.items():
+            results[f"gripper/{morphology}/{task}/{name}"] = value / count
     for morphology in MORPHOLOGIES:
         results[f"macro/{morphology}"] = sum(
             results[f"{morphology}/{task}"] for task in TASKS
@@ -541,10 +606,12 @@ def train_joint(args: argparse.Namespace) -> None:
     )
     if not args.smoke_test:
         if generation_manifest_sha256(args.train_root) != TRAIN_GENERATION_SHA256:
-            raise ValueError("experiment 036 train dataset hash does not match registration")
+            raise ValueError("registered train dataset hash does not match")
         if generation_manifest_sha256(args.validation_root) != VALIDATION_GENERATION_SHA256:
-            raise ValueError("experiment 036 validation dataset hash does not match registration")
+            raise ValueError("registered validation dataset hash does not match")
     schedule = cell_schedule(args.condition, args.presentations_per_step)
+    loss_denominator = optimization_loss_denominator(args.protocol, len(schedule))
+    experiment = 43 if args.protocol == "exp43-half-specialist" else 36
 
     configure_deterministic_training(args.deterministic)
     random.seed(args.model_seed)
@@ -592,7 +659,8 @@ def train_joint(args: argparse.Namespace) -> None:
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, multiplier)
     data_report = {
         "format_version": 1,
-        "experiment": "36-smoke" if args.smoke_test else 36,
+        "experiment": f"{experiment}-smoke" if args.smoke_test else experiment,
+        "protocol": args.protocol,
         "condition": args.condition,
         "train": train_lineage,
         "validation": validation_lineage,
@@ -601,6 +669,8 @@ def train_joint(args: argparse.Namespace) -> None:
         "validation_frame_manifest_sha256": file_sha256(args.validation_manifest),
         "schedule": {
             "presentations_per_step": args.presentations_per_step,
+            "optimization_loss_denominator": loss_denominator,
+            "per_sample_gradient_coefficient": 1 / loss_denominator,
             "cells": [f"{morphology}/{task}" for morphology, task in schedule],
         },
         "runtime": provenance,
@@ -616,8 +686,12 @@ def train_joint(args: argparse.Namespace) -> None:
         output_dir / "run_manifest.json",
         {
             "format_version": 1,
-            "experiment": 36,
-            "arguments": {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()},
+            "experiment": experiment,
+            "protocol": args.protocol,
+            "arguments": {
+                key: str(value) if isinstance(value, Path) else value
+                for key, value in vars(args).items()
+            },
             "configs": {key: asdict(value) for key, value in configs.items()},
             "device": str(device),
             "runtime": provenance,
@@ -631,10 +705,13 @@ def train_joint(args: argparse.Namespace) -> None:
         range(start_step + 1, args.steps + 1),
         total=args.steps,
         initial=start_step,
-        desc=f"experiment-036-{args.condition}",
+        desc=f"experiment-{experiment:03d}-{args.condition}",
         unit="step",
         disable=args.no_progress,
     )
+    sample_digests = {cell: hashlib.sha256() for cell in dict.fromkeys(schedule)}
+    sample_counts = {cell: 0 for cell in sample_digests}
+    clipping_count = 0
     for step in progress:
         optimizer.zero_grad(set_to_none=True)
         metric_name = (
@@ -643,8 +720,13 @@ def train_joint(args: argparse.Namespace) -> None:
             else "flow_loss"
         )
         metrics = {metric_name: 0.0}
+        if args.protocol == "exp43-half-specialist":
+            metrics["optimization_loss"] = 0.0
         for cell in schedule:
             raw_batch = _next_batch(cell, train_loaders, iterators)
+            sample_index = batch_sample_index(raw_batch)
+            sample_digests[cell].update(f"{sample_index}\n".encode())
+            sample_counts[cell] += 1
             morphology = cell[0]
             config = configs[morphology]
             model_batch = prepare_model_batch(
@@ -655,15 +737,21 @@ def train_joint(args: argparse.Namespace) -> None:
                 config,
             )
             loss, batch_metrics = policies[morphology](model_batch)
-            (loss / len(schedule)).backward()
+            backward_scaled(loss, loss_denominator)
             metrics[metric_name] += batch_metrics[metric_name] / len(schedule)
+            if args.protocol == "exp43-half-specialist":
+                metrics["optimization_loss"] += batch_metrics[metric_name] / loss_denominator
         grad_norm = torch.nn.utils.clip_grad_norm_(parameters, 10.0).item()
+        clipping_count += int(grad_norm > 10.0)
         optimizer.step()
         scheduler.step()
         if step % args.log_every == 0 or step == args.steps:
             metrics["grad_norm"] = grad_norm
             metrics["expert_grad_norm"] = gradient_norm(policies["so101"].expert.parameters())
             metrics["learning_rate"] = optimizer.param_groups[0]["lr"]
+            if args.protocol == "exp43-half-specialist":
+                metrics["gradient_clip_count"] = clipping_count
+                metrics["gradient_clip_rate"] = clipping_count / step
             append_metrics(metrics_path, step, "train", metrics)
             progress.set_postfix(loss=f"{metrics[metric_name]:.4f}")
         if step == args.steps:
@@ -672,16 +760,37 @@ def train_joint(args: argparse.Namespace) -> None:
                 validation_loaders,
                 processor,
                 device,
+                detailed_gripper=args.protocol == "exp43-half-specialist",
             )
             append_metrics(metrics_path, step, "validation", validation_metrics)
             progress.write(
                 f"step={step} validation_macro_all={validation_metrics['macro/all']:.6f}"
             )
+    atomic_write_json(
+        output_dir / "sample_sequence.json",
+        {
+            "format_version": 1,
+            "experiment": experiment,
+            "protocol": args.protocol,
+            "condition": args.condition,
+            "model_seed": args.model_seed,
+            "loader_seed": args.loader_seed,
+            "steps": args.steps,
+            "cells": {
+                f"{morphology}/{task}": {
+                    "samples": sample_counts[(morphology, task)],
+                    "dataset_index_sequence_sha256": sample_digests[(morphology, task)].hexdigest(),
+                }
+                for morphology, task in sample_digests
+            },
+        },
+    )
     save_policies(output_dir / "final", policies, optimizer, scheduler, args.steps, data_report)
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="train experiment 036 shared canonical core")
+    parser = argparse.ArgumentParser(description="train registered joint canonical-core protocols")
+    parser.add_argument("--protocol", choices=PROTOCOLS, default="exp36")
     parser.add_argument("--condition", choices=CONDITIONS, default="joint")
     parser.add_argument("--train-root", type=Path, default=Path("datasets/embodi-sim-v1-train-v2"))
     parser.add_argument(

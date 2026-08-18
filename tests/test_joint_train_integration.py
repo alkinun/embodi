@@ -321,6 +321,14 @@ class _FakeEvaluationPolicy:
         metric_name = "regression_loss" if self.config.core_objective == "regression" else "flow_loss"
         return None, {metric_name: self.value}
 
+    def reset(self) -> None:
+        pass
+
+    def predict_canonical_action_chunk(self, batch):
+        prediction = torch.zeros_like(batch["canonical_action"])
+        prediction[..., 9] = 1.2
+        return prediction
+
 
 def test_evaluate_cells_aggregates_task_and_morphology_metrics(
     monkeypatch: pytest.MonkeyPatch,
@@ -343,6 +351,38 @@ def test_evaluate_cells_aggregates_task_and_morphology_metrics(
     assert results["macro/panda"] == 3.0
     assert results["macro/all"] == 2.0
     assert all(results[f"{morphology}/{task}"] == (1.0 if morphology == "so101" else 3.0) for morphology, task in loaders)
+
+
+def test_evaluate_cells_reports_detailed_lead_zero_gripper_metrics(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(joint_train, "prepare_model_batch", lambda raw, *args: raw)
+    policies = {
+        morphology: _FakeEvaluationPolicy("regression", 1.0)
+        for morphology in MORPHOLOGIES
+    }
+    target = torch.zeros(1, 32, 1, 10)
+    target[..., 9] = 0.5
+    loaders = {
+        (morphology, task): [{"canonical_action": target}]
+        for morphology in MORPHOLOGIES
+        for task in TASKS
+    }
+
+    results = evaluate_cells(
+        policies,
+        loaders,
+        processor=None,
+        device=torch.device("cpu"),
+        detailed_gripper=True,
+    )
+
+    prefix = "gripper/so101/push_to_zone"
+    assert results[f"{prefix}/normalized_channel9_loss"] == pytest.approx(1.96)
+    assert results[f"{prefix}/raw_absolute_error"] == pytest.approx(0.7)
+    assert results[f"{prefix}/signed_bias"] == pytest.approx(0.7)
+    assert results[f"{prefix}/effective_error"] == pytest.approx(0.5)
+    assert results[f"{prefix}/saturation_rate"] == 1.0
 
 
 def test_evaluate_cells_rejects_empty_validation_cell(monkeypatch: pytest.MonkeyPatch) -> None:
