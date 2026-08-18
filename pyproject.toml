@@ -62,6 +62,7 @@ embodi-diagnose-benchmark-geometry = "embodi.sim.benchmark_geometry_diagnostics:
 embodi-project-benchmark-geometry = "embodi.sim.benchmark_geometry_projection:main"
 embodi-align-benchmark-replans = "embodi.sim.benchmark_replan_alignment:main"
 embodi-diagnose-task-instruction = "embodi.sim.benchmark_task_instruction:main"
+embodi-diagnose-phase-agreement = "embodi.sim.benchmark_phase_agreement:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/embodi"]
