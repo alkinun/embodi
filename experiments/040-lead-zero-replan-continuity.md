@@ -95,15 +95,50 @@ improve closed-loop control for the joint core or matched specialists?
 
 ## result
 
-pending.
+all 12 registered shards completed sequentially from evaluator commit `588769d`
+under one runtime signature: 252 development pairs and 504 fresh episodes. the
+aggregate report is `reports/benchmark-exp40-summary.json` at SHA-256
+`05018ce882e01a5e30d00672ce84db007bdf60992c629ee86485ee7dab55efea`.
+all frozen inputs, 12 source report hashes, checkpoint artifacts, pair-input and
+treatment-onset invariants, outcome and baseline audit chains, schedules,
+telemetry, and aggregates validated. all 252 pairs were eligible.
+
+neither condition received registered causal support. joint success changed from
+11/126 baseline pairs to 10/126 alignment pairs, an equal-weight three-seed gain
+of -0.79 percentage points. seed gains were +2.38, -4.76, and 0.00 points, and
+task-equal progression changed by -0.00057. matched success changed from 18/126
+to 21/126, a +2.38-point gain. seed gains were -2.38, +11.90, and -2.38 points,
+and progression improved by 0.02759. joint therefore missed the materiality and
+positive-progression criteria; matched missed materiality and the required two
+nonnegative seeds.
+
+delivery passed in every shard with exact treatment onset, zero treatment
+failures, intact chunk tails, and zero native clipping. the transform materially
+improved delivered continuity in both conditions. joint mean realized lead-zero
+translation fell from 11.35 to 5.55 mm, rotation from 1.85 to 1.40 degrees, and
+effective-gripper error from 0.03895 to approximately zero. matched translation
+fell from 12.84 to 6.42 mm, rotation from 1.86 to 1.37 degrees, and gripper error
+from 0.04311 to approximately zero.
 
 ## finding
 
-pending.
+lead-zero alignment receives no development diagnostic causal support for either
+model condition. the registered transform was delivered successfully and
+improved realized continuity, but this mechanism improvement did not produce a
+material, seed-consistent success gain. the matched mean gain was concentrated
+in seed 36002 and reversed in the other two seeds; joint mean success and
+progression were both slightly negative.
+
+the result does not support replan target discontinuity as a sufficient
+explanation for weak closed-loop control in either the joint core or matched
+specialists. it does not establish that continuity is irrelevant: realized FK
+overlap remained imperfect after unchanged IK, and subgroup effects are
+descriptive. no final-split, model-admission, advancement, inferential, or
+uniform-effect claim follows.
 
 ## decision
 
 - do not advance or reject a model from this development-only diagnostic.
 - keep the final split untouched.
-- if supported, repair replan target composition before a new comparison.
-- if unsupported despite delivery, move to task-conditioned policy quality.
+- do not deploy or advance lead-zero alignment as a control repair.
+- move the next diagnosis to task-conditioned policy quality.
