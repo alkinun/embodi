@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -68,3 +69,22 @@ def test_dependency_registration_and_cli_contract() -> None:
     args = support.parse_args([])
     assert args.output == support.SUMMARY_PATH
     assert args.manifest.name == "development.json"
+
+
+def test_registered_support_report_hash_and_counts() -> None:
+    path = ROOT / "reports/benchmark-exp45-support.json"
+    assert file_sha256(path) == (
+        "34c3252feab6b7153a17cf14baa8708fccfbb4551ea6fc71d1dc65b73b85cb58"
+    )
+    report = json.loads(path.read_text())
+    assert report["contract"]["checkpoint_files_opened"] == 0
+    assert report["contract"]["policy_inferences_run"] == 0
+    assert report["support"]["endpoint_anchors"] == 364
+    assert report["support"]["scenario_phase_units"] == 182
+    assert report["support"]["by_partition_endpoint_anchors"] == {
+        "open_steady": 154,
+        "open_openward": 28,
+        "closed_steady": 70,
+        "closed_closeward": 56,
+        "terminal_noop": 56,
+    }
