@@ -450,3 +450,16 @@ def test_cli_registration_guards_and_frozen_counts(monkeypatch: pytest.MonkeyPat
 def test_policy_registration_hash_and_cli_entrypoint() -> None:
     assert fresh.registered_evaluator_sha256() == file_sha256(Path(fresh.__file__))
     assert "embodi-evaluate-exp45-fresh-gripper" in (ROOT / "pyproject.toml").read_text()
+
+
+def test_registered_result_hash_and_classification() -> None:
+    path = ROOT / "reports/benchmark-exp45-summary.json"
+    assert file_sha256(path) == (
+        "f5d2b11c297ec3ae54a998d0bb2f78db4da3ad9de95619f0a663ffd3594f008f"
+    )
+    report = json.loads(path.read_text())
+    assert report["delivery_gate_passed"] is True
+    assert report["localization_classification"]["classification"] == (
+        "open_target-localized-broad"
+    )
+    assert report["final_split_loaded"] is False

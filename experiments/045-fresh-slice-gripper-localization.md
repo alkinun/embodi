@@ -83,7 +83,7 @@ behavior?
   as Experiment 043. run no training, selection, architecture change, weighting
   change, or final-split evaluation.
 - retain Experiment 043's correct prompt, lead-zero target, immediate repeat,
-  native execution, canonical round trip, and six balanced F/H/J query
+  native execution, canonical round trip, and six cyclic F/H/J query
   permutations. use two sequential non-resumable morphology shards under one
   registered lock. expect 3,276 scored chunks, 3,276 repeats, 6,552 inferences,
   and 1,092 observations for each of `J-F`, `H-F`, and `J-H`. commit source
@@ -137,8 +137,30 @@ the frozen endpoint support is 154 open-steady, 28 openward, 70 closed-steady,
 56 closeward, and 56 terminal-noop records. the corresponding scenario-phase
 support is 84, 14, 42, 28, and 42; these counts overlap where one phase has
 different first/last labels. all 14 same-call first/last pairs were exact
-terminal-noop duplicates. policy results remain pending the separately frozen
-support-bound evaluator.
+terminal-noop duplicates.
+
+the support-bound policy assay then completed from clean commit `f3597f0` with
+42 successful episodes, 364 endpoints, 3,276 scored chunks and repeats, 6,552
+inferences, and 1,092 observations per contrast. the summary is
+`reports/benchmark-exp45-summary.json` at SHA-256
+`f5d2b11c297ec3ae54a998d0bb2f78db4da3ad9de95619f0a663ffd3594f008f`.
+SO-101 and Panda source archives are at SHA-256
+`1b73eb0908d85c733067b975e536519cd6abe1a18f745ff7eeacf671b2389c1f`
+and `0511f52510607f4840f527dab95d0e116e4abbe5a72dad804a3571c4e7cba2b0`.
+all support, asset, source, checkpoint, runtime, repeat, order, hierarchy,
+decomposition, and final-split gates passed.
+
+effective gripper error was 0.117335 for `F`, 0.125903 for `H`, and 0.136347
+for `J`. `J-F` was 0.019012 and 1.1620x; `H-F` was 0.008568 and 1.0730x;
+`J-H` was 0.010444 and 1.0830x. exact decomposition passed in all 4,514 reported
+contrast cells.
+
+open-target `J-F` was 0.029617 versus 0.005787 for closed targets, giving the
+registered closed-minus-open interaction -0.023830. its pooled sign held in two
+seeds and both morphologies, and winning-side `J-F` remained nonnegative across
+both morphologies, eligible tasks, and endpoints. opening transition, closing
+transition, and terminal-noop interactions failed their localization gates. the
+exact classification is `open_target-localized-broad`.
 
 ## finding
 
@@ -146,9 +168,14 @@ the outcome-blind support stage resolves Experiment 044's delivery failure
 without inspecting a model: actual structural marginals are now immutable before
 checkpoint load, while common scenario support remains exact by construction.
 
+on the final factor-complete focused-assay-fresh slice, the joint deficit is
+materially concentrated on open expert targets rather than closed targets. this
+localizes the descriptive error but does not identify whether calibration,
+representation, or another training mechanism causes it.
+
 ## decision
 
-- bind the policy evaluator to support SHA-256
-  `34c3252feab6b7153a17cf14baa8708fccfbb4551ea6fc71d1dc65b73b85cb58`.
-- do not load a policy checkpoint until that evaluator is merged.
+- retain `open_target-localized-broad` as a development-only descriptive result.
+- next audit morphology-specific open-target calibration and signed bias with
+  fixed checkpoints before changing training.
 - keep the training recipe and final split untouched.
