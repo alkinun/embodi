@@ -52,6 +52,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [043](043-gripper-exposure-interference.md) | does exposure or shared training explain the joint gripper deficit? | neither is materially supported alone; both component differences are broad, positive, and sub-threshold. |
 | [044](044-gripper-target-direction-localization.md) | where is the fixed joint core's gripper deficit localized? | invalid delivery; one legitimate one-action phase violated the frozen support table, so metrics are not interpreted. |
 | [045](045-fresh-slice-gripper-localization.md) | where does the joint gripper deficit localize on the final focused-assay-fresh slice? | open targets broadly; closed-minus-open J-F interaction is -0.02383 across both morphologies. |
+| [046](046-fixed-checkpoint-open-target-calibration.md) | does the open-target deficit reproduce as signed under-opening and admit fixed-checkpoint intercept correction? | preregistered; pending execution. |
 
 ## current decision
 
@@ -86,6 +87,8 @@ existing hardware acceptance gates before autonomous motion.
 
 for the canonical joint core, experiment 043 confirms a broad development-only
 gripper deficit but does not materially support reduced exposure or shared
-training alone as its mechanism. keep the final split untouched, do not change
-the training recipe, and first localize the fixed checkpoints' error by gripper
-target state and transition direction.
+training alone as its mechanism. experiment 045 localizes that deficit to open
+targets on the final factor-complete focused-assay-fresh slice without identifying
+a cause. keep the final split and training recipe untouched; experiment 046 next
+audits morphology-specific signed bias and fixed-checkpoint open-target
+correctability on the narrow remaining development workspace case.
