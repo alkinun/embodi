@@ -51,7 +51,7 @@ raw metrics are in `reports/`. checkpoints are local under `outputs/`.
 | [042](042-correct-prompt-phase-agreement.md) | is joint correct-prompt expert-action agreement broadly worse than matched specialists? | yes; normalized loss is 13.24% worse, corroborated by a 14.99% gripper-error deficit. |
 | [043](043-gripper-exposure-interference.md) | does exposure or shared training explain the joint gripper deficit? | neither is materially supported alone; both component differences are broad, positive, and sub-threshold. |
 | [044](044-gripper-target-direction-localization.md) | where is the fixed joint core's gripper deficit localized? | invalid delivery; one legitimate one-action phase violated the frozen support table, so metrics are not interpreted. |
-| [045](045-fresh-slice-gripper-localization.md) | where does the joint gripper deficit localize on the final focused-assay-fresh slice? | expert-only support is frozen; bind its hash into the policy evaluator before inference. |
+| [045](045-fresh-slice-gripper-localization.md) | where does the joint gripper deficit localize on the final focused-assay-fresh slice? | open targets broadly; closed-minus-open J-F interaction is -0.02383 across both morphologies. |
 
 ## current decision
 
