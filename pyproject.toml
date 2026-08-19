@@ -68,6 +68,7 @@ embodi-diagnose-phase-agreement = "embodi.sim.benchmark_phase_agreement:main"
 embodi-diagnose-exp43-gripper = "embodi.sim.benchmark_gripper_mechanism:main"
 embodi-localize-exp44-gripper = "embodi.sim.benchmark_gripper_localization:main"
 embodi-freeze-exp45-support = "embodi.sim.benchmark_gripper_support:main"
+embodi-evaluate-exp45-fresh-gripper = "embodi.sim.benchmark_gripper_fresh_localization:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/embodi"]
