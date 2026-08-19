@@ -58,9 +58,9 @@ behavior?
   axes per morphology/task, exhaustive disjoint labels, valid native/canonical
   hashes and round trips, valid same-call duplicates, zero checkpoint opens,
   zero policy inference, zero training, and `final_split_loaded: false`.
-- after the support report exists, freeze its SHA-256 and a separate F/H/J policy
-  evaluator on a clean merged commit before loading any checkpoint. the policy
-  evaluator must recapture the expert endpoints and require exact scenario,
+- after the support report exists, bind its SHA-256 and freeze Experiment 045 policy evaluator SHA-256 `0de983db18a4d5abfedda6f0e9195be9ac239a761f1eb76f3e72e1dd5b996825`
+  on a clean merged commit. before loading any checkpoint, the policy evaluator
+  must recapture the expert endpoints and require exact scenario,
   transition, native/canonical state, target, round-trip, and partition evidence.
   rendered image hashes are excluded from cross-run equality because prior
   deterministic recaptures have shown sparse one-level uint8 differences; each
@@ -68,6 +68,14 @@ behavior?
   F/H/J arms. before checkpoint load, require the policy runtime's
   benchmark-referenced asset inventory to equal the support report exactly. a
   structural or asset mismatch is delivery failure, not a model result.
+- freeze and persist the evaluator's enumerated `SOURCE_FILE_SHA256` closure:
+  Experiments 041--044 and support, benchmark/environment/expert and geometry
+  loading, processor, v3 token config/policy/canonical/backbone/expert/adapter,
+  metric/hash helpers, and their local import-time dependencies. validate every
+  entry only after both morphology recaptures pass and before checkpoint access.
+  independently recompute runtime/package provenance at that boundary; require
+  each shard's claimed commit to equal `git rev-parse HEAD`, exist as a commit,
+  and contain evaluator and source-closure blobs at the frozen SHA-256 values.
 - compare existing full-exposure specialists `F`, half-exposure specialists `H`,
   and joint cores `J` at model seeds 36001--36003 and fixed update 1,200. bind
   checkpoint, trainer, embodiment, config, data-manifest, Experiment 036 summary,
