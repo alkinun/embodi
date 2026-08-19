@@ -44,6 +44,7 @@ reports/exp40-runtime/
 reports/exp41-runtime/
 reports/exp42-runtime/
 reports/exp43-runtime/
+reports/exp45-runtime/
 # Experiment 043 source shards exceed the remote blob limit; commit their
 # deterministic gzip archives and retain these byte-identical raw files locally.
 reports/benchmark-exp43-so101-gripper-mechanism.json
