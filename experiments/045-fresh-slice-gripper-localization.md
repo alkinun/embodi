@@ -117,15 +117,30 @@ behavior?
 
 ## result
 
-pending the expert-only support freeze and support-bound policy assay.
+the expert-only support freeze completed from clean commit `d2d9c28`. the
+independently audited report is `reports/benchmark-exp45-support.json` at
+SHA-256 `34c3252feab6b7153a17cf14baa8708fccfbb4551ea6fc71d1dc65b73b85cb58`.
+all 42 episodes succeeded, all 182 scenario-phase units and 364 endpoints
+validated, all seven factor axes appeared once per morphology/task, all 91
+benchmark-referenced asset files matched, and no checkpoint, policy inference,
+training run, validation split, or final split was accessed.
+
+the frozen endpoint support is 154 open-steady, 28 openward, 70 closed-steady,
+56 closeward, and 56 terminal-noop records. the corresponding scenario-phase
+support is 84, 14, 42, 28, and 42; these counts overlap where one phase has
+different first/last labels. all 14 same-call first/last pairs were exact
+terminal-noop duplicates. policy results remain pending the separately frozen
+support-bound evaluator.
 
 ## finding
 
-pending.
+the outcome-blind support stage resolves Experiment 044's delivery failure
+without inspecting a model: actual structural marginals are now immutable before
+checkpoint load, while common scenario support remains exact by construction.
 
 ## decision
 
-- freeze and merge the expert-only support evaluator before support capture.
-- do not load a policy checkpoint until the immutable support hash and separate
-  policy evaluator are merged.
+- bind the policy evaluator to support SHA-256
+  `34c3252feab6b7153a17cf14baa8708fccfbb4551ea6fc71d1dc65b73b85cb58`.
+- do not load a policy checkpoint until that evaluator is merged.
 - keep the training recipe and final split untouched.
